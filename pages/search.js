@@ -17,7 +17,7 @@ export default function search() {
     <div className="m-5">
       <h2 className="text-xl font-bold">Search Result</h2>
       <p className="text-sm">
-        {searchResult.length} product{searchResult.length > 1 ? "s" : ""} found
+        {searchResult.length} product{searchResult.length > 1 && "s" } found
       </p>
       {searchResult.map((product, index) => {
         return <Card key={index} product={product} />;

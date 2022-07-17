@@ -53,32 +53,29 @@ export default function Navbar() {
           />
         </a>
       </Link>
-      <div className="flex h-auto   " onBlur={() => blur(inputRef, setSearch)}>
+      <div className="flex h-auto" onBlur={() => blur(inputRef, setSearch)}>
         <input
           type="text"
-          className="rounded-l w-[130px] sm:w-[150px] md:w-[200px] lg:w-[300px]  focus:outline-none p-1"
+          className="rounded-l h-7 focus:outline-none p-1 w-[130px] sm:w-[150px] md:w-[200px] lg:w-[300px]"
           ref={inputRef}
           onChange={(e) => handleSearch(e)}
           onFocus={() => setShowSearch(true)}
         />
         {search.length > 0 ? (
-          <p
+          <BsSearch
             onClick={() =>
               router.push({
                 pathname: "/search",
                 query: { search: JSON.stringify(search) },
               })
             }
-          >
-            <BsSearch className="rounded-r bg-orange-300 h-6 px-1.5 w-7 text-xl  " />
-          </p>
+            className="rounded-r bg-orange-300 h-7 px-1.5 w-7 text-xl  "
+          />
         ) : (
-          <BsSearch className="rounded-r bg-orange-300 h-6 px-1.5 w-7 text-xl  " />
+          <BsSearch className="rounded-r bg-orange-300 h-7 px-1.5 w-7 text-xl  " />
         )}
-
-        {showSearch ? (
-          // show users result from research and like to account
-          <div className="z-10 absolute  mt-6 rounded-md z-1 w-[130px] md:w-[200px] lg:w-[300px]  ">
+        {showSearch && (
+          <div className="z-10 absolute  mt-6 rounded-md z-1 w-[130px] sm:w-[150px] md:w-[200px] lg:w-[300px]  ">
             {search.slice(0, 4).map((product, index) => {
               return (
                 <Link key={index} href={`/product/${product._id}`}>
@@ -95,7 +92,7 @@ export default function Navbar() {
                         className=" hidden sm:block w-[40px] h-[40px]"
                         alt="product"
                       />
-                      <p className=" whitespace-nowrap overflow-hidden text-xs ">
+                      <p className="whitespace-nowrap overflow-hidden text-xs ">
                         {product.name}
                       </p>
                     </div>
@@ -104,8 +101,6 @@ export default function Navbar() {
               );
             })}
           </div>
-        ) : (
-          ""
         )}
       </div>
       <div className="flex  gap-3 md:gap-5">

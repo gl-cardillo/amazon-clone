@@ -1,5 +1,5 @@
 import dbConnect from "../../../utils/dbConnect";
-import Product from "../../../models/Product";
+const Product = require("../../../models/Product");
 
 dbConnect();
 

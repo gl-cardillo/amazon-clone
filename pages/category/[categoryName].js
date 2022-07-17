@@ -10,7 +10,7 @@ export default function Category({ products }) {
         <p>bla</p>
       </div>
       <div>
-        <h2 className=" font-bold text-2xl">
+        <h2 className="font-bold text-2xl">
           {products[0].category.charAt(0).toUpperCase() +
             products[0].category.slice(1)}
         </h2>
