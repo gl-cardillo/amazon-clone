@@ -1,30 +1,27 @@
+import axios from "axios";
 import { useState } from "react";
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+
 export default function singin() {
   const [showSignin, setShowSignin] = useState(true);
-  const schema = yup.object().shape({
+  const [errorSignin, setErrorSignin] = useState("");
+  const [errorLogin, setErrorLogin] = useState("");
+  const router = useRouter();
+
+  const schemaSingin = yup.object().shape({
     name: yup
       .string()
       .min(2)
       .max(50)
-      .matches(/^[a-zA-Z0-9]{0,}$/, {
+      .matches(/^[a-zA-Z0-9 _]{0,}$/, {
         message: "Special character not allowed.",
       })
-      .required("Name is a required field"),
+      .required("name is a required field"),
     email: yup.string().email().required(),
-    emailLogin: yup.string().email().required(),
     password: yup
-      .string()
-      .min(8)
-      .max(15)
-      .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?])[A-Za-z\d@$!%*#?]{8,}$/, {
-        message:
-          "Password must be eight characters, at least one letter, one number and one special character(@$!%*#?)",
-      })
-      .required(),
-    passwordLogin: yup
       .string()
       .min(8)
       .max(15)
@@ -35,15 +32,60 @@ export default function singin() {
       .required(),
   });
 
+  const schemaLogin = yup.object().shape({
+    emailLogin: yup.string().email().required("Email is required"),
+    passwordLogin: yup
+      .string()
+      .min(8)
+      .max(15)
+      .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?])[A-Za-z\d@$!%*#?]{8,}$/, {
+        message:
+          "Password must be eight characters, at least one letter, one number and one special character(@$!%*#?)",
+      })
+      .required("password is required"),
+  });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schemaSingin),
   });
-  const signin = (data) => {};
-  const login = (data) => {};
+
+  const {
+    register: registerLogin,
+    handleSubmit: handleSubmitLogin,
+    formState: { errors: errorsLogin },
+  } = useForm({
+    resolver: yupResolver(schemaLogin),
+  });
+
+  const signin = async (data) => {
+    await axios
+      .post("http://localhost:3000/api/auth/singin", data)
+      .then((res) => {
+        localStorage.setItem("user_amazon_lc", JSON.stringify(res.data.user));
+        localStorage.setItem("token_amazon_lc", JSON.stringify(res.data.token));
+        router.push("/");
+      })
+      .catch((err) => {
+        setErrorSignin(err.response.data.message);
+        console.log(err.response.data.message);
+      });
+  };
+  const login = async (data) => {
+    await axios
+      .post("http://localhost:3000/api/auth/login", data)
+      .then((res) => {
+        localStorage.setItem("user_amazon_lc", JSON.stringify(res.data.user));
+        localStorage.setItem("token_amazon_lc", JSON.stringify(res.data.token));
+        router.push("/");
+      })
+      .catch((err) => {
+        setErrorLogin(err.response.data.message);
+      });
+  };
 
   return (
     <div className=" flex flex-col mx-3 md:max-w-[400px] md:mx-auto my-10 ">
@@ -69,42 +111,51 @@ export default function singin() {
             </h3>
           </div>
           <div className={showSignin ? "" : "hidden"}>
+            <p className="text-[12px] text-red-600 pl-4 pt-2">{errorSignin}</p>
             <form
               className="flex flex-col mx-1"
+              id="singin"
               onSubmit={handleSubmit(signin)}
             >
               <label htmlFor="name" className="pl-2 py-2 font-semibold">
                 First and last name
               </label>
               <input
-                className="p-2.5 rounded-[3px] border-solid border-1 border-slate-400 focus:outline-orange-300"
+                className="p-2.5 rounded-[3px] border-solid border-1  focus:border-none  border-slate-400 focus:outline-orange-300"
                 type="text"
                 id="name"
                 {...register("name")}
               />
-              <p>{errors?.name?.message}</p>
+              <p className="text-[12px] text-red-600 pt-1">
+                {errors?.name?.message}
+              </p>
               <label htmlFor="email" className="pl-2 py-2 font-semibold">
                 Email
               </label>
               <input
-                className="p-2.5 rounded-[3px] border-solid border-1 border-slate-400 focus:outline-orange-300"
+                className="p-2.5 rounded-[3px] border-solid border-1 focus:border-none border-slate-400 focus:outline-orange-300"
                 type="email"
                 id="email"
                 {...register("email")}
               />
-              <p>{errors?.email?.message}</p>
+              <p className="text-[12px] text-red-600 pt-1">
+                {errors?.email?.message}
+              </p>
               <label htmlFor="password" className="pl-2 py-2 font-semibold">
                 Password
               </label>
               <input
-                className="p-2.5 rounded-[3px] border-solid border-1 border-slate-400 focus:outline-orange-300"
+                className="p-2.5 rounded-[3px] border-solid border-1 focus:border-none border-slate-400 focus:outline-orange-300"
                 type="password"
                 id="password"
                 {...register("password")}
               />
-              <p>{errors?.password?.message}</p>
+              <p className="text-[12px] text-red-600 pt-1">
+                {errors?.password?.message}
+              </p>
               <button
                 type="submit"
+                form="singin"
                 className="mt-5 p-3 rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
               >
                 Continue
@@ -113,13 +164,13 @@ export default function singin() {
           </div>
         </div>
         <div className={` border-t-2 p-4 ${showSignin ? " bg-slate-100" : ""}`}>
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-3 items-center">
             <input
               type="radio"
               name="singin"
               onChange={() => setShowSignin(false)}
               checked={!showSignin}
-              className="h-4 w-4 checked:ring-orange-400 text-orange-400 checked:bg-orange-400 hover:bg-orange-400"
+              className="h-4 w-4 checked:ring-orange-400 focus:border-none text-orange-400 checked:bg-orange-400 hover:bg-orange-400"
             />
             <h3 className="font-bold text-medium text-[14px]">
               Sign-In.
@@ -130,27 +181,38 @@ export default function singin() {
             </h3>
           </div>
           <div className={showSignin ? "hidden" : ""}>
-            <form className="flex flex-col mx-1" onSubmit={handleSubmit(login)}>
-              <label htmlFor="email" className="pl-2 py-2 font-semibold">
+            <p className="text-[12px] text-red-600 pl-4 pt-2">{errorLogin}</p>
+            <form
+              className="flex flex-col mx-1"
+              onSubmit={handleSubmitLogin(login)}
+            >
+              <label htmlFor="emailLogin" className="pl-2 py-2 font-semibold">
                 Email
               </label>
               <input
-                className="p-2.5 rounded-[3px] border-solid border-1 border-slate-400 focus:outline-orange-300"
+                className="p-2.5 rounded-[3px] border-solid focus:border-none border-1 border-slate-400 focus:outline-orange-300"
                 type="email"
-                id="email"
-                {...register("email")}
+                id="email_login"
+                {...registerLogin("emailLogin")}
               />
-              <p>{errors?.emailLogin?.message}</p>
-              <label htmlFor="password" className="pl-2 py-2 font-semibold">
+              <p className="text-[12px] text-red-600 pt-1">
+                {errorsLogin?.emailLogin?.message}
+              </p>
+              <label
+                htmlFor="passwordLogin"
+                className="pl-2 py-2 font-semibold"
+              >
                 Password
               </label>
               <input
-                className="p-2.5 rounded-[3px] border-solid border-1 border-slate-400 focus:outline-orange-300"
+                className="p-2.5 rounded-[3px] border-solid border-1 focus:border-none border-slate-400 focus:outline-orange-300"
                 type="password"
-                id="password"
-                {...register("password")}
+                id="password_login"
+                {...registerLogin("passwordLogin")}
               />
-              <p>{errors?.passwordLogin?.message}</p>
+              <p className="text-[12px] text-red-600 pt-1">
+                {errorsLogin?.passwordLogin?.message}
+              </p>
               <button
                 className="mt-5 p-3 rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
                 type="submit"
