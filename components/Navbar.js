@@ -2,16 +2,20 @@ import Link from "next/link";
 import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
+import { UserContext } from "../utils/userContext";
 import { BsSearch, BsCart2 } from "react-icons/bs";
 import { AiOutlineUser } from "react-icons/ai";
 
 export default function Navbar() {
   const [search, setSearch] = useState([]);
+  const [cartQuantity, setCartQuantity] = useState(0);
   const [showSearch, setShowSearch] = useState(false);
   const [products, setProducts] = useState([]);
   const inputRef = useRef(null);
   const router = useRouter();
+  const { user, setUser } = useContext(UserContext);
+  console.log(user);
 
   function blur(input) {
     input.current.value = "";
@@ -33,6 +37,14 @@ export default function Navbar() {
       setSearch(newSearch);
     }
   }
+  useEffect(() => {
+    if (user) {
+      setCartQuantity(
+        user.cart.reduce((accum, cart) => accum + cart.quantity, 0)
+      );
+    }
+  }, [user]);
+
   useEffect(() => {
     const getData = async () => {
       const res = await axios.get(`http://localhost:3000/api/product`);
@@ -105,7 +117,12 @@ export default function Navbar() {
       </div>
       <div className="flex  gap-3 md:gap-5">
         <AiOutlineUser className="text-white text-xl md:text-3xl " />
-        <BsCart2 className="text-white text-xl md:text-3xl " />
+        <div>
+          <BsCart2 className="text-white text-xl md:text-3xl " />
+          <p className="text-bg-slate-900 bg-orange-300 h-[20px] w-[20px] flex items-center justify-center rounded-full absolute top-6 right-1">
+            {cartQuantity}
+          </p>
+        </div>
       </div>
     </div>
   );

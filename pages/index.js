@@ -5,10 +5,6 @@ import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 
 export default function Home() {
-  useEffect(() => {
-    console.log(localStorage.getItem("user_amazon_lc"));
-    console.log(localStorage.getItem("token_amazon_lc"));
-  }, []);
 
   const slideImages = [
     { image: "/images/phones-slide.jpeg", link: "/electronics" },

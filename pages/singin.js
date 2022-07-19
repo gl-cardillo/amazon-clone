@@ -1,5 +1,6 @@
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import { UserContext } from "../utils/userContext";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,6 +11,13 @@ export default function singin() {
   const [errorSignin, setErrorSignin] = useState("");
   const [errorLogin, setErrorLogin] = useState("");
   const router = useRouter();
+  const { user, setUser } = useContext(UserContext);
+
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  });
 
   const schemaSingin = yup.object().shape({
     name: yup
@@ -65,6 +73,7 @@ export default function singin() {
     await axios
       .post("http://localhost:3000/api/auth/singin", data)
       .then((res) => {
+        setUser(res.data.user);
         localStorage.setItem("user_amazon_lc", JSON.stringify(res.data.user));
         localStorage.setItem("token_amazon_lc", JSON.stringify(res.data.token));
         router.push("/");
@@ -78,6 +87,7 @@ export default function singin() {
     await axios
       .post("http://localhost:3000/api/auth/login", data)
       .then((res) => {
+        setUser(res.data.user);
         localStorage.setItem("user_amazon_lc", JSON.stringify(res.data.user));
         localStorage.setItem("token_amazon_lc", JSON.stringify(res.data.token));
         router.push("/");
