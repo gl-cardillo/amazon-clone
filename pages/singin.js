@@ -17,7 +17,7 @@ export default function singin() {
     if (user) {
       router.push("/");
     }
-  });
+  }, []);
 
   const schemaSingin = yup.object().shape({
     name: yup

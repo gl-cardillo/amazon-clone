@@ -15,7 +15,6 @@ export default function Navbar() {
   const inputRef = useRef(null);
   const router = useRouter();
   const { user, setUser } = useContext(UserContext);
-  console.log(user);
 
   function blur(input) {
     input.current.value = "";
@@ -47,7 +46,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const getData = async () => {
-      const res = await axios.get(`http://localhost:3000/api/product`);
+      const res = await axios.get(`http://localhost:3000/api/product/all`);
       setProducts(res.data);
     };
     getData();
@@ -116,9 +115,13 @@ export default function Navbar() {
         )}
       </div>
       <div className="flex  gap-3 md:gap-5">
-        <AiOutlineUser className="text-white text-xl md:text-3xl " />
+        <Link href="/profile">
+          <a>
+            <AiOutlineUser className="text-white text-2xl md:text-3xl " />
+          </a>
+        </Link>
         <div>
-          <BsCart2 className="text-white text-xl md:text-3xl " />
+          <BsCart2 className="text-white text-2xl md:text-3xl " />
           <p className="text-bg-slate-900 bg-orange-300 h-[20px] w-[20px] flex items-center justify-center rounded-full absolute top-6 right-1">
             {cartQuantity}
           </p>

@@ -5,8 +5,7 @@ const bcrypt = require("bcryptjs");
 
 dbConnect();
 
-export default async (req, res, next) => {
-    console.log(req.body)
+export default async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.emailLogin });
     // if user is the test account, set the right password
@@ -28,6 +27,6 @@ export default async (req, res, next) => {
       return res.status(400).json({ message: "Password is incorrect" });
     }
   } catch (err) {
-    return res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: "Sorry, try again later" });
   }
 };

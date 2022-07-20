@@ -5,10 +5,11 @@ import { useState, useEffect } from "react";
 
 function MyApp({ Component, pageProps }) {
   const [user, setUser] = useState(null);
+
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("user_amazon_lc")));
     //   localStorage.clear();
-    //   setUser(null)
+    //    setUser(null)
   }, []);
 
   return (

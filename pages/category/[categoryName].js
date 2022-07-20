@@ -27,7 +27,9 @@ export default function Category({ products }) {
 export const getStaticProps = async ({ params }) => {
   const res = await axios.get(
     `http://localhost:3000/api/category/${params.categoryName}`
-  );
+  ).catch((err) => {
+    console.log(err.message)
+  });
 
   return { props: { products: res.data } };
 };

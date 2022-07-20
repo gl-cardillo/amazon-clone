@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { UserContext } from "../../utils/userContext";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useRouter } from "next/router";
@@ -7,10 +7,8 @@ import { useRouter } from "next/router";
 export default function Product({ product }) {
   const [showDescription, setShowDescription] = useState(false);
   const [askLogin, setAskLogin] = useState(false);
-
   const [quantity, setQuantity] = useState(1);
   const router = useRouter();
-
   const { user, setUser } = useContext(UserContext);
 
   const addToCart = async () => {
@@ -19,13 +17,23 @@ export default function Product({ product }) {
       return;
     }
     axios
-      .post("http://localhost:3000/api/user/addToCart", {
-        productId: product._id,
-        quantity,
-        userId: user._id,
-      })
+      .post(
+        "http://localhost:3000/api/user/addToCart",
+        {
+          productId: product._id,
+          quantity,
+          userId: user._id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(
+              localStorage.getItem("token_amazon_lc")
+            )}`,
+          },
+        }
+      )
       .then((res) => {
-        setUser(res.data)
+        setUser(res.data);
         localStorage.setItem("user_amazon_lc", JSON.stringify(res.data));
         setQuantity(1);
       })
@@ -136,14 +144,20 @@ export default function Product({ product }) {
   );
 }
 export const getStaticProps = async ({ params }) => {
-  const res = await axios.get(
-    `http://localhost:3000/api/product/${params.productId}`
-  );
+  const res = await axios
+    .get(`http://localhost:3000/api/product/${params.productId}`)
+    .catch((err) => {
+      console.log(err.message);
+    });
   return { props: { product: res.data } };
 };
 
 export const getStaticPaths = async () => {
-  const products = await axios.get(`http://localhost:3000/api/product`);
+  const products = await axios
+    .get(`http://localhost:3000/api/product/all`)
+    .catch((err) => {
+      console.log(err.message);
+    });
 
   return {
     paths: products.data.map((product) => {

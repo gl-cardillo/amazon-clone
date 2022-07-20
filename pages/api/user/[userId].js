@@ -4,7 +4,7 @@ const User = require("../../../models/User");
 
 dbConnect();
 
-export default async (req, res, next) => {
+export default async (req, res) => {
   try {
     const result = verifyToken(req);
     if (!result) {
@@ -15,15 +15,8 @@ export default async (req, res, next) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    user.cart.push({
-      productId: req.body.productId,
-      quantity: req.body.quantity,
-    });
-
-    await user.save();
     return res.status(200).json(user);
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: error.message });
+    return res.status(500);
   }
 };

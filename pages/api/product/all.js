@@ -7,11 +7,14 @@ export default async (req, res) => {
   switch (req.method) {
     case "GET":
       try {
-        const products = await Product.find();
+        const products = await Product.find({});
+        if (!products) {
+          return res.status(404).json({ message: "Product not found" });
+        }
         return res.status(200).json(products);
       } catch (error) {
-        console.log(error);
-        return res.status(404).json({ message: error.message });
+        console.log(error.message)
+        return res.status(500).json({ message: error.message });
       }
       break;
     case "POST":
