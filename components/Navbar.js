@@ -122,9 +122,11 @@ export default function Navbar() {
         </Link>
         <div>
           <BsCart2 className="text-white text-2xl md:text-3xl " />
-          <p className="text-bg-slate-900 bg-orange-300 h-[20px] w-[20px] flex items-center justify-center rounded-full absolute top-6 right-1">
-            {cartQuantity}
-          </p>
+          {cartQuantity > 0 && (
+            <p className="text-bg-slate-900 bg-orange-300 h-[20px] w-[20px] flex items-center justify-center rounded-full absolute top-6 right-1">
+              {cartQuantity}
+            </p>
+          )}
         </div>
       </div>
     </div>

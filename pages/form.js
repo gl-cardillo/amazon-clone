@@ -55,9 +55,15 @@ export default function form() {
       <input type="number" id="price" {...register("price")} step="0.01" />
       <input
         type="text"
-        id="category"
-        placeholder="category"
-        {...register("category")}
+        id="categoryId"
+        placeholder="categoryId"
+        {...register("categoryId")}
+      />
+      <input
+        type="text"
+        id="categoryName"
+        placeholder="categoryName"
+        {...register("categoryName")}
       />
       <input
         type="text"

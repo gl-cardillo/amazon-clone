@@ -1,53 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect } from "react";
+import { catalogs } from "../utils/catalogs";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 
 export default function Home() {
-
   const slideImages = [
     { image: "/images/phones-slide.jpeg", link: "/electronics" },
     { image: "/images/pets-slide.jpeg", link: "/pets" },
     { image: "/images/shoes-slide.jpeg", link: "/clothes" },
   ];
-  const catalogs = [
-    {
-      name: "Electronics",
-      image: "/images/electronic_devices_catalog.jpeg",
-      link: "category/electronics",
-    },
-    {
-      name: "Videogame & Console",
-      image: "/images/console_videogame_catalog.jpeg",
-      link: "category/videogame&console",
-    },
-    {
-      name: "Clothes",
-      image: "/images/clothes_catalog.jpeg",
-      link: "category/clothes",
-    },
-    {
-      name: "Pets supplies",
-      image: "/images/pets_catalog.jpeg",
-      link: "category/petsSupplies",
-    },
-    {
-      name: "Books",
-      image: "/images/books_catalog.jpeg",
-      link: "category/books",
-    },
-    {
-      name: "Personal care",
-      image: "/images/personal_care_catalog.jpeg",
-      link: "category/personalCare",
-    },
-    {
-      name: "Kitchen products",
-      image: "/images/kitchen_catalog.jpeg",
-      link: "category/kitchenProduct",
-    },
-  ];
+
   return (
     <>
       <div className="slide-container">

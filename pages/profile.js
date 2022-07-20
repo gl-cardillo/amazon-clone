@@ -3,7 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { BsFillPencilFill } from "react-icons/bs";
 import { UserContext } from "../utils/userContext";
-import { HiOutlineLogout } from "react-icons/bs";
+import { HiOutlineLogout } from "react-icons/hi";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,6 +12,7 @@ import * as yup from "yup";
 export default function profile() {
   const [showDetails, setShowDetails] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
+  const [showDeleteAccount, setShowDeleteAccount] = useState(false);
   const { user, setUser } = useContext(UserContext);
   const router = useRouter();
 
@@ -33,7 +34,7 @@ export default function profile() {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -84,19 +85,42 @@ export default function profile() {
     defaultValues.address = user.address;
     defaultValues.city = user.city;
     defaultValues.postcode = user.postcode;
-    defaultValues.dateOfBirth = user.dateOfBirth_toISODate
+    defaultValues.dateOfBirth = user.dateOfBirth_toISODate;
 
     reset({ ...defaultValues });
   }, [user]);
 
+  const logOut = () => {
+    setUser(null);
+    localStorage.clear();
+    router.push("/");
+  };
+
+  console.log(user);
+  const deleteAccount = () => {
+    axios
+      .delete("http://localhost:3000/api/user/deleteAccount", {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("token_amazon_lc")
+          )}`,
+        },
+      })
+      .then(() => {
+        logOut();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
-    <div className=" mt-5 mx-6 md:mx-24 lg:mx-52 flex items-center flex-col p-5 bg-white rounded-md gap-2">
+    <div className=" mt-5 mx-6 md:mx-24 lg:mx-52 flex items-center flex-col p-5 bg-white rounded-md gap-3">
       <h2 className="font-bold text-lx">Welcome {user && user.firstname}</h2>
       <p className="flex gap 2 items-center">
         Details
         <MdKeyboardArrowDown
-          className={showDetails ? "rotate-180 text-xl" : "text-xl"}
+          className={`${showDetails && "rotate-180 text-xl"} "text-xl"`}
           onClick={() => {
             setShowDetails(!showDetails);
           }}
@@ -117,7 +141,7 @@ export default function profile() {
               </label>
               <p className="text-[12px] text-red-600 pt-1">
                 {errors?.name?.message}
-              </p>{" "}
+              </p>
               <label htmlFor="address">
                 <h4>Address:</h4>
                 <input
@@ -127,7 +151,9 @@ export default function profile() {
                   name="address"
                 />
               </label>
-              <p  className="text-[12px] text-red-600 pt-1">{errors?.address?.message}</p>
+              <p className="text-[12px] text-red-600 pt-1">
+                {errors?.address?.message}
+              </p>
               <label htmlFor="city">
                 <h4>City:</h4>
                 <input
@@ -146,7 +172,9 @@ export default function profile() {
                   name="postcode"
                 />
               </label>
-              <p  className="text-[12px] text-red-600 pt-1">{errors?.postcode?.message}</p>
+              <p className="text-[12px] text-red-600 pt-1">
+                {errors?.postcode?.message}
+              </p>
               <label htmlFor="dateOfBirth">
                 <h4> Date of birth:</h4>
                 <input
@@ -156,7 +184,9 @@ export default function profile() {
                   id="dateOfBirth"
                 />
               </label>
-              <p  className="text-[12px] text-red-600 pt-1">{errors?.dateOfBirth?.message}</p>
+              <p className="text-[12px] text-red-600 pt-1">
+                {errors?.dateOfBirth?.message}
+              </p>
               <button
                 type="submit"
                 className="mt-5  w-[110px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
@@ -181,17 +211,44 @@ export default function profile() {
             <p>Address:{user && user.address}</p>
             <p>City: {user && user.city}</p>
             <p>Postcode: {user && user.postcode}</p>
-            <p>Date of birth: {user && user.dateOfBirth &&  user.dateOfBirth_formatted}</p>
+            <p>
+              Date of birth:{" "}
+              {user && user.dateOfBirth && user.dateOfBirth_formatted}
+            </p>
           </div>
         ))}
-      <div className="flex  gap-2">
-        <button className="mt-5  w-[110px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]">
-          Go to shopping
-        </button>
-        <button className="mt-5  w-[110px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]">
-          Go to cart
+      <div className="flex flex-col  gap-5 items-center">
+        <HiOutlineLogout onClick={() => logOut()} className="text-3xl" />
+        <button
+          onClick={() => setShowDeleteAccount(true)}
+          className="p-1 text-red-400 border-[3px] border-red-400"
+        >
+          Delete account
         </button>
       </div>
+      {showDeleteAccount && (
+        <div className=" fixed z-2 top-0 left-0 w-full h-full bg-black/50">
+          <div className="absolute z-3 top-1/2 left-1/2 w-[300px] text-[18px] bg-white transform -translate-x-1/2 -translate-y-1/2 p-4 rounded-md border-2 border-[#f0c14b] flex flex-col items-center">
+            <p className=" text-center font-semibold">
+              Are you sure you want to delete this account?
+            </p>
+            <div className="flex justify-around">
+              <button
+                className="mt-5 p-2 w-[120px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                onClick={() => setShowDeleteAccount(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="mt-5 p-2 w-[120px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                onClick={() => deleteAccount()}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

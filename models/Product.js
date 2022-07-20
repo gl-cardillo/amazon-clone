@@ -10,7 +10,8 @@ const ProductSchema = new mongoose.Schema({
   description: { type: String },
   description2: { type: String },
   description3: { type: String },
-  category: { type: String },
+  categoryId: { type: String },
+  categoryName: { type: String },
   subcategory: { type: String },
 });
 

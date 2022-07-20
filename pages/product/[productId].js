@@ -126,7 +126,7 @@ export default function Product({ product }) {
         <p className="flex gap-2 items-center">
           Description
           <MdKeyboardArrowDown
-            className={showDescription ? "rotate-180 text-xl" : "text-xl"}
+            className={`${showDescription && "rotate-180 text-xl"} text-xl`}
             onClick={() => {
               setShowDescription(!showDescription);
             }}
