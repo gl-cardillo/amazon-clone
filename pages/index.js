@@ -19,7 +19,7 @@ export default function Home() {
             <div className="each-slide" key={index}>
               <img
                 key={index}
-                className="h-auto max-h-[500px] w-full"
+                className="h-auto max-h-[500px] xl:max-h-[600px] w-full"
                 src={slideImage.image}
                 alt=""
               />

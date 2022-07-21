@@ -96,7 +96,6 @@ export default function Profile() {
     router.push("/");
   };
 
-  console.log(user);
   const deleteAccount = () => {
     axios
       .delete("http://localhost:3000/api/user/deleteAccount", {
@@ -208,11 +207,22 @@ export default function Profile() {
               onClick={() => setEditProfile(!editProfile)}
               className=" self-end mb-2"
             />
-            <p>Address:{user && user.address}</p>
-            <p>City: {user && user.city}</p>
-            <p>Postcode: {user && user.postcode}</p>
             <p>
-              Date of birth:{" "}
+              <span className="font-bold">Name:</span> {user && user.name}
+            </p>
+            <p>
+              <span className="font-bold">Address:</span>
+              {user && user.address}
+            </p>
+            <p>
+              <span className="font-bold">City:</span> {user && user.city}
+            </p>
+            <p>
+              <span className="font-bold">Postcode:</span>{" "}
+              {user && user.postcode}
+            </p>
+            <p>
+              <span className="font-bold">Date of birth: </span>
               {user && user.dateOfBirth && user.dateOfBirth_formatted}
             </p>
           </div>

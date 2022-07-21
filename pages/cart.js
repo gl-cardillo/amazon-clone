@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useState, useEffect, useContext, useRef } from "react";
+import Link from "next/link";
+import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../utils/userContext";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -26,7 +27,6 @@ export default function Cart() {
         })
         .then((res) => {
           setCart(res.data.cart);
-          console.log(res.data.cart);
           setCartQuantity(
             res.data.cart.reduce((accum, cart) => accum + cart.quantity, 0)
           );
@@ -99,7 +99,7 @@ export default function Cart() {
   };
 
   return (
-    <div className="m-2 p-2 py-5 bg-white rounded-md flex flex-col sm:mx-6 md:mx-20 md:px-10 lg:mx-40 ">
+    <div className="m-5 p-2 py-5 bg-white rounded-md flex flex-col sm:mx-6 md:mx-20 md:px-10 lg:mx-40 xl:mx-[400px] 2xl:mx-[500px] ">
       <h2 className="font-bold text-xl">Shopping Basket</h2>
       <div>
         {cart ? (
@@ -117,7 +117,13 @@ export default function Cart() {
                         className="min-w-[50px] h-[50px]"
                       />
                       <div className="flex gap-5 flex-col">
-                        <h3 className="text-sm">{productCart.product.name}</h3>
+                        <Link href={`/product/${productCart.product._id}`}>
+                          <a>
+                            <h3 className="text-sm font-semibold">
+                              {productCart.product.name}
+                            </h3>
+                          </a>
+                        </Link>
                         <div>
                           <div className="flex gap-2 items-center">
                             <div className="flex gap-3 px-1 text-sm border-solid border-2  border-slate-400 rounded-2xl">
@@ -173,7 +179,10 @@ export default function Cart() {
             <div className="flex flex-col items-center">
               <p>Basket is Empty</p>
               <div>
-                <button className="mt-5 p-1 w-[120px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]">
+                <button
+                  onClick={() => router.push("/")}
+                  className="mt-1 p-1 w-[120px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                >
                   Go to shopping!
                 </button>
               </div>

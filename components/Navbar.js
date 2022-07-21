@@ -20,6 +20,7 @@ export default function Navbar() {
     input.current.value = "";
     setTimeout(() => {
       setSearch([]);
+      setShowSearch(false);
     }, 200);
   }
 
@@ -27,6 +28,7 @@ export default function Navbar() {
     if (e.target.value === "") {
       setSearch([]);
     } else {
+      setShowSearch(true);
       const newSearch = products.filter((product) => {
         return product.name
           .toLowerCase()
@@ -67,10 +69,9 @@ export default function Navbar() {
       <div className="flex h-auto" onBlur={() => blur(inputRef, setSearch)}>
         <input
           type="text"
-          className="rounded-l h-7 focus:outline-none p-1 w-[130px] sm:w-[150px] md:w-[200px] lg:w-[300px]"
+          className="rounded-l h-7 focus:outline-none focus:border-none p-1 w-[130px] sm:w-[150px] md:w-[200px] lg:w-[300px]"
           ref={inputRef}
           onChange={(e) => handleSearch(e)}
-          onFocus={() => setShowSearch(true)}
         />
         {search.length > 0 ? (
           <BsSearch
@@ -86,7 +87,7 @@ export default function Navbar() {
           <BsSearch className="rounded-r bg-orange-300 h-7 px-1.5 w-7 text-xl  " />
         )}
         {showSearch && (
-          <div className="z-10 absolute  mt-6 rounded-md z-1 w-[130px] sm:w-[150px] md:w-[200px] lg:w-[300px]  ">
+          <div className="z-10 absolute   mt-[24px] rounded-md z-1 w-[131px] sm:w-[150px] md:w-[200px] lg:w-[300px] border-solid border-b-2 border-x-2 border-slate-200   ">
             {search.slice(0, 4).map((product, index) => {
               return (
                 <Link key={index} href={`/product/${product._id}`}>
@@ -96,14 +97,14 @@ export default function Navbar() {
                         inputRef.current.value = "";
                         setSearch([]);
                       }}
-                      className=" flex bg-white px-1 py-3"
+                      className=" flex bg-white px-1 py-3 gap-2 items-center"
                     >
                       <img
                         src={product.picUrl}
                         className=" hidden sm:block w-[40px] h-[40px]"
                         alt="product"
                       />
-                      <p className="whitespace-nowrap overflow-hidden text-xs ">
+                      <p className="whitespace-nowrap overflow-hidden text-xs font-semibold ">
                         {product.name}
                       </p>
                     </div>
@@ -127,7 +128,7 @@ export default function Navbar() {
             </a>
           </Link>
           {cartQuantity > 0 && (
-            <p className="text-bg-slate-900 bg-orange-300 h-[20px] w-[20px] flex items-center justify-center rounded-full absolute top-6 right-1">
+            <p className="text-sm text-bg-slate-900 bg-orange-300 h-[17px] w-[17px] flex items-center justify-center rounded-full absolute top-6 right-1">
               {cartQuantity}
             </p>
           )}

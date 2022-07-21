@@ -59,34 +59,38 @@ export default function Product({ product }) {
         <img src={product.picUrl} alt="category" />
         <p className="font-bold text-2xl self-center">£{product.price}</p>
       </div>
-      <div className="hidden md:flex bg-white my-3 gap-5 p-5 items-center rounded-md  md:mx-24 lg:mx-52">
-        <div className="p-5 w-1/3">
-          <img src={product.picUrl} className="w-full h-1/3" alt="category" />
+      <div className="hidden md:flex flex-col bg-white my-3 gap-5 p-5 items-center rounded-md  md:mx-24 lg:mx-52 xl:mx-[400px]">
+        <div className="flex gap-5 items-center">
+          <div className="p-2 w-1/3">
+            <img src={product.picUrl} className="w-full h-1/3" alt="category" />
+          </div>
+          <div className="flex flex-col self-baseline pt-5 xl:pt-10 2xl:pt-16   ">
+            <h3 className=" font-bold text-lg lg:text-xl xl:text-3xl ">
+              {product.name}
+            </h3>
+            <p className="font-bold text-lg xl:text-xl py-5 2xl:py-16">
+              £{product.price}
+            </p>
+            <p className="flex gap-2 items-center">
+              Description
+              <MdKeyboardArrowDown
+                className={showDescription ? "rotate-180 text-xl" : "text-xl"}
+                onClick={() => {
+                  setShowDescription(!showDescription);
+                }}
+              />
+            </p>
+          </div>
         </div>
-        <div className="flex flex-col self-baseline pt-5 xl:pt-10 2xl:pt-16  ">
-          <h3 className=" font-bold text-lg lg:text-xl xl:text-3xl ">
-            {product.name}
-          </h3>
-          <p className="font-bold text-lg xl:text-xl py-5">£{product.price}</p>
-          <p className="flex gap-2 items-center">
-            Description
-            <MdKeyboardArrowDown
-              className={showDescription ? "rotate-180 text-xl" : "text-xl"}
-              onClick={() => {
-                setShowDescription(!showDescription);
-              }}
-            />
-          </p>
-          {showDescription && (
-            <div className="max-w-[300px] xl:max-w-[500px]">
-              <p>&#8226;{product.description}</p>
-              <p>&#8226;{product.description2 && product.description2}</p>
-              <p>&#8226;{product.description3}</p>
-            </div>
-          )}
-        </div>
+        {showDescription && (
+          <div className="max-w-[350px] lg:max-w-[400px] xl:max-w-[450px] 2xl:max-w-[1100px] self-end">
+            <p>&#8226;{product.description}</p>
+            <p className="py-2">&#8226;{product.description2 && product.description2}</p>
+            <p>&#8226;{product.description3}</p>
+          </div>
+        )}
       </div>
-      <div className="bg-white py-5 flex flex-col gap-5 items-center rounded-md  md:mx-24 lg:mx-52  ">
+      <div className="bg-white py-5 flex flex-col gap-5 items-center rounded-md  md:mx-24 lg:mx-52 xl:mx-[400px]  ">
         <div className="flex gap-3 px-1.5 border-solid border-2  border-slate-400 rounded-2xl">
           <p onClick={() => decreaseQuantity()}>-</p>
           <p>{quantity}</p>
