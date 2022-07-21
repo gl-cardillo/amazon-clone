@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import Layout from "../components/Layout";
 import { UserContext } from "../utils/userContext";
 import { useState, useEffect } from "react";
+import { SkeletonTheme } from "react-loading-skeleton";
 
 function MyApp({ Component, pageProps }) {
   const [user, setUser] = useState(null);
@@ -14,9 +15,11 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <SkeletonTheme highlightColor="#979797">
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </SkeletonTheme>
     </UserContext.Provider>
   );
 }

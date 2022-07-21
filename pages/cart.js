@@ -2,11 +2,16 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useState, useEffect, useContext, useRef } from "react";
 import { UserContext } from "../utils/userContext";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+
 export default function Cart() {
   const { user, setUser } = useContext(UserContext);
   const [totalPrice, setTotalPrice] = useState(0);
   const [cartQuantity, setCartQuantity] = useState(0);
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(null);
+  const [disableButton, setDisableButton] = useState(false);
+  const [quantityError, setQuantityError] = useState("");
   const router = useRouter();
 
   useEffect(() => {
@@ -39,53 +44,150 @@ export default function Cart() {
     getCart();
   }, [user]);
 
+  const updateQuantity = (productId, quantity, n) => {
+    setDisableButton(true);
+    if (quantity === 1 && n === "-1") {
+      removeProduct(productId);
+      return;
+    }
+    if (quantity === 9 && n === "+1") {
+      setQuantityError("The limit is 9");
+
+      return;
+    }
+
+    axios
+      .put(
+        "http://localhost:3000/api/cart/addToCart",
+        { productId, n },
+        {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(
+              localStorage.getItem("token_amazon_lc")
+            )}`,
+          },
+        }
+      )
+      .then((res) => {
+        setUser(res.data);
+        setQuantityError("");
+        setDisableButton(false);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
+  const removeProduct = (productId) => {
+    axios
+      .delete("http://localhost:3000/api/cart/addToCart", {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("token_amazon_lc")
+          )}`,
+        },
+        data: {
+          productId: productId,
+        },
+      })
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+  };
+
   return (
-    <div className="m-2 p-2 py-5 bg-white rounded-md flex flex-col md:mx-20 md:px-10 lg:mx-40 ">
+    <div className="m-2 p-2 py-5 bg-white rounded-md flex flex-col sm:mx-6 md:mx-20 md:px-10 lg:mx-40 ">
       <h2 className="font-bold text-xl">Shopping Basket</h2>
       <div>
-        {cart.length > 0 ? (
-          <div>
-            {cart.map((productCart, index) => {
-              return (
-                <div
-                  key={index}
-                  className="flex min-h-[100px] justify-between my-5 py-2 border-b-2 border-slate-300 "
-                >
-                  <div className="flex gap-3 items-center">
-                    <img
-                      src={productCart.product.picUrl}
-                      className="w-[50px] h-[50px]"
-                    ></img>
-                    <div className="flex gap-5 flex-col">
-                      <h3 className="text-sm">{productCart.product.name}</h3>
-                      <div className="flex gap-2 items-center">
-                        <div className="flex gap-3 px-1 text-sm border-solid border-2  border-slate-400 rounded-2xl">
-                          <p onClick={() => decreaseQuantity()}>-</p>
-                          <p>{productCart.quantity}</p>
-                          <p onClick={() => increaseQuantity()}>+</p>
+        {cart ? (
+          cart.length > 0 ? (
+            <div>
+              {cart.map((productCart, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="flex min-h-[100px] justify-between my-5 py-2 border-b-2 border-slate-300 "
+                  >
+                    <div className="flex gap-3 items-center">
+                      <img
+                        src={productCart.product.picUrl}
+                        className="min-w-[50px] h-[50px]"
+                      />
+                      <div className="flex gap-5 flex-col">
+                        <h3 className="text-sm">{productCart.product.name}</h3>
+                        <div>
+                          <div className="flex gap-2 items-center">
+                            <div className="flex gap-3 px-1 text-sm border-solid border-2  border-slate-400 rounded-2xl">
+                              <button
+                                onClick={() =>
+                                  updateQuantity(
+                                    productCart.product._id,
+                                    productCart.quantity,
+                                    "-1"
+                                  )
+                                }
+                              >
+                                -
+                              </button>
+                              <p>{productCart.quantity}</p>
+                              <button
+                                onClick={() =>
+                                  updateQuantity(
+                                    productCart.product._id,
+                                    productCart.quantity,
+                                    "+1"
+                                  )
+                                }
+                                disabled={disableButton}
+                              >
+                                +
+                              </button>
+                            </div>
+
+                            <button
+                              onClick={() =>
+                                removeProduct(productCart.product._id)
+                              }
+                              className="text-sm text-blue-500"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                          <p className="text-red-500 text-[12px]">
+                            {quantityError}
+                          </p>
                         </div>
-                        <p className="text-sm text-blue-500">Delete</p>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex flex-col">
-                    <p>price</p>
                     <p className="font-bold text-sm">
                       {productCart.product.price}
                     </p>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center">
+              <p>Basket is Empty</p>
+              <div>
+                <button className="mt-5 p-1 w-[120px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]">
+                  Go to shopping!
+                </button>
+              </div>
+            </div>
+          )
         ) : (
-          "Cart is empty"
+          <Skeleton height={300} width={300} />
         )}
       </div>
       <div className="flex gap-1 items-center self-end ">
         <p className="text-sm">{`Subtotal (${cartQuantity} items):`}</p>
-             <p className="font-bold"> {totalPrice}
-  </p>
+        <p className="font-bold">
+          {(Math.round(totalPrice * 100) / 100).toFixed(2)}
+        </p>
       </div>
     </div>
   );
