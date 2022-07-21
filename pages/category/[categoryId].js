@@ -8,9 +8,9 @@ export default function Category({ products }) {
       <div className=" hidden md:block border-r-2 p-3">
         <h3>Categoeries</h3>
 
-        {catalogs.map((category) => {
+        {catalogs.map((category, index) => {
           return (
-            <div>
+            <div key={index}>
               <p
                 className={`${
                   category.name === products[0].categoryName &&

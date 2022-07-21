@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-export default function singin() {
+export default function Singin() {
   const [showSignin, setShowSignin] = useState(true);
   const [errorSignin, setErrorSignin] = useState("");
   const [errorLogin, setErrorLogin] = useState("");

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Card from "../components/Card";
 
-export default function search() {
+export default function Search() {
   const router = useRouter();
   const [searchResult, setSearchResult] = useState([]);
 

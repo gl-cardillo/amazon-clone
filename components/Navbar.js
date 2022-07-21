@@ -14,7 +14,7 @@ export default function Navbar() {
   const [products, setProducts] = useState([]);
   const inputRef = useRef(null);
   const router = useRouter();
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   function blur(input) {
     input.current.value = "";
@@ -121,7 +121,11 @@ export default function Navbar() {
           </a>
         </Link>
         <div>
-          <BsCart2 className="text-white text-2xl md:text-3xl " />
+          <Link href="/cart">
+            <a>
+              <BsCart2 className="text-white text-2xl md:text-3xl " />
+            </a>
+          </Link>
           {cartQuantity > 0 && (
             <p className="text-bg-slate-900 bg-orange-300 h-[20px] w-[20px] flex items-center justify-center rounded-full absolute top-6 right-1">
               {cartQuantity}

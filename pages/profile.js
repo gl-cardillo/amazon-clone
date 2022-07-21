@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-export default function profile() {
+export default function Profile() {
   const [showDetails, setShowDetails] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
   const [showDeleteAccount, setShowDeleteAccount] = useState(false);

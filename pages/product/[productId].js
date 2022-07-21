@@ -18,7 +18,7 @@ export default function Product({ product }) {
     }
     axios
       .post(
-        "http://localhost:3000/api/user/addToCart",
+        "http://localhost:3000/api/cart/addToCart",
         {
           productId: product._id,
           quantity,
