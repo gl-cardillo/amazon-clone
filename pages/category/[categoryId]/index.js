@@ -11,19 +11,19 @@ export default function Category({ products }) {
   return (
     <div className="flex min-h-screen gap-3 p-3">
       <div className=" hidden md:block border-r-2 p-2 min-w-[170px]">
-        <h3 className="text-2xl font-bold mb-3">Categoeries</h3>
+        <h2 className="text-2xl font-bold mb-3">Categoeries</h2>
         {catalogs.map((category, index) => {
           return (
             <div key={index}>
               <Link href={category.link}>
                 <a>
-                  <p
+                  <h3
                     className={`${
                       category.id === categoryId && "font-bold text-lg"
                     }  mt-1`}
                   >
                     {category.name}
-                  </p>
+                  </h3>
                 </a>
               </Link>
               {category.id === categoryId &&
@@ -47,7 +47,31 @@ export default function Category({ products }) {
         })}
       </div>
       <div>
-        <h2 className="font-bold text-3xl pl-6">{products[0].categoryName}</h2>
+        <h3 className="font-bold text-2xl pl-1 mb-2  border-b-2 border-slate-300">
+          {products[0].categoryName}
+        </h3>
+        <div className="flex items-center">
+          {catalogs
+            .filter((category) => category.id === categoryId)[0]
+            .subcategory.map((subcategory, index) => {
+              return (
+                <Link
+                  key={index}
+                  href={`/category/${categoryId}/${subcategory}`}
+                >
+                  <a>
+                    <p
+                      className={`${
+                        subcategory === subcategoryId && "font-bold text-lg"
+                      }  pl-2`}
+                    >
+                      {subcategory}
+                    </p>
+                  </a>
+                </Link>
+              );
+            })}
+        </div>
         <div className="md:flex md:flex-wrap justify-center">
           {products.map((product, index) => {
             return <Card key={index} product={product} />;
