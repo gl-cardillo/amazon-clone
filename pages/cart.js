@@ -2,11 +2,13 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useState, useEffect, useContext } from "react";
-import { UserContext } from "../utils/userContext";
+import { UserContext } from "../utils/context";
+import { CurrencyContext } from "../utils/context";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 export default function Cart() {
+  const { currencySymbol, currencyRate } = useContext(CurrencyContext);
   const { user, setUser } = useContext(UserContext);
   const [totalPrice, setTotalPrice] = useState(0);
   const [cartQuantity, setCartQuantity] = useState(0);
@@ -169,7 +171,12 @@ export default function Cart() {
                       </div>
                     </div>
                     <p className="font-bold text-sm">
-                      {productCart.product.price}
+                      {currencySymbol}
+                      {(
+                        Math.round(
+                          productCart.product.price * currencyRate * 100
+                        ) / 100
+                      ).toFixed(2)}
                     </p>
                   </div>
                 );
@@ -195,7 +202,8 @@ export default function Cart() {
       <div className="flex gap-1 items-center self-end ">
         <p className="text-sm">{`Subtotal (${cartQuantity} items):`}</p>
         <p className="font-bold">
-          {(Math.round(totalPrice * 100) / 100).toFixed(2)}
+          {currencySymbol}
+          {(Math.round(totalPrice * currencyRate * 100) / 100).toFixed(2)}
         </p>
       </div>
     </div>

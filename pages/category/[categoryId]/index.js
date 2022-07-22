@@ -46,11 +46,11 @@ export default function Category({ products }) {
           );
         })}
       </div>
-      <div>
-        <h3 className="font-bold text-2xl pl-1 mb-2  border-b-2 border-slate-300">
+      <div className="w-full">
+        <h3 className="  md:hidden font-bold text-2xl pl-1 mb-2  border-b-2 border-slate-300">
           {products[0].categoryName}
         </h3>
-        <div className="flex items-center">
+        <div className=" md:hidden flex items-center">
           {catalogs
             .filter((category) => category.id === categoryId)[0]
             .subcategory.map((subcategory, index) => {

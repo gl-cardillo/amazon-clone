@@ -4,7 +4,7 @@ export const catalogs = [
     id: "electronics",
     image: "/images/electronic_devices_catalog.jpeg",
     link: "/category/electronics",
-    subcategory: ["phones", "computer", "headphones"],
+    subcategory: ["Phones", "Computer", "Headphones", "TV"],
   },
   {
     name: "Videogame & Console",

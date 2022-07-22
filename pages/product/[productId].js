@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useContext } from "react";
-import { UserContext } from "../../utils/userContext";
+import { UserContext } from "../../utils/context";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useRouter } from "next/router";
 

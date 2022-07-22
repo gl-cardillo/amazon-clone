@@ -3,7 +3,7 @@ import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useState, useEffect, useContext, useRef } from "react";
-import { UserContext } from "../utils/userContext";
+import { UserContext } from "../utils/context";
 import { BsSearch, BsCart2 } from "react-icons/bs";
 import { AiOutlineUser } from "react-icons/ai";
 
@@ -101,7 +101,7 @@ export default function Navbar() {
                     >
                       <img
                         src={product.picUrl}
-                        className=" hidden sm:block w-[40px] h-[40px]"
+                        className=" object-contain hidden sm:block min-w-[30px] h-[40px]"
                         alt="product"
                       />
                       <p className="whitespace-nowrap overflow-hidden text-xs font-semibold ">

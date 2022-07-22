@@ -2,7 +2,8 @@ import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { BsFillPencilFill } from "react-icons/bs";
-import { UserContext } from "../utils/userContext";
+import { UserContext } from "../utils/context";
+import { CurrencyContext } from "../utils/context";
 import { HiOutlineLogout } from "react-icons/hi";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useForm } from "react-hook-form";
@@ -13,6 +14,9 @@ export default function Profile() {
   const [showDetails, setShowDetails] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
   const [showDeleteAccount, setShowDeleteAccount] = useState(false);
+
+  const { currencySymbol, setCurrencySymbol, currencyRate, setCurrencyRate } =
+    useContext(CurrencyContext);
   const { user, setUser } = useContext(UserContext);
   const router = useRouter();
 
@@ -113,8 +117,28 @@ export default function Profile() {
       });
   };
 
+  const setCurrency = (symbol) => {
+    if (symbol === currencySymbol) return;
+    switch (symbol) {
+      case "£":
+        setCurrencySymbol("£");
+        setCurrencyRate(1);
+        break;
+      case "€":
+        setCurrencySymbol("€");
+        setCurrencyRate(1.18);
+        break;
+      case "$":
+        setCurrencySymbol("$");
+        setCurrencyRate(1.2);
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
-    <div className=" mt-5 mx-6 md:mx-24 lg:mx-52 flex items-center flex-col p-5 bg-white rounded-md gap-3">
+    <div className=" mt-5 mx-6 md:mx-44 lg:mx-[300px] xl:mx-[500px] 2xl:mx-[600px] flex items-center flex-col p-5 bg-white rounded-md gap-3">
       <h2 className="font-bold text-lx">Welcome {user && user.firstname}</h2>
       <p className="flex gap 2 items-center">
         Details
@@ -227,6 +251,35 @@ export default function Profile() {
             </p>
           </div>
         ))}
+      <div>
+        <p className=" text-center mb-2">Curency:</p>
+        <div className="flex gap-2">
+          <button
+            onClick={() => setCurrency("£")}
+            className={`${
+              currencySymbol === "£" && "bg-[#f7dfa5]"
+            } h-[40px] w-[40px] text-xl border-2 border-[#f0c14b] hover:bg-[#f7dfa5] `}
+          >
+            £
+          </button>
+          <button
+            onClick={() => setCurrency("€")}
+            className={`${
+              currencySymbol === "€" && "bg-[#f7dfa5]"
+            } h-[40px] w-[40px] text-xl border-2 border-[#f0c14b] hover:bg-[#f7dfa5] `}
+          >
+            €
+          </button>
+          <button
+            onClick={() => setCurrency("$")}
+            className={`${
+              currencySymbol === "$" && "bg-[#f7dfa5]"
+            } h-[40px] w-[40px] text-xl border-2 border-[#f0c14b] hover:bg-[#f7dfa5] `}
+          >
+            $
+          </button>
+        </div>
+      </div>
       <div className="flex flex-col  gap-5 items-center">
         <HiOutlineLogout onClick={() => logOut()} className="text-3xl" />
         <button
