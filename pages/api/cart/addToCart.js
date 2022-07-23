@@ -11,13 +11,13 @@ export default async (req, res, next) => {
       try {
         const result = verifyToken(req);
         if (!result) {
-          return res.status(403).json({ message: "User not loged in " });
+          return res.status(403).json({ message: "User not logged in " });
         }
         const user = await User.findById(result.user._id);
         if (!user) {
           return res.status(404).json({ message: "User not found" });
         }
-        //check if procuts is in the cart
+        //check if products is in the cart
         const index = user.cart.findIndex(
           (cart) => cart.productId === req.body.productId
         );
@@ -28,7 +28,7 @@ export default async (req, res, next) => {
             quantity: req.body.quantity,
           });
         } else {
-          // if product is in the cart increament quantity
+          // if product is in the cart increment quantity
           user.cart[index].quantity += req.body.quantity;
         }
         user.markModified("cart");
@@ -43,13 +43,13 @@ export default async (req, res, next) => {
       try {
         const result = verifyToken(req);
         if (!result) {
-          return res.status(403).json({ message: "User not loged in " });
+          return res.status(403).json({ message: "User not logged in " });
         }
         const user = await User.findById(result.user._id);
         if (!user) {
           return res.status(404).json({ message: "User not found" });
         }
-        //check if procuts is in the cart
+        //check if products is in the cart
         const index = user.cart.findIndex(
           (cart) => cart.productId === req.body.productId
         );
@@ -71,11 +71,11 @@ export default async (req, res, next) => {
       try {
         const result = verifyToken(req);
         if (!result) {
-          return res.status(403).json({ message: "User not loged in " });
+          return res.status(403).json({ message: "User not logged in " });
         }
         const user = await User.findById(result.user._id);
 
-        //check if procuts is in the cart
+        //check if products is in the cart
         for (let i = 0; i < user.cart.length; i++) {
           if (user.cart[i].productId === req.body.productId) {
             user.cart.splice(i, 1);

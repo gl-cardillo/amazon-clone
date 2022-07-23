@@ -25,7 +25,7 @@ UserSchema.virtual("dateOfBirth_toISODate").get(function () {
   return DateTime.fromJSDate(this.dateOfBirth).toISODate();
 });
 
-UserSchema.virtual("firstname").get(function () {
+UserSchema.virtual("firstName").get(function () {
   return this.name.split(' ')[0]
 });
 

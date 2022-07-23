@@ -44,7 +44,7 @@ export default function Profile() {
   });
 
   const updateProfile = (data) => {
-    // only way i found to store date of birth witout time in mongodb
+    // only way i found to store date of birth without time in mongodb
     const date = new Date(data.dateOfBirth);
     const userTimezoneOffset = date.getTimezoneOffset() * 60000;
     const dateOfBirth = new Date(date.getTime() - userTimezoneOffset);
@@ -252,7 +252,7 @@ export default function Profile() {
           </div>
         ))}
       <div>
-        <p className=" text-center mb-2">Curency:</p>
+        <p className=" text-center mb-2">Currency:</p>
         <div className="flex gap-2">
           <button
             onClick={() => setCurrency("£")}

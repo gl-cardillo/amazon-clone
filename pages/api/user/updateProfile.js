@@ -9,7 +9,7 @@ export default async (req, res) => {
     const { id, name, city, address, postcode, dateOfBirth } = req.body;
     const result = verifyToken(req);
     if (!result) {
-      return res.status(403).json({ message: "User not loged in" });
+      return res.status(403).json({ message: "User not logged in" });
     }
     const firstname = name.split(" ")[0];
      await User.findByIdAndUpdate(result.user._id, {

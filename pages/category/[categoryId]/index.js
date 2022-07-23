@@ -11,7 +11,7 @@ export default function Category({ products }) {
   return (
     <div className="flex min-h-screen gap-3 p-3">
       <div className=" hidden md:block border-r-2 p-2 min-w-[170px]">
-        <h2 className="text-2xl font-bold mb-3">Categoeries</h2>
+        <h2 className="text-2xl font-bold mb-3">Categories</h2>
         {catalogs.map((category, index) => {
           return (
             <div key={index}>
@@ -83,12 +83,9 @@ export default function Category({ products }) {
 }
 
 export const getStaticProps = async ({ params }) => {
+  
   const res = await axios
-
     .get(`http://localhost:3000/api/category/${params.categoryId}`)
-    .catch((err) => {
-      console.log(err.message);
-    });
 
   return { props: { products: res.data } };
 };

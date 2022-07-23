@@ -8,7 +8,7 @@ export default async (req, res) => {
   try {
     const result = verifyToken(req);
     if (!result) {
-      return res.status(403).json({ message: "User not loged in " });
+      return res.status(403).json({ message: "User not logged in " });
     }
     const user = await User.findById(result.user._id);
     if (!user) {
