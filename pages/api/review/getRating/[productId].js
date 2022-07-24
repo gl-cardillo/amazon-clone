@@ -13,15 +13,12 @@ export default async (req, res) => {
     if (!reviews) {
       return res.status(404).json({ message: "reviews not found" });
     }
-    const reviewsWithRating = reviews.filter(
-      (review) => review.rating !== null
-    );
+    // get average of rating for each product
+    const average =
+      reviews.reduce((accum, review) => accum + review.rating, 0) /
+      reviews.length;
 
-    const rating =
-      reviewsWithRating.reduce((accum, review) => accum + review.rating, 0) /
-      reviewsWithRating.length;
-    console.log(rating);
-    return res.status(200).json(rating);
+    return res.status(200).json(average);
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({ message: error.message });

@@ -9,12 +9,20 @@ import * as yup from "yup";
 import { BsStarFill, BsStar } from "react-icons/bs";
 import { handleRating } from "../../utils/utils";
 
-export default function Product({ product, reviews }) {
+export default function Product({
+  product,
+  reviews,
+  ratingArray,
+  ratingAverage,
+}) {
+
   const [showDescription, setShowDescription] = useState(false);
   const [askLogin, setAskLogin] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [ratingForm, setRatingForm] = useState(null);
-  const [rating, setRating] = useState(0);
+
+  const [errorRating, setErrorRating] = useState("");
+
   const router = useRouter();
   const { user, setUser } = useContext(UserContext);
   //used for star rating
@@ -69,11 +77,16 @@ export default function Product({ product, reviews }) {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
   const addReview = (data) => {
+    if (!ratingForm) {
+      setErrorRating("Select a star");
+      return;
+    }
     axios
       .post(
         `http://localhost:3000/api/review/${product._id}`,
@@ -91,34 +104,30 @@ export default function Product({ product, reviews }) {
           },
         }
       )
+      .then(() => {
+        reset();
+        setRatingForm(null);
+        router.push(`/product/${product._id}`);
+      })
       .catch((err) => {
         console.log(err.message);
       });
   };
 
-  useEffect(() => {
-    const getStars = () => {
-      axios
-        .get(`http://localhost:3000/api/review/getStars/${product._id}`)
-        .then((res) => {
-          setRating(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    getStars();
-  }, []);
-
   return (
     <div className="flex flex-col bg-slate-100 mx-2">
-      <div className="flex flex-col gap-3 p-5 my-3 bg-white rounded-md  md:hidden ">
+      <div className="flex flex-col items-center gap-5 p-5 my-3 bg-white rounded-md  md:hidden ">
         <h3 className="font-bold text-xl">{product.name}</h3>
         <img src={product.picUrl} alt="category" />
-        <div className="flex">{handleRating(rating)}</div>
+        <div className="flex items-center ">
+          {handleRating(ratingAverage)}{" "}
+          <p className="text-lg pl-2">
+            {(Math.round(ratingAverage * 100) / 100).toFixed(1)} out of 5
+          </p>
+        </div>
         <p className="font-bold text-2xl self-center">£{product.price}</p>
-        <div className="my-3">
-          <p className="flex gap-2 items-center mb-2">
+        <div className="my-3 flex flex-col items-center">
+          <p className="flex gap-1 items-center mb-2">
             Description
             <MdKeyboardArrowDown
               className={`${showDescription && "rotate-180 text-xl"} text-xl`}
@@ -136,7 +145,7 @@ export default function Product({ product, reviews }) {
           )}
         </div>
       </div>
-      <div className="hidden md:flex flex-col bg-white my-3 gap-5 p-5 items-center rounded-md  md:mx-24 lg:mx-52 xl:mx-[400px]">
+      <div className="hidden md:flex flex-col bg-white my-3  p-5 items-center rounded-md md:mx-24 lg:mx-52 xl:mx-[400px]">
         <div className="flex gap-5 items-center">
           <div className="p-2 w-1/3">
             <img src={product.picUrl} className="w-full h-1/3" alt="category" />
@@ -148,7 +157,13 @@ export default function Product({ product, reviews }) {
             <p className="font-bold text-lg xl:text-xl py-5 2xl:py-16">
               £{product.price}
             </p>
-            <p className="flex gap-2 items-center">
+            <div className="flex gap-1 mb-7">
+              {handleRating(ratingAverage)}{" "}
+              <p className="text-lg pl-2">
+                {(Math.round(ratingAverage * 100) / 100).toFixed(1)} out of 5
+              </p>
+            </div>
+            <p className="flex gap-1 items-center">
               Description
               <MdKeyboardArrowDown
                 className={showDescription ? "rotate-180 text-xl" : "text-xl"}
@@ -162,9 +177,7 @@ export default function Product({ product, reviews }) {
         {showDescription && (
           <div className="max-w-[350px] lg:max-w-[400px] xl:max-w-[450px] 2xl:max-w-[1100px] self-end">
             <p>&#8226;{product.description}</p>
-            <p className="py-2">
-              &#8226;{product.description2 && product.description2}
-            </p>
+            <p className="py-2">&#8226;{product.description2}</p>
             <p>&#8226;{product.description3}</p>
           </div>
         )}
@@ -182,33 +195,75 @@ export default function Product({ product, reviews }) {
           Add to Cart
         </button>
       </div>
-      <div>
-        <h3>Customer reviews</h3>
-        <p>Stars</p>
-        <p>{reviews.length} reviews for this product</p>
+      <div className="bg-white mt-3 p-5 flex flex-col  rounded-md md:px-10  md:mx-24 lg:mx-52 xl:mx-[400px]">
+        <h3 className="font-bold text-2xl">Customer reviews</h3>
+        <p className="mb-3 text-slate-600">
+          {reviews.length} global rating{reviews.length > 1 && "s"}
+        </p>
+        <div>
+          <table>
+            <tbody>
+              {starsLoop.map((star, index) => (
+                <tr className="flex   mb-2 items-center " key={index}>
+                  <td className="w-[60px] ">{star + 1} star </td>{" "}
+                  <td className="h-[22px] w-[160px] border border-[#e3e6e6] bg-[#F0F2F2] rounded-[3px]">
+                    <div
+                      style={{
+                        width: `${
+                          ratingArray[star + 1] !== 0
+                            ? (ratingArray[star + 1] / reviews.length) * 100 +
+                              "%"
+                            : "0%"
+                        }`,
+                      }}
+                      className={`h-[20px] bg-[#FFA41C] rounded-l-[3px]`}
+                    ></div>
+                  </td>
+                  <td className="text-right w-[50px]">
+                    {ratingArray[star + 1] !== 0
+                      ? Math.round(
+                          (ratingArray[star + 1] / reviews.length) * 100
+                        ) + "%"
+                      : "0%"}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         <div>
           {reviews.length > 0 ? (
             <div>
               {reviews.map((review, index) => (
-                <div key={index}>
-                  <p>{review.reviewAuthor}</p>
-                  <p>{review.text}</p>
-                  <div className="flex gap-1">
-                    {review.rating &&
-                      starsLoop.map((numb, index) =>
-                        review.rating > numb ? (
-                          <BsStarFill
-                            key={index}
-                            className="text-[#f0a04b] text-xl"
-                          />
-                        ) : (
-                          <BsStar
-                            key={index}
-                            className="text-[#f0a04b] text-xl"
-                          />
-                        )
-                      )}
+                <div
+                  className="mt-8 pb-2 border-solid border-b-2 border-slate-200"
+                  key={index}
+                >
+                  <div className="flex gap-2 items-center">
+                    <img
+                      className="w-[40px] h-[40px] rounded-full"
+                      src="/images/user.jpeg"
+                      alt="avatar"
+                    />{" "}
+                    <p className="text-xl">{review.reviewAuthor}</p>
                   </div>
+
+                  <div className="flex gap-1 my-2">
+                    {starsLoop.map((numb, index) =>
+                      review.rating > numb ? (
+                        <BsStarFill
+                          key={index}
+                          className="text-[#FFA41C] text-lg"
+                        />
+                      ) : (
+                        <BsStar
+                          key={index}
+                          className="text-[#FFA41C] text-lg"
+                        />
+                      )
+                    )}
+                  </div>
+                  <p>{review.text}</p>
                 </div>
               ))}
             </div>
@@ -218,35 +273,44 @@ export default function Product({ product, reviews }) {
         </div>
         {user ? (
           <div>
-            <div className="flex gap-3 items-center">
-              <p
-                className="text-sm text-blue-500 "
-                onClick={() => setRatingForm(null)}
-              >
-                Remove
-              </p>
-              {starsLoop.map((numb, index) =>
-                rating > numb ? (
-                  <BsStarFill
-                    key={index}
-                    className="text-[#f0c14b] text-xl"
-                    onClick={() => setRatingForm(numb + 1)}
-                  />
-                ) : (
-                  <BsStar
-                    key={index}
-                    className="text-[#f0c14b] text-xl"
-                    onClick={() => setRatingForm(numb + 1)}
-                  />
-                )
-              )}
+            <h4 className="my-2 font-semibold">Leave a review</h4>
+            <div className="flex items-center flex-col gap-2  ">
+              <div className="flex gap-3 items-center">
+                {starsLoop.map((numb, index) =>
+                  ratingForm > numb ? (
+                    <BsStarFill
+                      key={index}
+                      className="text-[#FFA41C] text-xl"
+                      onClick={() => {
+                        setErrorRating("");
+                        setRatingForm(numb + 1);
+                      }}
+                    />
+                  ) : (
+                    <BsStar
+                      key={index}
+                      className="text-[#FFA41C] text-xl"
+                      onClick={() => {
+                        setErrorRating("");
+                        setRatingForm(numb + 1);
+                      }}
+                    />
+                  )
+                )}
+              </div>
+              <p className="text-red-500 text-sm">{errorRating}</p>
             </div>
             <div>
               <form
                 className="flex flex-col items-center mt-2"
                 onSubmit={handleSubmit(addReview)}
               >
-                <textarea row={4} id="text" name="text" {...register("text")} />
+                <textarea
+                  className="w-full p-1 text resize-none rounded-sm h-24"
+                  id="text"
+                  name="text"
+                  {...register("text")}
+                />
                 <button
                   className=" mt-2 p-2 w-[120px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
                   type="submit"
@@ -294,8 +358,15 @@ export const getStaticProps = async ({ params }) => {
   const resReview = await axios.get(
     `http://localhost:3000/api/review/${params.productId}`
   );
-
-  return { props: { product: res.data, reviews: resReview.data } };
+  console.log(resReview.data);
+  return {
+    props: {
+      product: res.data,
+      reviews: resReview.data.reviews,
+      ratingArray: resReview.data.ratingArray,
+      ratingAverage: resReview.data.average,
+    },
+  };
 };
 
 export const getStaticPaths = async () => {

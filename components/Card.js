@@ -11,7 +11,7 @@ export default function Card({ product }) {
   useEffect(() => {
     const getStars = () => {
       axios
-        .get(`http://localhost:3000/api/review/getStars/${product._id}`)
+        .get(`http://localhost:3000/api/review/getRating/${product._id}`)
         .then((res) => {
           setRating(res.data);
         })
@@ -21,7 +21,6 @@ export default function Card({ product }) {
     };
     getStars();
   }, []);
-
 
   return (
     <Link href={`/product/${product._id}`}>
