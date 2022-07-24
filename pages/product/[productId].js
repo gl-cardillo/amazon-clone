@@ -358,7 +358,6 @@ export const getStaticProps = async ({ params }) => {
   const resReview = await axios.get(
     `http://localhost:3000/api/review/${params.productId}`
   );
-  console.log(resReview.data);
   return {
     props: {
       product: res.data,

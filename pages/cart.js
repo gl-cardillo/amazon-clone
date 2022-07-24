@@ -13,6 +13,7 @@ export default function Cart() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [cartQuantity, setCartQuantity] = useState(0);
   const [cart, setCart] = useState(null);
+    const [rating, setRating] = useState(0);
   const [disableButton, setDisableButton] = useState(false);
   const [quantityError, setQuantityError] = useState("");
   const router = useRouter();
@@ -43,6 +44,7 @@ export default function Cart() {
           console.log(err);
         });
     };
+
     getCart();
   }, [user]);
 
