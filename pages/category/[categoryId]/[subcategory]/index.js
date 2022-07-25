@@ -9,7 +9,7 @@ export default function index({ products }) {
 export const getStaticProps = async ({ params }) => {
   const res = await axios
 
-    .get(`http://localhost:3000/api/subcategory/${params.subcategory}`)
+    .get(`${process.env.MY_VARIABLE_API}/api/subcategory/${params.subcategory}`)
     .catch((err) => {
       console.log(err.message);
     });

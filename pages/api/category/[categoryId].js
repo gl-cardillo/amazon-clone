@@ -5,6 +5,7 @@ dbConnect();
 
 export default async (req, res) => {
   try {
+    console.log('calledddddd')
     const products = await Product.find({ categoryId: req.query.categoryId });
     if (!products) {
       return res.status(404).json({ message: "No products found" });

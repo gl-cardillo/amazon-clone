@@ -21,7 +21,7 @@ export default function Cart() {
   useEffect(() => {
     const getCart = async () => {
       axios
-        .get("http://localhost:3000/api/cart/getCartProduct", {
+        .get("/api/cart/getCartProduct", {
           headers: {
             Authorization: `Bearer ${JSON.parse(
               localStorage.getItem("token_amazon_lc")
@@ -62,7 +62,7 @@ export default function Cart() {
 
     axios
       .put(
-        "http://localhost:3000/api/cart/addToCart",
+        "/api/cart/addToCart",
         { productId, n },
         {
           headers: {
@@ -84,7 +84,7 @@ export default function Cart() {
 
   const removeProduct = (productId) => {
     axios
-      .delete("http://localhost:3000/api/cart/addToCart", {
+      .delete("/api/cart/addToCart", {
         headers: {
           Authorization: `Bearer ${JSON.parse(
             localStorage.getItem("token_amazon_lc")

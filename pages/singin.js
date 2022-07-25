@@ -71,7 +71,7 @@ export default function Singin() {
 
   const signin = async (data) => {
     await axios
-      .post("http://localhost:3000/api/auth/singin", data)
+      .post("/api/auth/singin", data)
       .then((res) => {
         setUser(res.data.user);
         localStorage.setItem("user_amazon_lc", JSON.stringify(res.data.user));
@@ -85,7 +85,7 @@ export default function Singin() {
   };
   const login = async (data) => {
     await axios
-      .post("http://localhost:3000/api/auth/login", data)
+      .post("/api/auth/login", data)
       .then((res) => {
         setUser(res.data.user);
         localStorage.setItem("user_amazon_lc", JSON.stringify(res.data.user));

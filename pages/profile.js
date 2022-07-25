@@ -50,7 +50,7 @@ export default function Profile() {
     const dateOfBirth = new Date(date.getTime() - userTimezoneOffset);
     axios
       .put(
-        "http://localhost:3000/api/user/updateProfile",
+        "/api/user/updateProfile",
         {
           id: user._id,
           name: data.name,
@@ -102,7 +102,7 @@ export default function Profile() {
 
   const deleteAccount = () => {
     axios
-      .delete("http://localhost:3000/api/user/deleteAccount", {
+      .delete("/api/user/deleteAccount", {
         headers: {
           Authorization: `Bearer ${JSON.parse(
             localStorage.getItem("token_amazon_lc")

@@ -83,9 +83,10 @@ export default function Category({ products }) {
 }
 
 export const getStaticProps = async ({ params }) => {
-  
   const res = await axios
-    .get(`http://localhost:3000/api/category/${params.categoryId}`)
+    .get(`${process.env.MY_VARIABLE_API}/api/category/${params.categoryId}`)
+
+  console.log(process.env.MY_VARIABLE_API);
 
   return { props: { products: res.data } };
 };

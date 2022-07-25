@@ -4,7 +4,7 @@ import axios from "axios";
 export default function Form() {
   const { register, handleSubmit, reset } = useForm();
   const post = async (data) => {
-    await axios.post(" http://localhost:3000/api/product", data);
+    await axios.post("/api/product", data);
     reset();
   };
   return (

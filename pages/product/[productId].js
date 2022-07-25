@@ -35,7 +35,7 @@ export default function Product({
     }
     axios
       .post(
-        "http://localhost:3000/api/cart/addToCart",
+        "/api/cart/addToCart",
         {
           productId: product._id,
           quantity,
@@ -89,7 +89,7 @@ export default function Product({
     }
     axios
       .post(
-        `http://localhost:3000/api/review/${product._id}`,
+        `/api/review/${product._id}`,
         {
           productId: product._id,
           text: data.text,
@@ -352,11 +352,11 @@ export default function Product({
 }
 export const getStaticProps = async ({ params }) => {
   const res = await axios.get(
-    `http://localhost:3000/api/product/${params.productId}`
+    `${process.env.MY_VARIABLE_API}/api/product/${params.productId}`
   );
 
   const resReview = await axios.get(
-    `http://localhost:3000/api/review/${params.productId}`
+    `${process.env.MY_VARIABLE_API}/api/review/${params.productId}`
   );
   return {
     props: {
@@ -369,7 +369,9 @@ export const getStaticProps = async ({ params }) => {
 };
 
 export const getStaticPaths = async () => {
-  const products = await axios.get(`http://localhost:3000/api/product/all`);
+  const products = await axios.get(
+    `${process.env.MY_VARIABLE_API}/api/product/all`
+  );
 
   return {
     paths: products.data.map((product) => {
