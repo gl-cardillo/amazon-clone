@@ -20,7 +20,7 @@ export default function Card({ product }) {
         });
     };
     getStars();
-  }, []);
+  }, [product]);
 
   return (
     <Link href={`/product/${product._id}`}>

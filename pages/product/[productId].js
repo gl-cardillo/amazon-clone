@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useContext, useEffect } from "react";
-import { UserContext } from "../../utils/context";
+import { UserContext, CurrencyContext } from "../../utils/context";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
@@ -22,7 +22,7 @@ export default function Product({
   const [askLogin, setAskLogin] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [ratingForm, setRatingForm] = useState(null);
-
+  const { currencySymbol, currencyRate } = useContext(CurrencyContext);
   const [errorRating, setErrorRating] = useState("");
 
   const router = useRouter();
@@ -157,7 +157,10 @@ export default function Product({
               {product.name}
             </h3>
             <p className="font-bold text-lg xl:text-xl py-5 2xl:py-16">
-              £{product.price}
+              {currencySymbol}
+              {(Math.round(product.price * currencyRate * 100) / 100).toFixed(
+                2
+              )}
             </p>
             <div className="flex gap-1 mb-7">
               {handleRating(ratingAverage)}{" "}
@@ -206,8 +209,8 @@ export default function Product({
           <table>
             <tbody>
               {starsLoop.map((star, index) => (
-                <tr className="flex   mb-2 items-center " key={index}>
-                  <td className="w-[60px] ">{star + 1} star </td>{" "}
+                <tr className="flex mb-2 items-center " key={index}>
+                  <td className="w-[60px] ">{star + 1} star</td>
                   <td className="h-[22px] w-[160px] border border-[#e3e6e6] bg-[#F0F2F2] rounded-[3px]">
                     <div
                       style={{
@@ -249,7 +252,6 @@ export default function Product({
                     />{" "}
                     <p className="text-xl">{review.reviewAuthor}</p>
                   </div>
-
                   <div className="flex gap-1 my-2">
                     {starsLoop.map((numb, index) =>
                       review.rating > numb ? (
@@ -370,7 +372,6 @@ export const getStaticProps = async ({ params }) => {
 };
 
 export const getStaticPaths = async () => {
-
   let products = await getAllProduct();
   products = JSON.parse(JSON.stringify(products));
   return {

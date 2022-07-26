@@ -13,7 +13,7 @@ export default function Category({ products }) {
 
   return (
     <div className="flex min-h-screen gap-3 p-3">
-      <div className=" hidden md:block border-r-2 p-2 min-w-[180px]">
+      <div className=" hidden md:block border-r-2 p-2 min-w-[210px]">
         <h2 className="text-2xl font-bold mb-3">Categories</h2>
         {catalogs.map((category, index) => {
           return (
@@ -37,7 +37,7 @@ export default function Category({ products }) {
                         <p
                           className={`${
                             subcategory === subcategoryId && "font-bold text-lg"
-                          }  pl-5  hover:scale-105`}
+                          }  pl-5 hover:scale-105`}
                         >
                           {subcategory}
                         </p>

@@ -2,8 +2,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { useState, useEffect, useContext } from "react";
-import { UserContext } from "../utils/context";
-import { CurrencyContext } from "../utils/context";
+import { UserContext, CurrencyContext } from "../utils/context";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
