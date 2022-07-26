@@ -4,32 +4,40 @@ const User = require("../../../models/User");
 import verifyToken from "../../../utils/verifyToken";
 
 dbConnect();
+export const getDataReview = async (productId) => {
+  const reviews = await Review.find({ productId });
+
+  if (reviews.length < 1) {
+    //if there are no reviews return empty values
+    return { reviews: [], ratingArray: [0, 0, 0, 0, 0, 0], average: 0 };
+  }
+  if (!reviews) {
+    return res.status(404).json({ message: "reviews not found" });
+  }
+
+  //get array of rating score for histogram
+  let ratingArray = [null, 0, 0, 0, 0, 0];
+  for (let i = 0; i < reviews.length; i++) {
+    ratingArray[reviews[i].rating] += 1;
+  }
+
+  // get average of rating for each product
+  const average =
+    reviews.reduce((accum, review) => accum + review.rating, 0) /
+    reviews.length;
+
+  return { average, ratingArray, reviews };
+};
 
 export default async (req, res) => {
   switch (req.method) {
     case "GET":
       try {
-        const reviews = await Review.find({ productId: req.query.productId });
-        if (reviews.length < 1) {
-          //if there are no reviews return empty values
-          return res
-            .status(200)
-            .json({ reviews: [], ratingArray: [0, 0, 0, 0, 0, 0], average: 0 });
-        }
+        const reviews = await getDataReview(req.query.productId);
+
         if (!reviews) {
           return res.status(404).json({ message: "reviews not found" });
         }
-
-        //get array of rating score for histogram
-        let ratingArray = [null, 0, 0, 0, 0, 0];
-        for (let i = 0; i < reviews.length; i++) {
-          ratingArray[reviews[i].rating] += 1;
-        }
-
-        // get average of rating for each product
-        const average =
-          reviews.reduce((accum, review) => accum + review.rating, 0) /
-          reviews.length;
 
         return res.status(200).json({ reviews, ratingArray, average });
       } catch (error) {

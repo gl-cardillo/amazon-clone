@@ -8,6 +8,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { BsStarFill, BsStar } from "react-icons/bs";
 import { handleRating } from "../../utils/utils";
+import { getAllProduct } from "../api/product/all";
+import { getDataProductId } from "../api/product/[productId]";
+import { getDataReview } from "../api/review/[productId]";
 
 export default function Product({
   product,
@@ -15,7 +18,6 @@ export default function Product({
   ratingArray,
   ratingAverage,
 }) {
-
   const [showDescription, setShowDescription] = useState(false);
   const [askLogin, setAskLogin] = useState(false);
   const [quantity, setQuantity] = useState(1);
@@ -351,30 +353,28 @@ export default function Product({
   );
 }
 export const getStaticProps = async ({ params }) => {
-  const res = await axios.get(
-    `${process.env.MY_VARIABLE_API}/api/product/${params.productId}`
-  );
+  let res = await getDataProductId(params.productId);
+  res = JSON.parse(JSON.stringify(res));
 
-  const resReview = await axios.get(
-    `${process.env.MY_VARIABLE_API}/api/review/${params.productId}`
-  );
+  let resReview = await getDataReview(params.productId);
+  resReview = JSON.parse(JSON.stringify(resReview));
+  
   return {
     props: {
-      product: res.data,
-      reviews: resReview.data.reviews,
-      ratingArray: resReview.data.ratingArray,
-      ratingAverage: resReview.data.average,
+      product: res,
+      reviews: resReview.reviews,
+      ratingArray: resReview.ratingArray,
+      ratingAverage: resReview.average,
     },
   };
 };
 
 export const getStaticPaths = async () => {
-  const products = await axios.get(
-    `${process.env.MY_VARIABLE_API}/api/product/all`
-  );
 
+  let products = await getAllProduct();
+  products = JSON.parse(JSON.stringify(products));
   return {
-    paths: products.data.map((product) => {
+    paths: products.map((product) => {
       return {
         params: {
           productId: product._id,

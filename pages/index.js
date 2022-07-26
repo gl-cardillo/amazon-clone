@@ -27,10 +27,10 @@ export default function Home() {
           ))}
         </Slide>
       </div>
-      <div className="flex flex-wrap justify-center bg-slate-100">
+      <div className="flex flex-wrap justify-center bg-slate-100 ">
         {catalogs.map((catalog, index) => {
           return (
-            <div key={index} className="p-3 m-3 max-w-xs bg-white ">
+            <div key={index} className="p-3 m-3 max-w-xs bg-white hover:scale-[1.02] hover:shadow-xl">
               <Link href={catalog.link}>
                 <a>
                   <h2 className="font-bold pb-2 text-lg">{catalog.name}</h2>

@@ -3,14 +3,17 @@ import Card from "../../../components/Card";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { catalogs } from "../../../utils/catalogs";
+import { getDataCategory } from "../../api/category/[categoryId]";
+
 export default function Category({ products }) {
   const router = useRouter();
   const categoryId = router.query.categoryId;
   const subcategoryId = router.query.subcategory || null;
 
+
   return (
     <div className="flex min-h-screen gap-3 p-3">
-      <div className=" hidden md:block border-r-2 p-2 min-w-[170px]">
+      <div className=" hidden md:block border-r-2 p-2 min-w-[180px]">
         <h2 className="text-2xl font-bold mb-3">Categories</h2>
         {catalogs.map((category, index) => {
           return (
@@ -20,7 +23,7 @@ export default function Category({ products }) {
                   <h3
                     className={`${
                       category.id === categoryId && "font-bold text-lg"
-                    }  mt-1`}
+                    }  mt-1 hover:scale-105`}
                   >
                     {category.name}
                   </h3>
@@ -34,7 +37,7 @@ export default function Category({ products }) {
                         <p
                           className={`${
                             subcategory === subcategoryId && "font-bold text-lg"
-                          }  pl-5`}
+                          }  pl-5  hover:scale-105`}
                         >
                           {subcategory}
                         </p>
@@ -83,12 +86,11 @@ export default function Category({ products }) {
 }
 
 export const getStaticProps = async ({ params }) => {
-  const res = await axios
-    .get(`${process.env.MY_VARIABLE_API}/api/category/${params.categoryId}`)
 
-  console.log(process.env.MY_VARIABLE_API);
+  const res = await getDataCategory(params.categoryId);
+  const products = JSON.parse(JSON.stringify(res));
 
-  return { props: { products: res.data } };
+  return { props: { products } };
 };
 
 export const getStaticPaths = () => {
