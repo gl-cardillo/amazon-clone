@@ -14,7 +14,7 @@ export default function Profile() {
   const [editProfile, setEditProfile] = useState(false);
   const [showDeleteAccount, setShowDeleteAccount] = useState(false);
 
-  const { currencySymbol, setCurrencySymbol, currencyRate, setCurrencyRate } =
+  const { currencySymbol, setCurrencySymbol, setCurrencyRate } =
     useContext(CurrencyContext);
   const { user, setUser } = useContext(UserContext);
   const router = useRouter();
@@ -30,7 +30,12 @@ export default function Profile() {
       .required("name is a required field"),
     address: yup.string().max(50),
     city: yup.string().max(30),
-    dateOfBirth: yup.date().max(new Date(), "Are you from the future?"),
+    postcode: yup.string().max(10),
+    dateOfBirth: yup
+      .date()
+      .nullable()
+      .transform((curr, orig) => (orig === "" ? null : curr))
+      .max(new Date(), "Are you from the future?"),
   });
 
   const {
@@ -44,9 +49,13 @@ export default function Profile() {
 
   const updateProfile = (data) => {
     // only way i found to store date of birth without time in mongodb
-    const date = new Date(data.dateOfBirth);
-    const userTimezoneOffset = date.getTimezoneOffset() * 60000;
-    const dateOfBirth = new Date(date.getTime() - userTimezoneOffset);
+    let dateOfBirth = null;
+    if (data.dateOfBirth) {
+      const date = new Date(data.dateOfBirth);
+      const userTimezoneOffset = date.getTimezoneOffset() * 60000;
+      dateOfBirth = new Date(date.getTime() - userTimezoneOffset);
+    }
+
     axios
       .put(
         "/api/user/updateProfile",
@@ -83,6 +92,7 @@ export default function Profile() {
       router.push("/singin");
       return;
     }
+    console.log(user.dateOfBirth_toISODate);
     let defaultValues = {};
     defaultValues.name = user.name;
     defaultValues.address = user.address;
@@ -211,14 +221,14 @@ export default function Profile() {
               </p>
               <button
                 type="submit"
-                className="mt-5  w-[110px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                className="mt-5 w-[110px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
               >
                 Update
               </button>
               <button
                 onClick={() => setEditProfile(false)}
                 type="button"
-                className="mt-5  w-[110px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                className="mt-5 w-[110px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
               >
                 Cancel
               </button>

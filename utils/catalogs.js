@@ -48,4 +48,4 @@ export const catalogs = [
     link: "/category/kitchenProduct",
     subcategory: ["Electronics", "Cleaning"],
   },
-];
+]; 

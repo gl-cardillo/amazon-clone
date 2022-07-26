@@ -11,7 +11,7 @@ export default function Card({ product }) {
   useEffect(() => {
     const getStars = () => {
       axios
-        .get(`http://localhost:3000/api/review/getRating/${product._id}`)
+        .get(`/api/review/getRating/${product._id}`)
         .then((res) => {
           setRating(res.data);
         })
@@ -21,14 +21,14 @@ export default function Card({ product }) {
     };
     getStars();
   }, [product]);
-
+console.log(rating)
   return (
     <Link href={`/product/${product._id}`}>
       <a>
         <div className="flex gap-5 p-2 m-2 border-2 rounded bg-white w-full md:w-[265px] md:h-[400px] md:flex-col hover:scale-[1.02] hover:shadow-xl">
           <img
             src={product.picUrl}
-            className=" object-contain w-[150px] h-[200px] sm:w-[150px] md:self-center"
+            className=" object-scale-down w-[150px] h-[200px] sm:w-[150px] md:self-center"
             alt="category"
           />
           <div>

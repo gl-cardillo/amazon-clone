@@ -48,7 +48,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const getData = async () => {
-      const res = await axios.get(`http://localhost:3000/api/product/all`);
+      const res = await axios.get(`/api/product/all`);
       setProducts(res.data);
     };
     getData();

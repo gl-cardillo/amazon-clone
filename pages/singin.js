@@ -131,7 +131,7 @@ export default function Singin() {
                 First and last name
               </label>
               <input
-                className="p-2.5 rounded-[3px] border-solid border-1  focus:border-none  border-slate-400 focus:outline-orange-300"
+                className="p-2.5 rounded-[3px] border-solid border-1 border-slate-400 focus:outline-orange-300 focus:border-transparent focus:ring-0"
                 type="text"
                 id="name"
                 {...register("name")}
@@ -143,7 +143,7 @@ export default function Singin() {
                 Email
               </label>
               <input
-                className="p-2.5 rounded-[3px] border-solid border-1 focus:border-none border-slate-400 focus:outline-orange-300"
+                className="p-2.5 rounded-[3px] border-solid border-1 border-slate-400 focus:outline-orange-300 focus:border-transparent focus:ring-0"
                 type="email"
                 id="email"
                 {...register("email")}
@@ -155,7 +155,7 @@ export default function Singin() {
                 Password
               </label>
               <input
-                className="p-2.5 rounded-[3px] border-solid border-1 focus:border-none border-slate-400 focus:outline-orange-300"
+                className="p-2.5 rounded-[3px] border-solid border-1 border-slate-400 focus:outline-orange-300 focus:border-transparent focus:ring-0"
                 type="password"
                 id="password"
                 {...register("password")}
@@ -180,7 +180,7 @@ export default function Singin() {
               name="singin"
               onChange={() => setShowSignin(false)}
               checked={!showSignin}
-              className="h-4 w-4 checked:ring-orange-400 focus:border-none text-orange-400 checked:bg-orange-400 hover:bg-orange-400"
+              className="h-4 w-4 checked:ring-orange-400  text-orange-400 checked:bg-orange-400 hover:bg-orange-400 focus:border-transparent focus:ring-0"
             />
             <h3 className="font-bold text-medium text-[14px]">
               Sign-In.
@@ -200,7 +200,7 @@ export default function Singin() {
                 Email
               </label>
               <input
-                className="p-2.5 rounded-[3px] border-solid focus:border-none border-1 border-slate-400 focus:outline-orange-300"
+                className="p-2.5 rounded-[3px] border-solid border-1 border-slate-400 focus:outline-orange-300 focus:border-transparent focus:ring-0"
                 type="email"
                 id="email_login"
                 {...registerLogin("emailLogin")}
@@ -215,7 +215,7 @@ export default function Singin() {
                 Password
               </label>
               <input
-                className="p-2.5 rounded-[3px] border-solid border-1 focus:border-none border-slate-400 focus:outline-orange-300"
+                className="p-2.5 rounded-[3px] border-solid border-1 border-slate-400 focus:outline-orange-300 focus:border-transparent focus:ring-0"
                 type="password"
                 id="password_login"
                 {...registerLogin("passwordLogin")}
