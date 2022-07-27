@@ -12,12 +12,14 @@ export default function Cart() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [cartQuantity, setCartQuantity] = useState(0);
   const [cart, setCart] = useState(null);
-    const [rating, setRating] = useState(0);
   const [disableButton, setDisableButton] = useState(false);
   const [quantityError, setQuantityError] = useState("");
   const router = useRouter();
 
   useEffect(() => {
+    if (!user) {
+      router.push('/singin')
+    }
     const getCart = async () => {
       axios
         .get("/api/cart/getCartProduct", {
@@ -55,7 +57,6 @@ export default function Cart() {
     }
     if (quantity === 9 && n === "+1") {
       setQuantityError("The limit is 9");
-
       return;
     }
 
@@ -129,7 +130,7 @@ export default function Cart() {
                         </Link>
                         <div>
                           <div className="flex gap-2 items-center">
-                            <div className="flex gap-3 px-1 text-sm border-solid border-2  border-slate-400 rounded-2xl">
+                            <div className="flex gap-3 px-1 text-sm border-solid border-2 border-slate-400 rounded-2xl">
                               <button
                                 onClick={() =>
                                   updateQuantity(

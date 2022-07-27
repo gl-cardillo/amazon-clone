@@ -155,7 +155,7 @@ export default function Profile() {
         src="/images/user.jpeg"
         alt="avatar"
       />
-      <p className="flex gap 2 items-center">
+      <p className="flex gap-2 items-center">
         Details
         <MdKeyboardArrowDown
           className={`${showDetails && "rotate-180 text-xl"} "text-xl"`}

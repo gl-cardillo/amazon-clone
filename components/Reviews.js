@@ -232,7 +232,7 @@ export default function Reviews({
               ))}
           </div>
         ) : (
-          "No reviews for this product"
+          <p className="text-center pt-5">No reviews for this product</p>
         )}
       </div>
       {user ? (

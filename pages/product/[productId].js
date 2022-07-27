@@ -66,7 +66,7 @@ export default function Product({
 
   return (
     <div className="flex flex-col bg-slate-100 mx-2">
-      <div className="flex flex-col items-center gap-5 p-5 my-3 bg-white rounded-md  md:hidden ">
+      <div className="flex flex-col items-center gap-5 p-5 my-3 bg-white rounded-md md:hidden">
         <h3 className="font-bold text-xl">{product.name}</h3>
         <div className="flex items-center ">
           {handleRating(ratingAverage)}{" "}
@@ -95,27 +95,33 @@ export default function Product({
           )}
         </div>
       </div>
-      <div className="hidden md:flex flex-col bg-white my-3  p-5 items-center rounded-md md:mx-24 lg:mx-52 xl:mx-[400px]">
+      <div className="hidden md:flex flex-col bg-white my-3 p-5 items-center rounded-md md:mx-24 lg:mx-52 xl:mx-[400px]">
         <div className="flex gap-5 items-center">
           <div className="p-2 w-1/3">
             <ImageSelector product={product} />
           </div>
-          <div className="flex flex-col self-baseline pt-5 xl:pt-10 2xl:pt-16   ">
-            <h3 className=" font-bold text-lg lg:text-xl xl:text-3xl ">
+          <div className="flex flex-col self-baseline pt-5 xl:pt-10 2xl:pt-16">
+            <h3 className="font-bold text-lg lg:text-xl xl:text-3xl ">
               {product.name}
             </h3>
+            <div className="flex gap-2 mt-2">
+              <p className="font-bold">
+                {product.categoryName === "Books" ? "Author" : "Manufacturer"}:{" "}
+              </p>
+              <p>{product.manufacturer}</p>
+            </div>
+            <div className="flex gap-1 mt-4">
+              {handleRating(ratingAverage)}{" "}
+              <p className="text-lg pl-2">
+                {(Math.round(ratingAverage * 100) / 100).toFixed(1)} out of 5
+              </p>
+            </div>
             <p className="font-bold text-lg xl:text-xl py-5 2xl:py-7">
               {currencySymbol}
               {(Math.round(product.price * currencyRate * 100) / 100).toFixed(
                 2
               )}
             </p>
-            <div className="flex gap-1 mb-7">
-              {handleRating(ratingAverage)}{" "}
-              <p className="text-lg pl-2">
-                {(Math.round(ratingAverage * 100) / 100).toFixed(1)} out of 5
-              </p>
-            </div>
             <p className="flex gap-1 items-center">
               Description
               <MdKeyboardArrowDown
@@ -135,9 +141,9 @@ export default function Product({
           </div>
         )}
       </div>
-      <div className="bg-white py-5 gap-3 items-center flex flex-col rounded-md  md:mx-24 lg:mx-52 xl:mx-[400px]">
+      <div className="bg-white py-5 gap-3 items-center flex flex-col rounded-md md:mx-24 lg:mx-52 xl:mx-[400px]">
         <p className="text-green-700 font-semibold">In Stock</p>
-        <div className="flex w-[65px]  gap-3 px-1.5 border-solid border-2  border-[#f0c14b] rounded-2xl">
+        <div className="flex w-[65px] gap-3 px-1.5 border-solid border-2  border-[#f0c14b] rounded-2xl">
           <p onClick={() => decreaseQuantity()}>-</p>
           <p>{quantity}</p>
           <p onClick={() => increaseQuantity()}>+</p>
