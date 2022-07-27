@@ -5,7 +5,7 @@ import verifyToken from "../../../utils/verifyToken";
 
 dbConnect();
 export const getDataReview = async (productId) => {
-  const reviews = await Review.find({ productId });
+  const reviews = await Review.find({ productId }).sort([['date', -1]]);
 
   if (reviews.length < 1) {
     //if there are no reviews return empty values

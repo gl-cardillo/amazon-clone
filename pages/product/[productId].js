@@ -68,17 +68,17 @@ export default function Product({
     <div className="flex flex-col bg-slate-100 mx-2">
       <div className="flex flex-col items-center gap-5 p-5 my-3 bg-white rounded-md  md:hidden ">
         <h3 className="font-bold text-xl">{product.name}</h3>
-        <ImageSelector product={product} />
         <div className="flex items-center ">
           {handleRating(ratingAverage)}{" "}
-          <p className="text-lg pl-2">
+          <p className="text-sm pl-2">
             {(Math.round(ratingAverage * 100) / 100).toFixed(1)} out of 5
           </p>
         </div>
-        <p className="font-bold text-2xl self-center">£{product.price}</p>
-        <div className="my-3 flex flex-col items-center">
-          <p className="flex gap-1 items-center mb-2">
-            Description
+        <ImageSelector product={product} />
+        <p className="font-bold text-xl self-center">£{product.price}</p>
+        <div className="flex flex-col items-center">
+          <p className="flex gap-1 items-center mb-2 font-semibold">
+            About this item
             <MdKeyboardArrowDown
               className={`${showDescription && "rotate-180 text-xl"} text-xl`}
               onClick={() => {
@@ -135,20 +135,27 @@ export default function Product({
           </div>
         )}
       </div>
-      <div className="bg-white py-5 flex flex-col gap-5 items-center rounded-md  md:mx-24 lg:mx-52 xl:mx-[400px]  ">
-        <div className="flex gap-3 px-1.5 border-solid border-2  border-slate-400 rounded-2xl">
+      <div className="bg-white py-5 gap-3 items-center flex flex-col rounded-md  md:mx-24 lg:mx-52 xl:mx-[400px]">
+        <p className="text-green-700 font-semibold">In Stock</p>
+        <div className="flex w-[65px]  gap-3 px-1.5 border-solid border-2  border-[#f0c14b] rounded-2xl">
           <p onClick={() => decreaseQuantity()}>-</p>
           <p>{quantity}</p>
           <p onClick={() => increaseQuantity()}>+</p>
         </div>
+
         <button
           onClick={() => addToCart(product.id)}
-          className="p-2 w-[120px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+          className="p-2 w-[300px] h-12 text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
         >
           Add to Cart
         </button>
       </div>
-      <Reviews reviews={reviews} ratingArray={ratingArray} product={product} />
+      <Reviews
+        reviews={reviews}
+        ratingArray={ratingArray}
+        product={product}
+        setAskLogin={setAskLogin}
+      />
       {askLogin && (
         <div className=" fixed z-2 top-0 left-0 w-full h-full bg-black/50">
           <div className="absolute z-3 top-1/2 left-1/2 w-[300px] text-[18px] bg-white transform -translate-x-1/2 -translate-y-1/2 p-4 rounded-md border-2 border-[#f0c14b]">

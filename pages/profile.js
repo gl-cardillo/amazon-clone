@@ -92,13 +92,14 @@ export default function Profile() {
       router.push("/singin");
       return;
     }
-    console.log(user.dateOfBirth_toISODate);
-    let defaultValues = {};
-    defaultValues.name = user.name;
-    defaultValues.address = user.address;
-    defaultValues.city = user.city;
-    defaultValues.postcode = user.postcode;
-    defaultValues.dateOfBirth = user.dateOfBirth_toISODate;
+
+    let defaultValues = {
+      name: user.name,
+      address: user.address,
+      city: user.city,
+      postcode: user.postcode,
+      dateOfBirth: user.dateOfBirth_toISODate,
+    };
 
     reset({ ...defaultValues });
   }, [user]);
@@ -148,7 +149,12 @@ export default function Profile() {
 
   return (
     <div className=" mt-5 mx-6 md:mx-44 lg:mx-[300px] xl:mx-[500px] 2xl:mx-[600px] flex items-center flex-col p-5 bg-white rounded-md gap-3">
-      <h2 className="font-bold text-lx">Welcome {user && user.firstname}</h2>
+      <h2 className="font-bold text-xl">Welcome {user && user.firstName}</h2>
+      <img
+        className="w-[50px] h-[50px] rounded-full"
+        src="/images/user.jpeg"
+        alt="avatar"
+      />
       <p className="flex gap 2 items-center">
         Details
         <MdKeyboardArrowDown
@@ -169,76 +175,83 @@ export default function Profile() {
                   type="text"
                   id="name"
                   name="name"
+                  className="w-[228px]"
                 />
               </label>
               <p className="text-[12px] text-red-600 pt-1">
                 {errors?.name?.message}
               </p>
               <label htmlFor="address">
-                <h4>Address:</h4>
+                <h4 className="pt-3">Address:</h4>
                 <input
                   {...register("address")}
                   type="text"
                   id="address"
                   name="address"
+                  className="w-[228px]"
                 />
               </label>
               <p className="text-[12px] text-red-600 pt-1">
                 {errors?.address?.message}
               </p>
               <label htmlFor="city">
-                <h4>City:</h4>
+                <h4 className="pt-3">City:</h4>
                 <input
                   {...register("city")}
                   type="text"
                   id="city"
                   name="city"
+                  className="w-[228px]"
                 />
               </label>
-              <label htmlFor="postcode">
-                <h4>Postcode:</h4>
+              <label htmlFor="postcode" className="mb-3">
+                <h4 className="pt-3">Postcode:</h4>
                 <input
                   {...register("postcode")}
                   type="text"
                   id="postcode"
                   name="postcode"
+                  className="w-[228px]"
                 />
               </label>
               <p className="text-[12px] text-red-600 pt-1">
                 {errors?.postcode?.message}
               </p>
               <label htmlFor="dateOfBirth">
-                <h4> Date of birth:</h4>
+                <h4 className="pt-3"> Date of birth:</h4>
                 <input
                   {...register("dateOfBirth")}
                   type="date"
                   name="dateOfBirth"
                   id="dateOfBirth"
+                  className="w-[228px]"
                 />
               </label>
               <p className="text-[12px] text-red-600 pt-1">
                 {errors?.dateOfBirth?.message}
               </p>
-              <button
-                type="submit"
-                className="mt-5 w-[110px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
-              >
-                Update
-              </button>
-              <button
-                onClick={() => setEditProfile(false)}
-                type="button"
-                className="mt-5 w-[110px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
-              >
-                Cancel
-              </button>
+              <div className="flex gap-2">
+                <button
+                  type="submit"
+                  className="mt-5 w-[110px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                >
+                  Update
+                </button>
+                <button
+                  onClick={() => setEditProfile(false)}
+                  type="button"
+                  className="mt-5 w-[110px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                >
+                  Cancel
+                </button>
+              </div>
             </form>
           </div>
         ) : (
           <div className="flex flex-col min-w-[120px] ">
             <BsFillPencilFill
               onClick={() => setEditProfile(!editProfile)}
-              className=" self-end mb-2"
+              className="self-end mb-2"
             />
             <p>
               <span className="font-bold">Name:</span> {user && user.name}
@@ -261,8 +274,8 @@ export default function Profile() {
           </div>
         ))}
       <div>
-        <p className=" text-center mb-2">Currency:</p>
-        <div className="flex gap-2">
+        <p className=" text-center my-3 ">Currency:</p>
+        <div className="flex gap-5">
           <button
             onClick={() => setCurrency("£")}
             className={`${
@@ -289,8 +302,11 @@ export default function Profile() {
           </button>
         </div>
       </div>
-      <div className="flex flex-col  gap-5 items-center">
-        <HiOutlineLogout onClick={() => logOut()} className="text-3xl" />
+      <div className="flex flex-col gap-7 items-center my-3">
+        <button onClick={() => logOut()} className="flex gap-2 items-center">
+          <HiOutlineLogout className="text-3xl" />{" "}
+          <p className="font-semibold text-lg">Log out</p>
+        </button>
         <button
           onClick={() => setShowDeleteAccount(true)}
           className="p-1 text-red-400 border-[3px] border-red-400"
