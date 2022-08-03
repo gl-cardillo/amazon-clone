@@ -12,7 +12,8 @@ export default async (req, res) => {
     //   if (req.body.email === "test-account@example.com") {
     //   req.body.password = process.env.TEST_PASSWORD;
     // }
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user)
+      return res.status(404).json({ message: "Credentials are incorrect" });
     // compare the password and create token
     const comparedPassword = await bcrypt.compare(
       req.body.passwordLogin,
@@ -23,8 +24,7 @@ export default async (req, res) => {
       const token = jwt.sign({ user }, process.env.ACCESS_TOKEN_SECRET);
       return res.status(200).json({ user, token });
     } else {
-      console.log(console.log(req.body.password));
-      return res.status(400).json({ message: "Password is incorrect" });
+      return res.status(400).json({ message: "Credentials are incorrect" });
     }
   } catch (err) {
     return res.status(500).json({ message: "Sorry, try again later" });

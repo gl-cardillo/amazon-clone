@@ -3,7 +3,7 @@ import Category from "../index";
 import { catalogs } from "../../../../utils/catalogs";
 import { getDataSubcategory } from "../../../api/subcategory/[subcategoryId]";
 export default function index({ products }) {
-  return <Category products={products} />;
+  return <Category productsAndAverage={products} />;
 }
 
 export const getStaticProps = async ({ params }) => {

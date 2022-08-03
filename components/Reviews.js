@@ -23,7 +23,7 @@ export default function Reviews({
   const router = useRouter();
 
   const schema = yup.object().shape({
-    text: yup.string().min(2),
+    review: yup.string().min(2),
   });
 
   const {
@@ -45,7 +45,7 @@ export default function Reviews({
         `/api/review/${product._id}`,
         {
           productId: product._id,
-          text: data.text,
+          text: data.review,
           reviewAuthor: user.name,
           ratingForm,
         },
@@ -94,7 +94,6 @@ export default function Reviews({
   };
 
   const handleSort = (sortMethod) => {
- 
     if (sortMethod === "rating") {
       reviews.sort((a, b) => b.rating - a.rating);
       setSort("rating");
@@ -273,8 +272,11 @@ export default function Reviews({
                 className="w-full p-1 text resize-none rounded-sm h-24"
                 id="text"
                 name="text"
-                {...register("text")}
+                {...register("review")}
               />
+              <p className="text-[12px] text-red-600 pt-1">
+                {errors?.review?.message}
+              </p>
               <button
                 className=" mt-2 p-2 w-[120px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
                 type="submit"

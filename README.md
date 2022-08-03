@@ -6,7 +6,7 @@
 
 ---
 
-This is an amazon clone full stack app made with Next.js and tailwind. 
+This is an amazon clone full stack app made with Next.js and Tailwind. 
 
 <br/>
 
@@ -20,10 +20,10 @@ This is an amazon clone full stack app made with Next.js and tailwind.
 - Add and remove product from cart.
 - Review product with star rating.
 - Change details like address, city etc.
-- change currency ($, € £).
+- change currency ($, €, £).
 
 ## Link
 
 ---
 
-Check the [demo](https://the-odinbook.herokuapp.com/) 
+Check the [demo](https://amazon-clone-git-main-gl-cardillo.vercel.app/) 

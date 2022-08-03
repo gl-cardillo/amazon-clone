@@ -1,26 +1,10 @@
-import axios from "axios";
 import Link from "next/link";
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 import { CurrencyContext } from "../utils/context";
 import { handleRating } from "../utils/utils";
 
-export default function Card({ product }) {
+export default function Card({ product, reviewAverage }) {
   const { currencySymbol, currencyRate } = useContext(CurrencyContext);
-  const [rating, setRating] = useState(0);
-
-  useEffect(() => {
-    const getStars = () => {
-      axios
-        .get(`/api/review/getRating/${product._id}`)
-        .then((res) => {
-          setRating(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-    getStars();
-  }, [product]);
 
   return (
     <Link href={`/product/${product._id}`}>
@@ -33,7 +17,7 @@ export default function Card({ product }) {
           />
           <div>
             <p className="font-semibold  text-sm md:text-md ">{product.name}</p>
-            <div className="flex gap-1 my-5">{handleRating(rating)}</div>
+            <div className="flex gap-1 my-5">{handleRating(reviewAverage)}</div>
             <p className="font-bold ">
               {currencySymbol}
               {(Math.round(product.price * currencyRate * 100) / 100).toFixed(

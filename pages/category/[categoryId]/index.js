@@ -1,15 +1,13 @@
-import axios from "axios";
 import Card from "../../../components/Card";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { catalogs } from "../../../utils/catalogs";
 import { getDataCategory } from "../../api/category/[categoryId]";
 
-export default function Category({ products }) {
+export default function Category({ productsAndAverage }) {
   const router = useRouter();
   const categoryId = router.query.categoryId;
   const subcategoryId = router.query.subcategory || null;
-
 
   return (
     <div className="flex min-h-screen gap-3 p-3">
@@ -51,7 +49,7 @@ export default function Category({ products }) {
       </div>
       <div className="w-full">
         <h3 className="  md:hidden font-bold text-2xl pl-1 mb-2  border-b-2 border-slate-300">
-          {products[0].categoryName}
+          {productsAndAverage[0].product.categoryName}
         </h3>
         <div className=" md:hidden flex items-center">
           {catalogs
@@ -76,8 +74,14 @@ export default function Category({ products }) {
             })}
         </div>
         <div className="md:flex md:flex-wrap justify-center">
-          {products.map((product, index) => {
-            return <Card key={index} product={product} />;
+          {productsAndAverage.map((products, index) => {
+            return (
+              <Card
+                key={index}
+                product={products.product}
+                reviewAverage={products.reviewAverage}
+              />
+            );
           })}
         </div>
       </div>
@@ -86,11 +90,10 @@ export default function Category({ products }) {
 }
 
 export const getStaticProps = async ({ params }) => {
-
   const res = await getDataCategory(params.categoryId);
-  const products = JSON.parse(JSON.stringify(res));
+  const productsAndAverage = JSON.parse(JSON.stringify(res));
 
-  return { props: { products } };
+  return { props: { productsAndAverage } };
 };
 
 export const getStaticPaths = () => {

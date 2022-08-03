@@ -7,6 +7,7 @@ import { handleRating } from "../../utils/utils";
 import { getAllProduct } from "../api/product/all";
 import { getDataProductId } from "../api/product/[productId]";
 import { getDataReview } from "../api/review/[productId]";
+import dbConnect from "../../utils/dbConnect";
 import ImageSelector from "../../components/ImageSelector";
 import Reviews from "../../components/Reviews";
 
@@ -188,11 +189,16 @@ export default function Product({
     </div>
   );
 }
-export const getStaticProps = async ({ params }) => {
-  let res = await getDataProductId(params.productId);
+
+export async function getServerSideProps(context) {
+
+  // if not called returns mongoose.models undefined
+  await getAllProduct();
+  
+  let res = await getDataProductId(context.query.productId);
   res = JSON.parse(JSON.stringify(res));
 
-  let resReview = await getDataReview(params.productId);
+  let resReview = await getDataReview(context.query.productId);
   resReview = JSON.parse(JSON.stringify(resReview));
 
   return {
@@ -203,19 +209,36 @@ export const getStaticProps = async ({ params }) => {
       ratingAverage: resReview.average,
     },
   };
-};
+}
 
-export const getStaticPaths = async () => {
-  let products = await getAllProduct();
-  products = JSON.parse(JSON.stringify(products));
-  return {
-    paths: products.map((product) => {
-      return {
-        params: {
-          productId: product._id,
-        },
-      };
-    }),
-    fallback: false,
-  };
-};
+// export const getStaticProps = async ({ params }) => {
+//   let res = await getDataProductId(params.productId);
+//   res = JSON.parse(JSON.stringify(res));
+
+//   let resReview = await getDataReview(params.productId);
+//   resReview = JSON.parse(JSON.stringify(resReview));
+
+//   return {
+//     props: {
+//       product: res,
+//       reviews: resReview.reviews,
+//       ratingArray: resReview.ratingArray,
+//       ratingAverage: resReview.average,
+//     },
+//   };
+// };
+
+// export const getStaticPaths = async () => {
+//   let products = await getAllProduct();
+//   products = JSON.parse(JSON.stringify(products));
+//   return {
+//     paths: products.map((product) => {
+//       return {
+//         params: {
+//           productId: product._id,
+//         },
+//       };
+//     }),
+//     fallback: false,
+//   };
+// };

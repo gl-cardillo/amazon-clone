@@ -4,6 +4,7 @@ const User = require("../../../models/User");
 import verifyToken from "../../../utils/verifyToken";
 
 dbConnect();
+
 export const getDataReview = async (productId) => {
   const reviews = await Review.find({ productId }).sort([['date', -1]]);
 
