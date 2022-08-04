@@ -307,12 +307,14 @@ export default function Profile() {
           <HiOutlineLogout className="text-3xl" />{" "}
           <p className="font-semibold text-lg">Log out</p>
         </button>
-        <button
-          onClick={() => setShowDeleteAccount(true)}
-          className="p-1 text-red-400 border-[3px] border-red-400"
-        >
-          Delete account
-        </button>
+        {user && user.email !== "testAccount@example.com" && (
+          <button
+            onClick={() => setShowDeleteAccount(true)}
+            className="p-1 text-red-400 border-[3px] border-red-400"
+          >
+            Delete account
+          </button>
+        )}
       </div>
       {showDeleteAccount && (
         <div className=" fixed z-2 top-0 left-0 w-full h-full bg-black/50">
@@ -327,6 +329,7 @@ export default function Profile() {
               >
                 Cancel
               </button>
+
               <button
                 className="mt-5 p-2 w-[120px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
                 onClick={() => deleteAccount()}

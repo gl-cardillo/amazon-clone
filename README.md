@@ -19,6 +19,8 @@ This is an amazon clone full stack app made with Next.js and Tailwind.
 - Search and browse products.
 - Add and remove product from cart.
 - Review product with star rating.
+- Sort review by most recent or highest rating.
+- Filter review by rating.
 - Change details like address, city etc.
 - change currency ($, €, £).
 

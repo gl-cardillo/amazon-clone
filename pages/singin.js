@@ -42,9 +42,7 @@ export default function Singin() {
 
   const schemaLogin = yup.object().shape({
     emailLogin: yup.string().email().required("Email is required"),
-    passwordLogin: yup
-      .string()
-      .required("Password is required")
+    passwordLogin: yup.string().required("Password is required"),
   });
 
   const {
@@ -77,7 +75,12 @@ export default function Singin() {
         console.log(err.response.data.message);
       });
   };
+
   const login = async (data) => {
+    if (!data) {
+      data = { emailLogin: "testAccount@example.com" };
+    }
+
     await axios
       .post("/api/auth/login", data)
       .then((res) => {
@@ -92,7 +95,7 @@ export default function Singin() {
   };
 
   return (
-    <div className=" flex flex-col mx-3 md:max-w-[400px] md:mx-auto my-10 ">
+    <div className=" flex flex-col mx-3 xs:mx-auto xs:max-w-[400px] my-10 ">
       <h2 className="text-3xl font-semibold self-start">Welcome</h2>
       <div className=" max-w-[400px] border-sold border-2 border-gray-300 bg-white rounded-md mt-3">
         <div
@@ -226,6 +229,17 @@ export default function Singin() {
             </form>
           </div>
         </div>
+      </div>
+      <div className="flex flex-col items-center mt-[30px] gap-2">
+        <p className="w-[100px] text-center border-b border-black  leading-[0.1em]">
+          <span className="p-2 bg-[#f1f5f9]">or</span>
+        </p>
+        <button
+          className="mt-5 p-4 text-sm border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+          onClick={() => login()}
+        >
+          Login with example account
+        </button>
       </div>
     </div>
   );

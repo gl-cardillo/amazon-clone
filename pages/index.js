@@ -7,12 +7,12 @@ import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 
 export default function Home() {
   const slideImages = [
+    { image: "/images/shoes-slide.jpeg", link: "/category/clothes/Shoes" },
     {
       image: "/images/phones-slide.jpeg",
       link: "/category/electronics/Phones",
     },
     { image: "/images/pets-slide.jpeg", link: "/category/petsSupplies" },
-    { image: "/images/shoes-slide.jpeg", link: "/category/clothes/Shoes" },
   ];
 
   const properties = {
@@ -37,12 +37,13 @@ export default function Home() {
             <div className="each-slide" key={index}>
               <Link href={slideImage.link}>
                 <a>
-                  <img
-                    key={index}
-                    className="h-[300px] md:h-[350px] lg:h-[400px] xl:h-[500px]  w-full"
-                    src={slideImage.image}
-                    alt=""
-                  />
+                  <div className="h-[250px] md:h-[350px] lg:h-[400px] xl:h-[550px] w-full relative">
+                    <Image
+                      src={slideImage.image}
+                      layout="fill"
+                      alt="ads"
+                    />
+                  </div>
                 </a>
               </Link>
             </div>
@@ -61,11 +62,11 @@ export default function Home() {
                   <h2 className="font-bold pb-2 text-lg">{catalog.name}</h2>
                   <Image
                     src={catalog.image}
-                    width={"400px"}
-                    height={"400px"}
+                    width={400}
+                    height={400}
                     alt="category"
                   />
-                  <p className=" text-blue-600">See more...</p>
+                  <p className=" text-slate-500">See more...</p>
                 </a>
               </Link>
             </div>

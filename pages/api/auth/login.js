@@ -8,10 +8,11 @@ dbConnect();
 export default async (req, res) => {
   try {
     const user = await User.findOne({ email: req.body.emailLogin });
-    // if user is the test account, set the right password
-    //   if (req.body.email === "test-account@example.com") {
-    //   req.body.password = process.env.TEST_PASSWORD;
-    // }
+    //if user is the test account, set the right password
+    if (req.body.emailLogin === "testAccount@example.com") {
+      req.body.passwordLogin = process.env.TEST_PASSWORD;
+    }
+
     if (!user)
       return res.status(404).json({ message: "Credentials are incorrect" });
     // compare the password and create token
@@ -27,6 +28,7 @@ export default async (req, res) => {
       return res.status(400).json({ message: "Credentials are incorrect" });
     }
   } catch (err) {
+    console.log(err.message);
     return res.status(500).json({ message: "Sorry, try again later" });
   }
 };

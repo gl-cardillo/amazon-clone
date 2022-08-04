@@ -38,6 +38,7 @@ export default function Navbar() {
       setSearch(newSearch);
     }
   }
+  
   useEffect(() => {
     if (user) {
       setCartQuantity(
@@ -57,7 +58,7 @@ export default function Navbar() {
 
   return (
     <div className="flex flex-col bg-[#131921]">
-      <div className="flex justify-between gap-3 px-2 pt-3 h-[50px] md:h-[60px] ">
+      <div className="flex justify-between gap-3 px-3 md:px-5 pt-3 h-[50px] md:h-[60px]">
         <Link href="/">
           <a className="py-1">
             <Image
@@ -122,17 +123,17 @@ export default function Navbar() {
         <div className="flex  gap-5 md:gap-5">
           <Link href="/profile">
             <a>
-              <AiOutlineUser className="text-white text-3xl md:text-4xl " />
+              <AiOutlineUser className="text-white text-3xl" />
             </a>
           </Link>
           <div>
             <Link href="/cart">
               <a>
-                <BsCart2 className="text-white text-3xl md:text-4xl " />
+                <BsCart2 className="text-white text-3xl" />
               </a>
             </Link>
             {cartQuantity > 0 && (
-              <p className=" text-bg-slate-900 bg-orange-300 h-[20px] w-[20px] flex items-center justify-center rounded-full absolute top-7 right-0.5">
+              <p className="text-bg-slate-900 bg-orange-300 h-[20px] w-[20px] flex items-center justify-center rounded-full absolute top-8 right-1.5 md:right-2.5">
                 {cartQuantity}
               </p>
             )}

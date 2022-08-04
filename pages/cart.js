@@ -95,7 +95,9 @@ export default function Cart() {
         },
       })
       .then((res) => {
+
         setUser(res.data);
+
       })
       .catch((err) => {
         console.log(err.message);
@@ -185,8 +187,8 @@ export default function Cart() {
               })}
             </div>
           ) : (
-            <div className="flex flex-col items-center">
-              <p>Basket is Empty</p>
+            <div className="flex flex-col items-center gap-1 py-3">
+              <p>Basket is empty</p>
               <div>
                 <button
                   onClick={() => router.push("/")}
@@ -198,7 +200,7 @@ export default function Cart() {
             </div>
           )
         ) : (
-          <Skeleton height={300} width={300} />
+          <Skeleton height={100} count={3}  />
         )}
       </div>
       <div className="flex gap-1 items-center self-end ">
