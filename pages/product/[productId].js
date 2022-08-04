@@ -7,7 +7,6 @@ import { handleRating } from "../../utils/utils";
 import { getAllProduct } from "../api/product/all";
 import { getDataProductId } from "../api/product/[productId]";
 import { getDataReview } from "../api/review/[productId]";
-import dbConnect from "../../utils/dbConnect";
 import ImageSelector from "../../components/ImageSelector";
 import Reviews from "../../components/Reviews";
 
@@ -194,7 +193,7 @@ export async function getServerSideProps(context) {
 
   // if not called returns mongoose.models undefined
   await getAllProduct();
-  
+
   let res = await getDataProductId(context.query.productId);
   res = JSON.parse(JSON.stringify(res));
 
