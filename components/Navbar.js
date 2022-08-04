@@ -16,7 +16,7 @@ export default function Navbar() {
   const router = useRouter();
   const { user } = useContext(UserContext);
 
-  function blur(input) {
+  const blur = (input) => {
     input.current.value = "";
     setTimeout(() => {
       setSearch([]);
@@ -24,7 +24,7 @@ export default function Navbar() {
     }, 200);
   }
 
-  function handleSearch(e) {
+  const handleSearch = (e) => {
     if (e.target.value === "") {
       setSearch([]);
     } else {
@@ -38,7 +38,7 @@ export default function Navbar() {
       setSearch(newSearch);
     }
   }
-  
+
   useEffect(() => {
     if (user) {
       setCartQuantity(
@@ -55,7 +55,6 @@ export default function Navbar() {
     getData();
   }, []);
 
-
   return (
     <div className="flex flex-col bg-[#131921]">
       <div className="flex justify-between gap-3 px-3 md:px-5 pt-3 h-[50px] md:h-[60px]">
@@ -70,7 +69,7 @@ export default function Navbar() {
           </a>
         </Link>
         <div onBlur={() => blur(inputRef, setSearch)}>
-          <div className=" hidden md:flex h-auto relative">
+          <div className="hidden md:flex h-auto relative">
             <input
               type="text"
               className="rounded-l h-[38px] p-1 focus:outline-none border-transparent focus:border-transparent focus:ring-0 md:w-[300px] lg:w-[350px]"
@@ -121,7 +120,7 @@ export default function Navbar() {
           )}
         </div>
         <div className="flex  gap-5 md:gap-5">
-          <Link href="/profile">
+          <Link href={user ? "/profile" : "/singin"}>
             <a>
               <AiOutlineUser className="text-white text-3xl" />
             </a>

@@ -238,7 +238,7 @@ export default function Singin() {
           className="mt-5 p-4 text-sm border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
           onClick={() => login()}
         >
-          Login with example account
+          Login with test account
         </button>
       </div>
     </div>

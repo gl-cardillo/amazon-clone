@@ -1,13 +1,7 @@
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 import axios from "axios";
 
 export default function Form() {
-  const router = useRouter();
-  useEffect(() => {
-    router.push("/notAllowed");
-  }, []);
   const { register, handleSubmit, reset } = useForm();
   const post = async (data) => {
     await axios.post("/api/product/all", data);
@@ -80,4 +74,13 @@ export default function Form() {
       <button type="submit">Submit</button>
     </form>
   );
+}
+
+export async function getServerSideProps() {
+  return {
+    redirect: {
+      destination: "/",
+      permanent: false,
+    },
+  };
 }
