@@ -1,7 +1,6 @@
 import dbConnect from "../../../utils/dbConnect";
 import verifyToken from "../../../utils/verifyToken";
 const User = require("../../../models/User");
-const Product = require("../../../models/Product");
 
 dbConnect();
 

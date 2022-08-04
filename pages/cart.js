@@ -18,7 +18,7 @@ export default function Cart() {
 
   useEffect(() => {
     if (!user) {
-      router.push('/singin')
+      router.push("/singin");
     }
     const getCart = async () => {
       axios
@@ -95,9 +95,8 @@ export default function Cart() {
         },
       })
       .then((res) => {
-
         setUser(res.data);
-
+        localStorage.setItem("user_amazon_lc", JSON.stringify(res.data));
       })
       .catch((err) => {
         console.log(err.message);
@@ -105,7 +104,7 @@ export default function Cart() {
   };
 
   return (
-    <div className="m-5 p-2 py-5 bg-white rounded-md flex flex-col sm:mx-6 md:mx-20 md:px-10 lg:mx-40 xl:mx-[400px] 2xl:mx-[500px] ">
+    <div className="m-5 p-2 py-5 bg-white rounded-md flex flex-col sm:mx-6 md:mx-20 md:px-10 lg:mx-40 xl:mx-[400px] 2xl:mx-[500px] 3xl:mx-[600px] ">
       <h2 className="font-bold text-xl">Shopping Basket</h2>
       <div>
         {cart ? (
@@ -200,7 +199,7 @@ export default function Cart() {
             </div>
           )
         ) : (
-          <Skeleton height={100} count={3}  />
+          <Skeleton height={100} count={3} />
         )}
       </div>
       <div className="flex gap-1 items-center self-end ">

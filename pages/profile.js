@@ -148,7 +148,7 @@ export default function Profile() {
   };
 
   return (
-    <div className=" mt-5 mx-6 md:mx-44 lg:mx-[300px] xl:mx-[500px] 2xl:mx-[600px] flex items-center flex-col p-5 bg-white rounded-md gap-3">
+    <div className=" mt-5 mx-6 md:mx-44 lg:mx-[300px] xl:mx-[500px] 2xl:mx-[600px] 3xl:mx-[800px] flex items-center flex-col p-5 bg-white rounded-md gap-3">
       <h2 className="font-bold text-xl">Welcome {user && user.firstName}</h2>
       <img
         className="w-[50px] h-[50px] rounded-full"

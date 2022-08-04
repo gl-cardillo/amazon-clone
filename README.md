@@ -6,7 +6,7 @@
 
 ---
 
-This is an amazon clone full stack app made with Next.js and Tailwind. 
+This is an amazon clone app made with Next.js and Tailwind. 
 
 <br/>
 
@@ -15,7 +15,7 @@ This is an amazon clone full stack app made with Next.js and Tailwind.
 ---
 
 - Create a profile and delete profile.
-- Sign in and log out. 
+- Sign in and log out.
 - Search and browse products.
 - Add and remove product from cart.
 - Review product with star rating.

@@ -22,7 +22,7 @@ export default function Navbar() {
       setSearch([]);
       setShowSearch(false);
     }, 200);
-  }
+  };
 
   const handleSearch = (e) => {
     if (e.target.value === "") {
@@ -37,7 +37,7 @@ export default function Navbar() {
       });
       setSearch(newSearch);
     }
-  }
+  };
 
   useEffect(() => {
     if (user) {

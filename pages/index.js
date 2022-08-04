@@ -37,12 +37,8 @@ export default function Home() {
             <div className="each-slide" key={index}>
               <Link href={slideImage.link}>
                 <a>
-                  <div className="h-[250px] md:h-[350px] lg:h-[400px] xl:h-[550px] w-full relative">
-                    <Image
-                      src={slideImage.image}
-                      layout="fill"
-                      alt="ads"
-                    />
+                  <div className="h-[250px] md:h-[350px] lg:h-[400px] xl:h-[550px] 3xl:h-[700px] w-full relative">
+                    <Image src={slideImage.image} layout="fill" alt="ads" />
                   </div>
                 </a>
               </Link>

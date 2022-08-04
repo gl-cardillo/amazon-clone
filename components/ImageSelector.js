@@ -8,8 +8,8 @@ export default function ImageSelector({ product }) {
     <div className="flex flex-col items-center gap-5">
       <Image
         src={pic}
-        width={300}
-        height={350}
+        width={250}
+        height={300}
         className="object-scale-down"
         alt="category"
       />

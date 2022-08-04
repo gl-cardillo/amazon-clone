@@ -106,7 +106,7 @@ export default function Reviews({
   };
 
   return (
-    <div className="bg-white mt-3 p-5 flex flex-col  rounded-md md:px-10  md:mx-24 lg:mx-52 xl:mx-[400px]">
+    <div className="bg-white mt-3 p-5 flex flex-col  rounded-md md:px-10  md:mx-24 lg:mx-52 xl:mx-[400px] 3xl:mx-[600px]">
       <div className="flex flex-col items-center">
         <h3 className="font-bold text-2xl">Customer reviews</h3>
         <p className="mb-3 text-slate-600">
@@ -236,7 +236,7 @@ export default function Reviews({
       </div>
       {user ? (
         <div>
-          <h4 className="my-2 font-semibold">Leave a review</h4>
+          <h4 className="my-3 font-semibold ">Leave a review</h4>
           <div className="flex items-center flex-col gap-2  ">
             <div className="flex gap-3 items-center">
               {starsLoop.map((numb, index) =>
