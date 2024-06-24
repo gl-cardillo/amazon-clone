@@ -21,7 +21,7 @@ export default function Category({ productsAndAverage }) {
                   <h3
                     className={`${
                       category.id === categoryId && "font-bold text-lg"
-                    }  mt-1 hover:scale-105`}
+                    }  mt-1 hover:scale-[1.02] transition-transform duration-200 ease-in-out`}
                   >
                     {category.name}
                   </h3>
@@ -35,7 +35,7 @@ export default function Category({ productsAndAverage }) {
                         <p
                           className={`${
                             subcategory === subcategoryId && "font-bold text-lg"
-                          }  pl-5 hover:scale-105`}
+                          } pl-5 hover:scale-[1.02] transition-transform duration-200 ease-in-out`}
                         >
                           {subcategory}
                         </p>
@@ -64,7 +64,7 @@ export default function Category({ productsAndAverage }) {
                     <p
                       className={`${
                         subcategory === subcategoryId && "font-bold text-lg"
-                      }  pl-2`}
+                      } pl-2`}
                     >
                       {subcategory}
                     </p>
