@@ -10,8 +10,8 @@ export default function Category({ productsAndAverage }) {
   const subcategoryId = router.query.subcategory || null;
 
   return (
-    <div className="flex min-h-screen gap-3 p-3">
-      <div className=" hidden md:block border-r-2 p-2 min-w-[210px]">
+    <div className="flex min-h-screen gap-3">
+      <div className="hidden md:block fixed h-[calc(100vh-60px)] border-r-2 p-2 min-w-[210px] bg-white">
         <h2 className="text-2xl font-bold mb-3">Categories</h2>
         {catalogs.map((category, index) => {
           return (
@@ -47,11 +47,11 @@ export default function Category({ productsAndAverage }) {
           );
         })}
       </div>
-      <div className="w-full">
-        <h3 className="  md:hidden font-bold text-2xl pl-1 mb-2  border-b-2 border-slate-300">
+      <div className="w-full ml-[200px]">
+        <h3 className=" md:hidden font-bold text-2xl pl-1 mb-2  border-b-2 border-slate-300">
           {productsAndAverage[0].product.categoryName}
         </h3>
-        <div className=" md:hidden flex items-center">
+        <div className="md:hidden flex items-center">
           {catalogs
             .filter((category) => category.id === categoryId)[0]
             .subcategory.map((subcategory, index) => {
@@ -73,7 +73,7 @@ export default function Category({ productsAndAverage }) {
               );
             })}
         </div>
-        <div className="md:flex md:flex-wrap justify-center">
+        <div className="md:flex md:flex-wrap justify-center my-2">
           {productsAndAverage.map((products, index) => {
             return (
               <Card

@@ -56,7 +56,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <div className="flex flex-col bg-[#131921]">
+    <div className="flex fixed flex-col w-full bg-[#131921] z-10">
       <div className="flex justify-between gap-3 px-3 md:px-5 pt-3 h-[50px] md:h-[60px]">
         <Link href="/">
           <a className="py-1">

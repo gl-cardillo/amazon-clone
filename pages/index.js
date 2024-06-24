@@ -51,7 +51,7 @@ export default function Home() {
           return (
             <div
               key={index}
-              className="p-3 m-3 max-w-xs bg-white hover:scale-[1.02] hover:shadow-xl"
+              className="p-3 m-3 max-w-xs bg-white hover:scale-[1.02] shadow rounded hover:shadow-lg transition-transform duration-300 ease-in-out"
             >
               <Link href={catalog.link}>
                 <a>

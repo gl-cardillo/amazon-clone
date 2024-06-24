@@ -97,9 +97,11 @@ export default function Singin() {
   return (
     <div className=" flex flex-col mx-3 xs:mx-auto xs:max-w-[400px] my-10 ">
       <h2 className="text-3xl font-semibold self-start">Welcome</h2>
-      <div className=" max-w-[400px] border-sold border-2 border-gray-300 bg-white rounded-md mt-3">
+      <div className=" shadow-md max-w-[400px]  border-gray-300 bg-white rounded-md mt-3">
         <div
-          className={` border-t-2 p-4 ${!showSignin ? " bg-slate-100" : ""}`}
+          className={`rounded-t-md border-t-2 p-4 ${
+            !showSignin ? " bg-slate-100" : ""
+          }`}
         >
           <div className="flex gap-3 items-center">
             <input
@@ -112,7 +114,6 @@ export default function Singin() {
             <h3 className="font-bold text-medium text-[14px]">
               Create account.
               <span className="text-md font-bold text-[13px]">
-                {" "}
                 New to amazon?
               </span>
             </h3>
@@ -170,7 +171,7 @@ export default function Singin() {
             </form>
           </div>
         </div>
-        <div className={` border-t-2 p-4 ${showSignin ? " bg-slate-100" : ""}`}>
+        <div className={`rounded-b-md border-t-2 p-4 ${showSignin ? " bg-slate-100" : ""}`}>
           <div className="flex gap-3 items-center">
             <input
               type="radio"
