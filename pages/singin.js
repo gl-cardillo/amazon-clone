@@ -62,18 +62,18 @@ export default function Singin() {
   });
 
   const signin = async (data) => {
-    await axios
-      .post("/api/auth/singin", data)
-      .then((res) => {
-        setUser(res.data.user);
-        localStorage.setItem("user_amazon_lc", JSON.stringify(res.data.user));
-        localStorage.setItem("token_amazon_lc", JSON.stringify(res.data.token));
-        router.push("/");
-      })
-      .catch((err) => {
-        setErrorSignin(err.response.data.message);
-        console.log(err.response.data.message);
-      });
+    try {
+      const response = await axios.post("/api/auth/singin", data);
+      const { user, token } = response.data;
+
+      setUser(user);
+      localStorage.setItem("user_amazon_lc", JSON.stringify(user));
+      localStorage.setItem("token_amazon_lc", JSON.stringify(token));
+      router.push("/");
+    } catch (error) {
+      setErrorSignin(err.response.data.message);
+      console.log(error.response.data.message);
+    }
   };
 
   const login = async (data) => {
@@ -81,17 +81,17 @@ export default function Singin() {
       data = { emailLogin: "testAccount@example.com" };
     }
 
-    await axios
-      .post("/api/auth/login", data)
-      .then((res) => {
-        setUser(res.data.user);
-        localStorage.setItem("user_amazon_lc", JSON.stringify(res.data.user));
-        localStorage.setItem("token_amazon_lc", JSON.stringify(res.data.token));
-        router.push("/");
-      })
-      .catch((err) => {
-        setErrorLogin(err.response.data.message);
-      });
+    try {
+      const response = await axios.post("/api/auth/login", data);
+      const { user, token } = response.data;
+
+      setUser(user);
+      localStorage.setItem("user_amazon_lc", JSON.stringify(user));
+      localStorage.setItem("token_amazon_lc", JSON.stringify(token));
+      router.push("/");
+    } catch (error) {
+      setErrorLogin(error.response.data.message);
+    }
   };
 
   return (
@@ -171,7 +171,11 @@ export default function Singin() {
             </form>
           </div>
         </div>
-        <div className={`rounded-b-md border-t-2 p-4 ${showSignin ? " bg-slate-100" : ""}`}>
+        <div
+          className={`rounded-b-md border-t-2 p-4 ${
+            showSignin ? " bg-slate-100" : ""
+          }`}
+        >
           <div className="flex gap-3 items-center">
             <input
               type="radio"

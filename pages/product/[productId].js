@@ -28,8 +28,8 @@ export default function Product({
       setAskLogin(true);
       return;
     }
-    axios
-      .post(
+    try {
+      const response = await axios.post(
         "/api/cart/addToCart",
         {
           productId: product._id,
@@ -43,15 +43,13 @@ export default function Product({
             )}`,
           },
         }
-      )
-      .then((res) => {
-        setUser(res.data);
-        localStorage.setItem("user_amazon_lc", JSON.stringify(res.data));
-        setQuantity(1);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
+      );
+      setUser(response.data);
+      localStorage.setItem("user_amazon_lc", JSON.stringify(response.data));
+      setQuantity(1);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const increaseQuantity = () => {
@@ -190,7 +188,6 @@ export default function Product({
 }
 
 export async function getServerSideProps(context) {
-
   // if not called returns mongoose.models undefined
   await getAllProduct();
 

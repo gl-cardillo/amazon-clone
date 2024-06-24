@@ -47,7 +47,7 @@ export default function Profile() {
     resolver: yupResolver(schema),
   });
 
-  const updateProfile = (data) => {
+  const updateProfile = async (data) => {
     // only way i found to store date of birth without time in mongodb
     let dateOfBirth = null;
     if (data.dateOfBirth) {
@@ -55,9 +55,8 @@ export default function Profile() {
       const userTimezoneOffset = date.getTimezoneOffset() * 60000;
       dateOfBirth = new Date(date.getTime() - userTimezoneOffset);
     }
-
-    axios
-      .put(
+    try {
+      const response = await axios.put(
         "/api/user/updateProfile",
         {
           id: user._id,
@@ -74,15 +73,14 @@ export default function Profile() {
             )}`,
           },
         }
-      )
-      .then((res) => {
-        localStorage.setItem("user_amazon_lc", JSON.stringify(res.data));
-        setUser(res.data);
-        setEditProfile(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      );
+
+      localStorage.setItem("user_amazon_lc", JSON.stringify(res.data));
+      setUser(res.data);
+      setEditProfile(false);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

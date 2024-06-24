@@ -4,9 +4,15 @@ import axios from "axios";
 export default function Form() {
   const { register, handleSubmit, reset } = useForm();
   const post = async (data) => {
-    await axios.post("/api/product/all", data);
+    try {
+      await axios.post("/api/product/all", data);
+    } catch (error) {
+      console.log(error);
+    }
+
     reset();
   };
+  
   return (
     <form onSubmit={handleSubmit(post)}>
       <input type="text" id="name" {...register("name")} placeholder="name" />
