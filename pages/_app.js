@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 import Layout from "../components/Layout";
+import axios from "axios";
 import { UserContext, CurrencyContext } from "../utils/context";
 import { useState, useEffect } from "react";
 import { SkeletonTheme } from "react-loading-skeleton";

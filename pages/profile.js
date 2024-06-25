@@ -8,11 +8,12 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import Swal from "sweetalert2";
+import { swalStyle, handleSuccess, handleError } from "../utils/utils";
 
 export default function Profile() {
   const [showDetails, setShowDetails] = useState(false);
   const [editProfile, setEditProfile] = useState(false);
-  const [showDeleteAccount, setShowDeleteAccount] = useState(false);
 
   const { currencySymbol, setCurrencySymbol, setCurrencyRate } =
     useContext(CurrencyContext);
@@ -107,6 +108,25 @@ export default function Profile() {
       console.log(error);
     }
   };
+
+   const confirmDelete = () => {
+     Swal.fire({
+       title: "Are you sure you want to delete this account?",
+       position: "top",
+       showCancelButton: true,
+       confirmButtonText: "Close",
+       cancelButtonText: "Delete",
+       ...swalStyle,
+     }).then((result) => {
+       if (result.isDismissed) {
+         deleteAccount()
+         Swal.close();
+         handleSuccess("Account deleted successfully");
+       } else {
+         Swal.close();
+       }
+     });
+   };
 
   const setCurrency = (symbol) => {
     if (symbol === currencySymbol) return;
@@ -290,37 +310,13 @@ export default function Profile() {
         </button>
         {user && user.email !== "testAccount@example.com" && (
           <button
-            onClick={() => setShowDeleteAccount(true)}
+            onClick={confirmDelete}
             className="p-1 text-red-400 border-[3px] border-red-400"
           >
             Delete account
           </button>
         )}
       </div>
-      {showDeleteAccount && (
-        <div className=" fixed z-2 top-0 left-0 w-full h-full bg-black/50">
-          <div className="absolute z-3 top-1/2 left-1/2 w-[300px] text-[18px] bg-white transform -translate-x-1/2 -translate-y-1/2 p-4 rounded-md border-2 border-[#f0c14b] flex flex-col items-center">
-            <p className=" text-center font-semibold">
-              Are you sure you want to delete this account?
-            </p>
-            <div className="flex justify-around">
-              <button
-                className="mt-5 p-2 w-[120px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
-                onClick={() => setShowDeleteAccount(false)}
-              >
-                Cancel
-              </button>
-
-              <button
-                className="mt-5 p-2 w-[120px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
-                onClick={() => deleteAccount()}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
