@@ -17,19 +17,14 @@ export default function Cart() {
   const router = useRouter();
 
   useEffect(() => {
+    console.log(user);
     if (!user) {
       router.push("/singin");
     }
 
     const getCart = async () => {
       try {
-        const response = await axios.get("/api/cart/getCartProduct", {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token_amazon_lc")
-            )}`,
-          },
-        });
+        const response = await axios.get("/api/cart/getCartProduct");
         const { cart } = response.data;
         setCart(cart);
         setCartQuantity(cart.reduce((accum, cart) => accum + cart.quantity, 0));
@@ -58,17 +53,7 @@ export default function Cart() {
       return;
     }
     try {
-      const response = await axios.put(
-        "/api/cart/addToCart",
-        { productId, n },
-        {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token_amazon_lc")
-            )}`,
-          },
-        }
-      );
+      const response = await axios.put("/api/cart/addToCart", { productId, n });
       setUser(response.data);
       setQuantityError("");
       setDisableButton(false);
@@ -80,14 +65,7 @@ export default function Cart() {
   const removeProduct = async (productId) => {
     try {
       const response = await axios.delete("/api/cart/addToCart", {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(
-            localStorage.getItem("token_amazon_lc")
-          )}`,
-        },
-        data: {
-          productId: productId,
-        },
+        productId: productId,
       });
       setUser(response.data);
       localStorage.setItem("user_amazon_lc", JSON.stringify(res.data));

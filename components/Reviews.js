@@ -19,7 +19,7 @@ export default function Reviews({
   const [ratingForm, setRatingForm] = useState(null);
   const [errorRating, setErrorRating] = useState("");
   const [filter, setFilter] = useState([1, 2, 3, 4, 5]);
-  const [sort, setSort] = useState('recent');
+  const [sort, setSort] = useState("recent");
   const router = useRouter();
 
   const schema = yup.object().shape({
@@ -35,36 +35,24 @@ export default function Reviews({
     resolver: yupResolver(schema),
   });
 
-  const addReview = (data) => {
+  const addReview = async (data) => {
     if (!ratingForm) {
       setErrorRating("Select a star");
       return;
     }
-    axios
-      .post(
-        `/api/review/${product._id}`,
-        {
-          productId: product._id,
-          text: data.review,
-          reviewAuthor: user.name,
-          ratingForm,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token_amazon_lc")
-            )}`,
-          },
-        }
-      )
-      .then(() => {
-        reset();
-        setRatingForm(null);
-        router.push(`/product/${product._id}`);
-      })
-      .catch((err) => {
-        console.log(err.message);
+    try {
+      await axios.post(`/api/review/${product._id}`, {
+        productId: product._id,
+        text: data.review,
+        reviewAuthor: user.name,
+        ratingForm,
       });
+      reset();
+      setRatingForm(null);
+      router.push(`/product/${product._id}`);
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   const handleFilter = (value) => {
@@ -117,7 +105,7 @@ export default function Reviews({
             <tbody>
               {starsLoop.map((star, index) => (
                 <tr
-                  className="flex mb-2 items-center hover:scale-105 cursor-pointer"
+                  className="flex mb-2 items-center cursor-pointer hover:scale-[1.02] transition-transform duration-200 ease-in-out"
                   key={index}
                   onClick={() => handleFilter(`${star + 1}`)}
                 >

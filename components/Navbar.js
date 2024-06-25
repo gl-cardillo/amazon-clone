@@ -44,13 +44,19 @@ export default function Navbar() {
       setCartQuantity(
         user.cart.reduce((accum, cart) => accum + cart.quantity, 0)
       );
+    } else {
+      setCartQuantity(0);
     }
   }, [user]);
 
   useEffect(() => {
     const getData = async () => {
-      const res = await axios.get(`/api/product/all`);
-      setProducts(res.data);
+      try {
+        const res = await axios.get(`/api/product/all`);
+        setProducts(res.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
     getData();
   }, []);

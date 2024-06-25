@@ -29,21 +29,11 @@ export default function Product({
       return;
     }
     try {
-      const response = await axios.post(
-        "/api/cart/addToCart",
-        {
-          productId: product._id,
-          quantity,
-          userId: user._id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token_amazon_lc")
-            )}`,
-          },
-        }
-      );
+      const response = await axios.post("/api/cart/addToCart", {
+        productId: product._id,
+        quantity,
+        userId: user._id,
+      });
       setUser(response.data);
       localStorage.setItem("user_amazon_lc", JSON.stringify(response.data));
       setQuantity(1);

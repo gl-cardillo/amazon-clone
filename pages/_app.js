@@ -10,7 +10,13 @@ function MyApp({ Component, pageProps }) {
   const [currencyRate, setCurrencyRate] = useState(1);
 
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("user_amazon_lc")));
+    const user = JSON.parse(localStorage.getItem("user_amazon_lc"));
+    const token = JSON.parse(localStorage.getItem("token_amazon_lc"));
+    if (user && token) {
+      setUser(user);
+      axios.defaults.headers.Authorization = `Bearer ${token}`;
+    }
+
     //   localStorage.clear();
     //    setUser(null)
   }, []);

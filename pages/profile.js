@@ -56,27 +56,17 @@ export default function Profile() {
       dateOfBirth = new Date(date.getTime() - userTimezoneOffset);
     }
     try {
-      const response = await axios.put(
-        "/api/user/updateProfile",
-        {
-          id: user._id,
-          name: data.name,
-          dateOfBirth,
-          city: data.city,
-          address: data.address,
-          postcode: data.postcode,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(
-              localStorage.getItem("token_amazon_lc")
-            )}`,
-          },
-        }
-      );
+      const response = await axios.put("/api/user/updateProfile", {
+        id: user._id,
+        name: data.name,
+        dateOfBirth,
+        city: data.city,
+        address: data.address,
+        postcode: data.postcode,
+      });
 
-      localStorage.setItem("user_amazon_lc", JSON.stringify(res.data));
-      setUser(res.data);
+      localStorage.setItem("user_amazon_lc", JSON.stringify(response.data));
+      setUser(response.data);
       setEditProfile(false);
     } catch (error) {
       console.log(error);
@@ -105,24 +95,17 @@ export default function Profile() {
   const logOut = () => {
     setUser(null);
     localStorage.clear();
+    delete axios.defaults.headers.Authorization;
     router.push("/");
   };
 
-  const deleteAccount = () => {
-    axios
-      .delete("/api/user/deleteAccount", {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(
-            localStorage.getItem("token_amazon_lc")
-          )}`,
-        },
-      })
-      .then(() => {
-        logOut();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const deleteAccount = async () => {
+    try {
+      await axios.delete("/api/user/deleteAccount");
+      logOut();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const setCurrency = (symbol) => {

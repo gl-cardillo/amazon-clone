@@ -69,6 +69,8 @@ export default function Singin() {
       setUser(user);
       localStorage.setItem("user_amazon_lc", JSON.stringify(user));
       localStorage.setItem("token_amazon_lc", JSON.stringify(token));
+      axios.defaults.headers.Authorization = `Bearer ${token}`;
+
       router.push("/");
     } catch (error) {
       setErrorSignin(err.response.data.message);
@@ -88,6 +90,8 @@ export default function Singin() {
       setUser(user);
       localStorage.setItem("user_amazon_lc", JSON.stringify(user));
       localStorage.setItem("token_amazon_lc", JSON.stringify(token));
+      axios.defaults.headers.Authorization = `Bearer ${token}`;
+
       router.push("/");
     } catch (error) {
       setErrorLogin(error.response.data.message);
