@@ -17,9 +17,6 @@ function MyApp({ Component, pageProps }) {
       setUser(user);
       axios.defaults.headers.Authorization = `Bearer ${token}`;
     }
-
-    //   localStorage.clear();
-    //    setUser(null)
   }, []);
 
   return (

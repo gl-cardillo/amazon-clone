@@ -53,7 +53,7 @@ export default function Product({
   };
 
   return (
-    <div className="flex flex-col bg-slate-100 mx-2">
+    <div className="flex flex-col bg-slate-100 mx-2 mb-4">
       <div className="flex flex-col items-center gap-5 p-5 my-3 bg-white rounded-md md:hidden">
         <h3 className="font-bold text-xl">{product.name}</h3>
         <div className="flex items-center ">
@@ -65,15 +65,18 @@ export default function Product({
         <ImageSelector product={product} />
         <p className="font-bold text-xl self-center">£{product.price}</p>
         <div className="flex flex-col items-center">
-          <p className="flex gap-1 items-center mb-2 font-semibold">
-            About this item
-            <MdKeyboardArrowDown
-              className={`${showDescription && "rotate-180 text-xl"} text-xl`}
+          <div className="flex gap-1 items-center mb-2 font-semibold">
+            <p>About this item</p>
+            <button
               onClick={() => {
                 setShowDescription(!showDescription);
               }}
-            />
-          </p>
+            >
+              <MdKeyboardArrowDown
+                className={`${showDescription && "rotate-180 text-xl"} text-xl`}
+              />
+            </button>
+          </div>
           {showDescription && (
             <div className=" max-w-sm">
               <p>&#8226;{product.description}</p>
@@ -83,7 +86,7 @@ export default function Product({
           )}
         </div>
       </div>
-      <div className="hidden md:flex flex-col bg-white my-3 p-3 items-center rounded-md md:mx-24 lg:mx-52 xl:mx-[400px] 3xl:mx-[600px]">
+      <div className="hidden md:flex flex-col bg-white my-3 p-3 items-center rounded-md shadow md:mx-24 lg:mx-52 xl:mx-[400px] 3xl:mx-[600px]">
         <div className="flex gap-5 items-center justify-between w-full h-[320px]">
           <div className="p-2 w-1/3">
             <ImageSelector product={product} />
@@ -110,15 +113,20 @@ export default function Product({
                 2
               )}
             </p>
-            <p className="flex gap-1 items-center  font-semibold">
-              About this item
-              <MdKeyboardArrowDown
-                className={showDescription ? "rotate-180 text-xl" : "text-xl"}
+            <div className="flex gap-1 items-center mb-2 ">
+              <p>About this item</p>
+              <button
                 onClick={() => {
                   setShowDescription(!showDescription);
                 }}
-              />
-            </p>
+              >
+                <MdKeyboardArrowDown
+                  className={`${
+                    showDescription && "rotate-180 text-xl"
+                  } text-xl`}
+                />
+              </button>
+            </div>
           </div>
         </div>
         {showDescription && (
@@ -129,17 +137,17 @@ export default function Product({
           </div>
         )}
       </div>
-      <div className="bg-white py-5 gap-3 items-center flex flex-col rounded-md md:mx-24 lg:mx-52 xl:mx-[400px] 3xl:mx-[600px]">
+      <div className="bg-white py-5 gap-3 items-center flex flex-col rounded-md md:mx-24 lg:mx-52 xl:mx-[400px] 3xl:mx-[600px] shadow">
         <p className="text-green-700 font-semibold">In Stock</p>
-        <div className="flex w-[65px] gap-3 px-1.5 border-solid border-2  border-[#f0c14b] rounded-2xl">
-          <p onClick={() => decreaseQuantity()}>-</p>
+        <div className="flex w-[70px] gap-3 px-[9px] border-solid border-2 border-[#f0c14b] rounded-2xl">
+          <button onClick={() => decreaseQuantity()}>-</button>
           <p>{quantity}</p>
-          <p onClick={() => increaseQuantity()}>+</p>
+          <button onClick={() => increaseQuantity()}>+</button>
         </div>
 
         <button
           onClick={() => addToCart(product.id)}
-          className="p-2 w-[300px] h-12 text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+          className="p-2 w-[300px] h-12 text-[14px] rounded-[5px] text-gray-800 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] shadow"
         >
           Add to Cart
         </button>
@@ -151,20 +159,20 @@ export default function Product({
         setAskLogin={setAskLogin}
       />
       {askLogin && (
-        <div className=" fixed z-2 top-0 left-0 w-full h-full bg-black/50">
+        <div className="fixed z-[10] top-0 left-0 w-full h-full bg-black/50">
           <div className="absolute z-3 top-1/2 left-1/2 w-[300px] text-[18px] bg-white transform -translate-x-1/2 -translate-y-1/2 p-4 rounded-md border-2 border-[#f0c14b]">
-            <p className=" text-center font-semibold">
+            <p className="text-center font-semibold text-gray-600">
               You need to login first
             </p>
             <div className="flex justify-around">
               <button
-                className="mt-5 p-2 w-[120px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                className="mt-5 p-2 w-[120px] text-[14px] rounded-[5px] text-gray-800 shadow bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
                 onClick={() => setAskLogin(false)}
               >
                 Cancel
               </button>
               <button
-                className="mt-5 p-1 w-[120px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                className="mt-5 p-1 w-[120px] text-[14px] rounded-[5px] text-gray-800 shadow bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
                 onClick={() => router.push("/singin")}
               >
                 Go to login page

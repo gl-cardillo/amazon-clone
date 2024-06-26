@@ -109,24 +109,24 @@ export default function Profile() {
     }
   };
 
-   const confirmDelete = () => {
-     Swal.fire({
-       title: "Are you sure you want to delete this account?",
-       position: "top",
-       showCancelButton: true,
-       confirmButtonText: "Close",
-       cancelButtonText: "Delete",
-       ...swalStyle,
-     }).then((result) => {
-       if (result.isDismissed) {
-         deleteAccount()
-         Swal.close();
-         handleSuccess("Account deleted successfully");
-       } else {
-         Swal.close();
-       }
-     });
-   };
+  const confirmDelete = () => {
+    Swal.fire({
+      title: "Are you sure you want to delete this account?",
+      position: "top",
+      showCancelButton: true,
+      confirmButtonText: "Close",
+      cancelButtonText: "Delete",
+      ...swalStyle,
+    }).then((result) => {
+      if (result.isDismissed) {
+        deleteAccount();
+        Swal.close();
+        handleSuccess("Account deleted successfully");
+      } else {
+        Swal.close();
+      }
+    });
+  };
 
   const setCurrency = (symbol) => {
     if (symbol === currencySymbol) return;
@@ -149,99 +149,127 @@ export default function Profile() {
   };
 
   return (
-    <div className=" mt-5 mx-6 md:mx-44 lg:mx-[300px] xl:mx-[500px] 2xl:mx-[600px] 3xl:mx-[800px] flex items-center flex-col p-5 bg-white rounded-md gap-3">
+    <div className=" mt-5 mx-6 md:mx-44 lg:mx-[300px] xl:mx-[500px] 2xl:mx-[600px] 3xl:mx-[800px] flex items-center flex-col p-5 bg-white rounded-md gap-3 shadow">
       <h2 className="font-bold text-xl">Welcome {user && user.firstName}</h2>
       <img
         className="w-[50px] h-[50px] rounded-full"
         src="/images/user.jpeg"
         alt="avatar"
       />
-      <p className="flex gap-2 items-center">
-        Details
-        <MdKeyboardArrowDown
-          className={`${showDetails && "rotate-180 text-xl"} "text-xl"`}
+      <div className="flex gap-2 items-center">
+        <p>Details</p>
+        <button
           onClick={() => {
             setShowDetails(!showDetails);
           }}
-        />
-      </p>
+        >
+          <MdKeyboardArrowDown
+            className={`${showDetails && "rotate-180 text-xl"} "text-xl"`}
+          />
+        </button>
+      </div>
       {showDetails &&
         (editProfile ? (
           <div className="flex flex-col">
             <form onSubmit={handleSubmit(updateProfile)}>
-              <label htmlFor="name">
-                <h4>Name:</h4>
+              <div className="mt-3 flex flex-col relative">
+                <label
+                  htmlFor="name"
+                  className="absolute -top-2.5 left-2 bg-white px-1 text-blue-500 text-sm"
+                >
+                  Name
+                </label>
                 <input
                   {...register("name")}
                   type="text"
                   id="name"
                   name="name"
-                  className="w-[228px]"
+                  className="w-[228px] border-gray-300 rounded shadow"
                 />
-              </label>
-              <p className="text-[12px] text-red-600 pt-1">
-                {errors?.name?.message}
-              </p>
-              <label htmlFor="address">
-                <h4 className="pt-3">Address:</h4>
+                <p className="text-[12px] text-red-600 pt-1">
+                  {errors?.name?.message}
+                </p>
+              </div>
+              <div className="mt-3 flex flex-col relative">
+                <label
+                  htmlFor="address"
+                  className="absolute -top-2.5 left-2 bg-white px-1 text-blue-500 text-sm"
+                >
+                  Address
+                </label>
                 <input
                   {...register("address")}
                   type="text"
                   id="address"
                   name="address"
-                  className="w-[228px]"
+                  className="w-[228px] border-gray-300 rounded shadow"
                 />
-              </label>
-              <p className="text-[12px] text-red-600 pt-1">
-                {errors?.address?.message}
-              </p>
-              <label htmlFor="city">
-                <h4 className="pt-3">City:</h4>
+                <p className="text-[12px] text-red-600 pt-1">
+                  {errors?.address?.message}
+                </p>
+              </div>
+              <div className="mt-3 flex flex-col relative">
+                <label
+                  htmlFor="city"
+                  className="absolute -top-2.5 left-2 bg-white px-1 text-blue-500 text-sm"
+                >
+                  City
+                </label>
                 <input
                   {...register("city")}
                   type="text"
                   id="city"
                   name="city"
-                  className="w-[228px]"
+                  className="w-[228px] border-gray-300 rounded shadow"
                 />
-              </label>
-              <label htmlFor="postcode" className="mb-3">
-                <h4 className="pt-3">Postcode:</h4>
+              </div>
+              <div className="mt-3 flex flex-col relative">
+                <label
+                  htmlFor="postcode"
+                  className="absolute -top-2.5 left-2 bg-white px-1 text-blue-500 text-sm"
+                >
+                  Postcode
+                </label>
                 <input
                   {...register("postcode")}
                   type="text"
                   id="postcode"
                   name="postcode"
-                  className="w-[228px]"
+                  className="w-[228px] border-gray-300 rounded shadow"
                 />
-              </label>
-              <p className="text-[12px] text-red-600 pt-1">
-                {errors?.postcode?.message}
-              </p>
-              <label htmlFor="dateOfBirth">
-                <h4 className="pt-3"> Date of birth:</h4>
+                <p className="text-[12px] text-red-600 pt-1">
+                  {errors?.postcode?.message}
+                </p>
+              </div>
+              <div className="mt-3 flex flex-col relative">
+                <label
+                  htmlFor="dateOfBirth"
+                  className="absolute -top-2.5 left-2 bg-white px-1 text-blue-500 text-sm"
+                >
+                  Date of birth
+                </label>
                 <input
                   {...register("dateOfBirth")}
                   type="date"
                   name="dateOfBirth"
                   id="dateOfBirth"
-                  className="w-[228px]"
+                  className="w-[228px] border-gray-300 rounded shadow"
                 />
-              </label>
-              <p className="text-[12px] text-red-600 pt-1">
-                {errors?.dateOfBirth?.message}
-              </p>
+                <p className="text-[12px] text-red-600 pt-1">
+                  {errors?.dateOfBirth?.message}
+                </p>
+              </div>
               <div className="flex gap-2">
                 <button
                   type="submit"
-                  className="mt-5 w-[110px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                  className="mt-5 w-[110px] text-[14px] rounded py-0.5 shadow bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
                 >
                   Update
                 </button>
                 <button
                   onClick={() => setEditProfile(false)}
                   type="button"
-                  className="mt-5 w-[110px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                  className="mt-5 w-[110px] text-[14px] rounded shadow bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
                 >
                   Cancel
                 </button>
@@ -265,7 +293,7 @@ export default function Profile() {
               <span className="font-bold">City:</span> {user && user.city}
             </p>
             <p>
-              <span className="font-bold">Postcode:</span>{" "}
+              <span className="font-bold">Postcode:</span>
               {user && user.postcode}
             </p>
             <p>
@@ -275,13 +303,13 @@ export default function Profile() {
           </div>
         ))}
       <div>
-        <p className=" text-center my-3 ">Currency:</p>
+        <p className="text-center my-3">Currency:</p>
         <div className="flex gap-5">
           <button
             onClick={() => setCurrency("£")}
             className={`${
               currencySymbol === "£" && "bg-[#f7dfa5]"
-            } h-[40px] w-[40px] text-xl border-2 border-[#f0c14b] hover:bg-[#f7dfa5] `}
+            } h-[40px] w-[40px] text-xl border border-[#f0c14b] hover:bg-[#f7dfa5] rounded shadow`}
           >
             £
           </button>
@@ -289,7 +317,7 @@ export default function Profile() {
             onClick={() => setCurrency("€")}
             className={`${
               currencySymbol === "€" && "bg-[#f7dfa5]"
-            } h-[40px] w-[40px] text-xl border-2 border-[#f0c14b] hover:bg-[#f7dfa5] `}
+            } h-[40px] w-[40px] text-xl border border-[#f0c14b] hover:bg-[#f7dfa5] rounded shadow`}
           >
             €
           </button>
@@ -297,7 +325,7 @@ export default function Profile() {
             onClick={() => setCurrency("$")}
             className={`${
               currencySymbol === "$" && "bg-[#f7dfa5]"
-            } h-[40px] w-[40px] text-xl border-2 border-[#f0c14b] hover:bg-[#f7dfa5] `}
+            } h-[40px] w-[40px] text-xl border border-[#f0c14b] hover:bg-[#f7dfa5] rounded shadow`}
           >
             $
           </button>
@@ -305,7 +333,7 @@ export default function Profile() {
       </div>
       <div className="flex flex-col gap-7 items-center my-3">
         <button onClick={() => logOut()} className="flex gap-2 items-center">
-          <HiOutlineLogout className="text-3xl" />{" "}
+          <HiOutlineLogout className="text-3xl" />
           <p className="font-semibold text-lg">Log out</p>
         </button>
         {user && user.email !== "testAccount@example.com" && (

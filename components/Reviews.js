@@ -94,9 +94,9 @@ export default function Reviews({
   };
 
   return (
-    <div className="bg-white mt-3 p-5 flex flex-col  rounded-md md:px-10  md:mx-24 lg:mx-52 xl:mx-[400px] 3xl:mx-[600px]">
+    <div className="bg-white mt-3 p-5 flex flex-col rounded-md md:px-10 shadow md:mx-24 lg:mx-52 xl:mx-[400px] 3xl:mx-[600px]">
       <div className="flex flex-col items-center">
-        <h3 className="font-bold text-2xl">Customer reviews</h3>
+        <h3 className="font-bold text-2xl text-gray-700">Customer reviews</h3>
         <p className="mb-3 text-slate-600">
           {reviews.length} global rating{reviews.length > 1 && "s"}
         </p>
@@ -110,7 +110,7 @@ export default function Reviews({
                   onClick={() => handleFilter(`${star + 1}`)}
                 >
                   <td className="w-[60px] text-blue-500">{star + 1} star</td>
-                  <td className="h-[22px] w-[160px] border border-[#e3e6e6] bg-[#F0F2F2] rounded-[3px]">
+                  <td className="h-[22px] w-[160px] bg-[#F0F2F2] rounded">
                     <div
                       style={{
                         width: `${
@@ -120,7 +120,7 @@ export default function Reviews({
                             : "0%"
                         }`,
                       }}
-                      className={`h-[20px] bg-[#FFA41C] rounded-l-[3px]`}
+                      className={`h-[20px] bg-[#FFA41C] rounded shadow`}
                     ></div>
                   </td>
                   <td className="text-right w-[50px] text-blue-500">
@@ -138,10 +138,13 @@ export default function Reviews({
       </div>
       <div className="flex gap-4  justify-center">
         <div className="self-center mt-6 flex flex-col items-center gap-1">
-          <p className="font-bold">Sort by</p>
+          <label id="sortBy" className="font-bold text-gray-700">
+            Sort by
+          </label>
           <select
+            id="sortBy"
             onChange={(e) => handleSort(e.target.value)}
-            className="cursor-pointer text-sm w-[140px]"
+            className="cursor-pointer text-sm w-[140px] border-gray-300 rounded shadow-sm"
           >
             <option value="recent" name="filter">
               Most recent
@@ -152,10 +155,13 @@ export default function Reviews({
           </select>
         </div>
         <div className="self-center mt-6 flex flex-col items-center gap-1">
-          <p className="font-bold">Filter by</p>
+          <label htmlFor="filterBy" className="font-bold text-gray-700">
+            Filter by
+          </label>
           <select
+            id="filterBy"
             onChange={(e) => handleFilter(e.target.value)}
-            className="cursor-pointer text-sm w-[140px]"
+            className="cursor-pointer text-sm w-[140px] border-gray-300 rounded shadow-sm"
           >
             <option value="0" name="filter">
               All rating
@@ -224,8 +230,8 @@ export default function Reviews({
       </div>
       {user ? (
         <div>
-          <h4 className="my-3 font-semibold ">Leave a review</h4>
-          <div className="flex items-center flex-col gap-2  ">
+          <h4 className="my-3 font-semibold text-gray-700">Leave a review</h4>
+          <div className="flex items-center flex-col gap-2">
             <div className="flex gap-3 items-center">
               {starsLoop.map((numb, index) =>
                 ratingForm > numb ? (
@@ -255,9 +261,10 @@ export default function Reviews({
             <form
               className="flex flex-col items-center mt-2"
               onSubmit={handleSubmit(addReview)}
+              
             >
               <textarea
-                className="w-full p-1 text resize-none rounded-sm h-24"
+                className="w-full p-1 text resize-none rounded-sm h-24 border-gray-300 shadow"
                 id="text"
                 name="text"
                 {...register("review")}
@@ -266,7 +273,7 @@ export default function Reviews({
                 {errors?.review?.message}
               </p>
               <button
-                className=" mt-2 p-2 w-[120px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                className=" mt-2 p-2 w-[120px] text-[14px] rounded-[5px] shadow bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
                 type="submit"
               >
                 Add review
@@ -276,7 +283,7 @@ export default function Reviews({
         </div>
       ) : (
         <button
-          className=" text-lg self-center mt-5 p-1 w-[200px] h-12 text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+          className=" text-lg self-center mt-5 p-1 w-[200px] h-12 text-[14px] rounded-[5px] shadow bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
           onClick={() => setAskLogin(true)}
         >
           Write a review
