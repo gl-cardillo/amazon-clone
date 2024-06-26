@@ -75,8 +75,8 @@ export default function Cart() {
   };
 
   return (
-    <div className="m-5 p-2 py-5 bg-white rounded-md flex flex-col sm:mx-6 md:mx-20 md:px-10 lg:mx-40 xl:mx-[400px] 2xl:mx-[500px] 3xl:mx-[600px] ">
-      <h2 className="font-bold text-xl">Shopping Basket</h2>
+    <div className="m-5 p-2 py-5 bg-white shadow rounded-md flex flex-col sm:mx-6 md:mx-20 md:px-10 lg:mx-40 xl:mx-[400px] 2xl:mx-[500px] 3xl:mx-[600px] ">
+      <h2 className="font-bold text-xl text-gray-700 -ml-2">Shopping Basket</h2>
       <div>
         {cart ? (
           cart.length > 0 ? (
@@ -85,13 +85,15 @@ export default function Cart() {
                 return (
                   <div
                     key={index}
-                    className="flex min-h-[100px] justify-between my-5 py-2 border-b-2 border-slate-300 "
+                    className="flex min-h-[100px] justify-between my-5 py-2 border-b border-slate-200 "
                   >
                     <div className="flex gap-3 items-center">
-                      <img
-                        src={productCart.product.picUrl}
-                        className="min-w-[50px] h-[50px]"
-                      />
+                      <div className="w-[100px] flex item-center justify-center">
+                        <img
+                          src={productCart.product.picUrl}
+                          className="min-w-[50px] h-[70px]"
+                        />
+                      </div>
                       <div className="flex gap-5 flex-col">
                         <Link href={`/product/${productCart.product._id}`}>
                           <a>
@@ -102,7 +104,7 @@ export default function Cart() {
                         </Link>
                         <div>
                           <div className="flex gap-2 items-center">
-                            <div className="flex gap-3 px-1 text-sm border-solid border-2 border-slate-400 rounded-2xl">
+                            <div className="flex gap-3 px-1 text-sm border-solid border-2 border-slate-300 rounded-2xl">
                               <button
                                 onClick={() =>
                                   updateQuantity(
@@ -128,14 +130,13 @@ export default function Cart() {
                                 +
                               </button>
                             </div>
-
                             <button
                               onClick={() =>
                                 removeProduct(productCart.product._id)
                               }
                               className="text-sm text-blue-500"
                             >
-                              Delete
+                              Remove
                             </button>
                           </div>
                           <p className="text-red-500 text-[12px]">
