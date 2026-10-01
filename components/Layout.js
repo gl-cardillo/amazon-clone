@@ -5,8 +5,8 @@ export default function Layout({ children }) {
   return (
     <>
       <Head>
-        <title>Amazon</title>
-        <link rel="icon" href="amazon_icon.ico" />
+        <title>Shop clone</title>
+        <link rel="icon" type="image/svg+xml" href="/icon.svg" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Navbar className='pb-[100px]' />

@@ -197,7 +197,7 @@ export default function Reviews({
                   <div className="flex gap-3 items-center">
                     <img
                       className="w-[40px] h-[40px] rounded-full"
-                      src="/images/user.jpeg"
+                      src="/images/user.svg"
                       alt="avatar"
                     />{" "}
                     <p className="text-xl">{review.reviewAuthor}</p>

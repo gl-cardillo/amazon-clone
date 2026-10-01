@@ -6,17 +6,20 @@ import Image from "next/image";
 
 export default function Card({ product, reviewAverage }) {
   const { currencySymbol, currencyRate } = useContext(CurrencyContext);
+  // book and game covers are portrait, show them whole instead of cropping
+  const isCover =
+    product.categoryId === "books" || product.subcategory === "Videogame";
 
   return (
     <Link href={`/product/${product._id}`}>
       <a>
         <div className="flex gap-5 p-2 m-2 border-2 rounded bg-white w-full md:w-[245px] md:h-[400px] md:flex-col lg:w-[300px] hover:scale-[1.01] shadow hover:shadow-lg transition-transform duration-200 ease-in-out">
-          <div className="object-scale-down min-w-[100px] w-[100px] h-[180px] md:self-center md:w-[140px] md:h-[200px] relative">
+          <div className="min-w-[130px] w-[130px] h-[150px] md:w-full md:h-[210px] relative overflow-hidden rounded bg-slate-50">
             <Image
               src={product.picUrl}
-              alt="category"
+              alt={product.name}
               layout="fill"
-              objectFit="scale-down"
+              objectFit={isCover ? "contain" : "cover"}
             />
           </div>
           <div>

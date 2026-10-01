@@ -153,7 +153,7 @@ export default function Profile() {
       <h2 className="font-bold text-xl">Welcome {user && user.firstName}</h2>
       <img
         className="w-[50px] h-[50px] rounded-full"
-        src="/images/user.jpeg"
+        src="/images/user.svg"
         alt="avatar"
       />
       <div className="flex gap-2 items-center">

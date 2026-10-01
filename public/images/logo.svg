@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 70">
+  <!-- cart icon -->
+  <g fill="none" stroke="#febd69" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 16h9l7 28h26l6-20H19"/>
+  </g>
+  <circle cx="26" cy="54" r="4.5" fill="#febd69"/>
+  <circle cx="45" cy="54" r="4.5" fill="#febd69"/>
+  <!-- wordmark -->
+  <text x="64" y="45" font-family="Arial, Helvetica, sans-serif" font-size="27" textLength="124" lengthAdjust="spacingAndGlyphs"><tspan font-weight="700" fill="#ffffff">shop</tspan><tspan font-weight="400" fill="#febd69">clone</tspan></text>
+</svg>

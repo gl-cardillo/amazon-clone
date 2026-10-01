@@ -1,4 +1,4 @@
-# Amazon clone
+# Shop Clone
 
 <br/>
 

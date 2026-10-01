@@ -7,12 +7,24 @@ import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 
 export default function Home() {
   const slideImages = [
-    { image: "/images/shoes-slide.jpeg", link: "/category/clothes/Shoes" },
     {
-      image: "/images/phones-slide.jpeg",
-      link: "/category/electronics/Phones",
+      image: "/images/shoes-slide.jpg",
+      link: "/category/clothes/Shoes",
+      caption: ["Shoes.", "They're never enough"],
+      position: "center",
     },
-    { image: "/images/pets-slide.jpeg", link: "/category/petsSupplies" },
+    {
+      image: "/images/phones-slide.jpg",
+      link: "/category/electronics/Phones",
+      caption: ["Check new deals", "on phones"],
+      position: "center 70%",
+    },
+    {
+      image: "/images/pets-slide.jpg",
+      link: "/category/petsSupplies",
+      caption: ["Find a gift", "for your pets"],
+      position: "center 40%",
+    },
   ];
 
   const properties = {
@@ -38,7 +50,21 @@ export default function Home() {
               <Link href={slideImage.link}>
                 <a>
                   <div className="h-[250px] md:h-[350px] lg:h-[400px] xl:h-[550px] 3xl:h-[700px] w-full relative">
-                    <Image src={slideImage.image} layout="fill" alt="ads" />
+                    <Image
+                      src={slideImage.image}
+                      layout="fill"
+                      objectFit="cover"
+                      objectPosition={slideImage.position}
+                      alt={slideImage.caption.join(" ")}
+                      priority={index === 0}
+                    />
+                    <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 via-black/10 to-transparent">
+                      <h2 className="p-5 md:p-10 lg:px-16 font-serif font-bold text-white text-2xl md:text-4xl lg:text-5xl drop-shadow-lg">
+                        {slideImage.caption[0]}
+                        <br />
+                        {slideImage.caption[1]}
+                      </h2>
+                    </div>
                   </div>
                 </a>
               </Link>
@@ -60,7 +86,8 @@ export default function Home() {
                     src={catalog.image}
                     width={400}
                     height={400}
-                    alt="category"
+                    objectFit="cover"
+                    alt={catalog.name}
                   />
                   <p className=" text-slate-500">See more...</p>
                 </a>

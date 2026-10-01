@@ -67,10 +67,11 @@ export default function Navbar() {
         <Link href="/">
           <a className="py-1">
             <Image
-              src={"/images/amazon_logo_navbar.png"}
+              src={"/images/logo.svg"}
               width={"100px"}
               height={"35px"}
               alt="logo"
+              unoptimized
             />
           </a>
         </Link>
