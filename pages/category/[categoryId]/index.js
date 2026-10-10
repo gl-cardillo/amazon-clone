@@ -8,6 +8,9 @@ export default function Category({ productsAndAverage }) {
   const router = useRouter();
   const categoryId = router.query.categoryId;
   const subcategoryId = router.query.subcategory || null;
+  const currentCategory = catalogs.find(
+    (category) => category.id === categoryId
+  );
 
   return (
     <div className="flex min-h-screen gap-3">
@@ -47,33 +50,31 @@ export default function Category({ productsAndAverage }) {
           );
         })}
       </div>
-      <div className="w-full ml-[200px]">
+      <div className="w-full md:ml-[210px]">
         <h3 className=" md:hidden font-bold text-2xl pl-1 mb-2  border-b-2 border-slate-300">
-          {productsAndAverage[0].product.categoryName}
+          {currentCategory?.name}
         </h3>
         <div className="md:hidden flex items-center">
-          {catalogs
-            .filter((category) => category.id === categoryId)[0]
-            .subcategory.map((subcategory, index) => {
-              return (
-                <Link
-                  key={index}
-                  href={`/category/${categoryId}/${subcategory}`}
-                >
-                  <a>
-                    <p
-                      className={`${
-                        subcategory === subcategoryId && "font-bold text-lg"
-                      } pl-2`}
-                    >
-                      {subcategory}
-                    </p>
-                  </a>
-                </Link>
-              );
-            })}
+          {currentCategory?.subcategory.map((subcategory, index) => {
+            return (
+              <Link key={index} href={`/category/${categoryId}/${subcategory}`}>
+                <a>
+                  <p
+                    className={`${
+                      subcategory === subcategoryId && "font-bold text-lg"
+                    } pl-2`}
+                  >
+                    {subcategory}
+                  </p>
+                </a>
+              </Link>
+            );
+          })}
         </div>
         <div className="md:flex md:flex-wrap justify-center my-2">
+          {productsAndAverage.length === 0 && (
+            <p className="text-center pt-5">No products found</p>
+          )}
           {productsAndAverage.map((products, index) => {
             return (
               <Card

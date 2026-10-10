@@ -2,41 +2,48 @@ import Link from "next/link";
 import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useState, useEffect, useContext, useRef } from "react";
+import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../utils/context";
 import { BsSearch, BsCart2 } from "react-icons/bs";
 import { AiOutlineUser } from "react-icons/ai";
 
 export default function Navbar() {
-  const [search, setSearch] = useState([]);
+  // shared by the desktop and mobile inputs, only one is visible at a time
+  const [query, setQuery] = useState("");
   const [cartQuantity, setCartQuantity] = useState(0);
   const [showSearch, setShowSearch] = useState(false);
   const [products, setProducts] = useState([]);
-  const inputRef = useRef(null);
   const router = useRouter();
   const { user } = useContext(UserContext);
 
-  const blur = (input) => {
-    input.current.value = "";
-    setTimeout(() => {
-      setSearch([]);
-      setShowSearch(false);
-    }, 200);
+  const trimmedQuery = query.toLowerCase().trim();
+  const search =
+    trimmedQuery === ""
+      ? []
+      : products.filter((product) =>
+          product.name.toLowerCase().includes(trimmedQuery)
+        );
+
+  const clearSearch = () => {
+    setQuery("");
+    setShowSearch(false);
+  };
+
+  // delay so a click on a suggestion lands before the list disappears
+  const blur = () => {
+    setTimeout(clearSearch, 200);
   };
 
   const handleSearch = (e) => {
-    if (e.target.value === "") {
-      setSearch([]);
-    } else {
-      setShowSearch(true);
-      const newSearch = products.filter((product) => {
-        return product.name
-          .toLowerCase()
-          .trim()
-          .includes(e.target.value.toLowerCase().trim());
-      });
-      setSearch(newSearch);
-    }
+    setQuery(e.target.value);
+    setShowSearch(e.target.value !== "");
+  };
+
+  const submitSearch = (e) => {
+    e.preventDefault();
+    if (trimmedQuery === "") return;
+    router.push({ pathname: "/search", query: { q: query.trim() } });
+    clearSearch();
   };
 
   useEffect(() => {
@@ -75,28 +82,21 @@ export default function Navbar() {
             />
           </a>
         </Link>
-        <div onBlur={() => blur(inputRef, setSearch)}>
-          <div className="hidden md:flex h-auto relative">
+        <div onBlur={blur}>
+          <form
+            className="hidden md:flex h-auto relative"
+            onSubmit={submitSearch}
+          >
             <input
               type="text"
               className="rounded-l h-[38px] p-1 focus:outline-none border-transparent focus:border-transparent focus:ring-0 md:w-[300px] lg:w-[350px]"
-              ref={inputRef}
-              onChange={(e) => handleSearch(e)}
+              value={query}
+              onChange={handleSearch}
             />
-            {search.length > 0 ? (
-              <BsSearch
-                onClick={() =>
-                  router.push({
-                    pathname: "/search",
-                    query: { search: JSON.stringify(search) },
-                  })
-                }
-                className="rounded-r-md bg-orange-300 h-[38px] px-1.5 w-12 rounded-l-md p-2 font-bold absolute -right-1 top-0"
-              />
-            ) : (
+            <button type="submit" aria-label="Search">
               <BsSearch className="rounded-r-md bg-orange-300 h-[38px] px-1.5 w-12 rounded-l-md p-2 font-bold absolute -right-1 top-0" />
-            )}
-          </div>
+            </button>
+          </form>
           {showSearch && (
             <div className="z-10 absolute mt-[80px] -ml-[47%] w-[calc(95%-65px)] z-1 rounded-md  border-solid border-b-2 border-x-2 border-slate-200 sm:w-[calc(95%-55px)] sm:-ml-[48%] md:ml-[0%] md:-mt-[5px] md:w-[258px] lg:w-[308px]">
               {search.slice(0, 4).map((product, index) => {
@@ -104,10 +104,7 @@ export default function Navbar() {
                   <Link key={index} href={`/product/${product._id}`}>
                     <a>
                       <div
-                        onClick={() => {
-                          inputRef.current.value = "";
-                          setSearch([]);
-                        }}
+                        onClick={clearSearch}
                         className=" flex bg-white px-1 py-3 gap-2 items-center"
                       >
                         <img
@@ -146,30 +143,21 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-      <div
+      <form
         className="flex h-auto  py-1  self-center md:hidden w-full  px-5 relative"
-        onBlur={() => blur(inputRef, setSearch)}
+        onBlur={blur}
+        onSubmit={submitSearch}
       >
         <input
           type="text"
           className="rounded-lg h-[44px] w-full p-1 border-transparent focus:border-transparent focus:ring-0 "
-          ref={inputRef}
-          onChange={(e) => handleSearch(e)}
+          value={query}
+          onChange={handleSearch}
         />
-        {search.length > 0 ? (
-          <BsSearch
-            onClick={() =>
-              router.push({
-                pathname: "/search",
-                query: { search: JSON.stringify(search) },
-              })
-            }
-            className="rounded-r-md bg-orange-300 h-[44px] px-1.5 w-12 rounded-l-md p-2 font-bold absolute right-4 top-[4px]"
-          />
-        ) : (
+        <button type="submit" aria-label="Search">
           <BsSearch className="rounded-r-md bg-orange-300 h-[44px] px-1.5 w-12 rounded-l-md p-2 font-bold absolute right-4 top-[4px]" />
-        )}
-      </div>
+        </button>
+      </form>
     </div>
   );
 }

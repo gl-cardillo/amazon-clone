@@ -81,17 +81,12 @@ export default function Reviews({
     }
   };
 
-  const handleSort = (sortMethod) => {
-    if (sortMethod === "rating") {
-      reviews.sort((a, b) => b.rating - a.rating);
-      setSort("rating");
-    } else {
-      reviews.sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      );
-      setSort("recent");
-    }
-  };
+  // sort a copy, the reviews prop must not be mutated
+  const sortedReviews = [...reviews].sort((a, b) =>
+    sort === "rating"
+      ? b.rating - a.rating
+      : new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
 
   return (
     <div className="bg-white mt-3 p-5 flex flex-col rounded-md md:px-10 shadow md:mx-24 lg:mx-52 xl:mx-[400px] 3xl:mx-[600px]">
@@ -138,12 +133,13 @@ export default function Reviews({
       </div>
       <div className="flex gap-4  justify-center">
         <div className="self-center mt-6 flex flex-col items-center gap-1">
-          <label id="sortBy" className="font-bold text-gray-700">
+          <label htmlFor="sortBy" className="font-bold text-gray-700">
             Sort by
           </label>
           <select
             id="sortBy"
-            onChange={(e) => handleSort(e.target.value)}
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
             className="cursor-pointer text-sm w-[140px] border-gray-300 rounded shadow-sm"
           >
             <option value="recent" name="filter">
@@ -187,7 +183,7 @@ export default function Reviews({
       <div>
         {reviews.length > 0 ? (
           <div>
-            {reviews
+            {sortedReviews
               .filter((review) => filter.includes(review.rating))
               .map((review, index) => (
                 <div

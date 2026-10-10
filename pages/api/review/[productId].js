@@ -12,9 +12,6 @@ export const getDataReview = async (productId) => {
     //if there are no reviews return empty values
     return { reviews: [], ratingArray: [0, 0, 0, 0, 0, 0], average: 0 };
   }
-  if (!reviews) {
-    return res.status(404).json({ message: "reviews not found" });
-  }
 
   //get array of rating score for histogram
   let ratingArray = [null, 0, 0, 0, 0, 0];
@@ -34,11 +31,9 @@ export default async (req, res) => {
   switch (req.method) {
     case "GET":
       try {
-        const reviews = await getDataReview(req.query.productId);
-
-        if (!reviews) {
-          return res.status(404).json({ message: "reviews not found" });
-        }
+        const { reviews, ratingArray, average } = await getDataReview(
+          req.query.productId
+        );
 
         return res.status(200).json({ reviews, ratingArray, average });
       } catch (error) {

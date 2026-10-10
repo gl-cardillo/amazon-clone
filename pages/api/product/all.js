@@ -8,6 +8,12 @@ export const getAllProduct = async () => {
   return products
 };
 
+export const searchProducts = async (query) => {
+  // escape regex characters so the query is matched literally
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return Product.find({ name: { $regex: escaped, $options: "i" } });
+};
+
 export default async (req, res) => {
   switch (req.method) {
     case "GET":

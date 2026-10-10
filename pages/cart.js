@@ -8,18 +8,20 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 export default function Cart() {
   const { currencySymbol, currencyRate } = useContext(CurrencyContext);
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, authReady } = useContext(UserContext);
   const [totalPrice, setTotalPrice] = useState(0);
   const [cartQuantity, setCartQuantity] = useState(0);
   const [cart, setCart] = useState(null);
   const [disableButton, setDisableButton] = useState(false);
-  const [quantityError, setQuantityError] = useState("");
+  // id of the product that hit the quantity limit
+  const [limitReachedId, setLimitReachedId] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
-    console.log(user);
+    if (!authReady) return;
     if (!user) {
       router.push("/singin");
+      return;
     }
 
     const getCart = async () => {
@@ -40,37 +42,44 @@ export default function Cart() {
     };
 
     getCart();
-  }, [user]);
+  }, [user, authReady]);
 
   const updateQuantity = async (productId, quantity, n) => {
-    setDisableButton(true);
     if (quantity === 1 && n === "-1") {
       removeProduct(productId);
       return;
     }
     if (quantity === 9 && n === "+1") {
-      setQuantityError("The limit is 9");
+      setLimitReachedId(productId);
       return;
     }
+    setDisableButton(true);
     try {
       const response = await axios.put("/api/cart/addToCart", { productId, n });
       setUser(response.data);
-      setQuantityError("");
-      setDisableButton(false);
+      localStorage.setItem("user_amazon_lc", JSON.stringify(response.data));
+      setLimitReachedId(null);
     } catch (error) {
       console.log(error.message);
+    } finally {
+      setDisableButton(false);
     }
   };
 
   const removeProduct = async (productId) => {
+    setDisableButton(true);
     try {
+      // axios.delete takes the body under `data`
       const response = await axios.delete("/api/cart/addToCart", {
-        productId: productId,
+        data: { productId },
       });
       setUser(response.data);
-      localStorage.setItem("user_amazon_lc", JSON.stringify(res.data));
+      localStorage.setItem("user_amazon_lc", JSON.stringify(response.data));
+      setLimitReachedId(null);
     } catch (error) {
       console.log(error.message);
+    } finally {
+      setDisableButton(false);
     }
   };
 
@@ -113,6 +122,7 @@ export default function Cart() {
                                     "-1"
                                   )
                                 }
+                                disabled={disableButton}
                               >
                                 -
                               </button>
@@ -134,14 +144,17 @@ export default function Cart() {
                               onClick={() =>
                                 removeProduct(productCart.product._id)
                               }
+                              disabled={disableButton}
                               className="text-sm text-blue-500"
                             >
                               Remove
                             </button>
                           </div>
-                          <p className="text-red-500 text-[12px]">
-                            {quantityError}
-                          </p>
+                          {limitReachedId === productCart.product._id && (
+                            <p className="text-red-500 text-[12px]">
+                              The limit is 9
+                            </p>
+                          )}
                         </div>
                       </div>
                     </div>

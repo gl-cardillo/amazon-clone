@@ -7,6 +7,8 @@ import { SkeletonTheme } from "react-loading-skeleton";
 
 function MyApp({ Component, pageProps }) {
   const [user, setUser] = useState(null);
+  // false until the user has been restored from localStorage
+  const [authReady, setAuthReady] = useState(false);
   const [currencySymbol, setCurrencySymbol] = useState("£");
   const [currencyRate, setCurrencyRate] = useState(1);
 
@@ -17,10 +19,11 @@ function MyApp({ Component, pageProps }) {
       setUser(user);
       axios.defaults.headers.Authorization = `Bearer ${token}`;
     }
+    setAuthReady(true);
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, authReady }}>
       <CurrencyContext.Provider
         value={{
           currencySymbol,

@@ -18,11 +18,8 @@ export const getAverageReview = async (productId) => {
 
 export default async (req, res) => {
   try {
+    // 0 means no reviews yet, which is a valid result
     const average = await getAverageReview(req.query.productId);
-    if (!average) {
-      return res.status(404).json({ message: "reviews not found" });
-    }
-
     return res.status(200).json(average);
   } catch (error) {
     console.log(error.message);

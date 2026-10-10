@@ -17,7 +17,7 @@ export default function Singin() {
     if (user) {
       router.push("/");
     }
-  }, []);
+  }, [user]);
 
   const schemaSingin = yup.object().shape({
     name: yup
@@ -73,8 +73,9 @@ export default function Singin() {
 
       router.push("/");
     } catch (error) {
-      setErrorSignin(err.response.data.message);
-      console.log(error.response.data.message);
+      setErrorSignin(
+        error.response?.data?.message || "Sorry, try again later"
+      );
     }
   };
 
@@ -94,7 +95,7 @@ export default function Singin() {
 
       router.push("/");
     } catch (error) {
-      setErrorLogin(error.response.data.message);
+      setErrorLogin(error.response?.data?.message || "Sorry, try again later");
     }
   };
 

@@ -63,7 +63,10 @@ export default function Product({
           </p>
         </div>
         <ImageSelector product={product} />
-        <p className="font-bold text-xl self-center">£{product.price}</p>
+        <p className="font-bold text-xl self-center">
+          {currencySymbol}
+          {(Math.round(product.price * currencyRate * 100) / 100).toFixed(2)}
+        </p>
         <div className="flex flex-col items-center">
           <div className="flex gap-1 items-center mb-2 font-semibold">
             <p>About this item</p>
@@ -190,6 +193,9 @@ export async function getServerSideProps(context) {
   await getAllProduct();
 
   let res = await getDataProductId(context.query.productId);
+  if (!res) {
+    return { notFound: true };
+  }
   res = JSON.parse(JSON.stringify(res));
 
   let resReview = await getDataReview(context.query.productId);
