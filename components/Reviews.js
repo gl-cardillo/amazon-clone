@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BsStarFill, BsStar } from "react-icons/bs";
-import { useState, useContext, useEffect } from "react";
-import { UserContext, CurrencyContext } from "../utils/context";
+import { useState, useContext } from "react";
+import { UserContext } from "../utils/context";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -15,7 +15,7 @@ export default function Reviews({
 }) {
   //used for star rating
   const starsLoop = [0, 1, 2, 3, 4];
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [ratingForm, setRatingForm] = useState(null);
   const [errorRating, setErrorRating] = useState("");
   const [filter, setFilter] = useState([1, 2, 3, 4, 5]);

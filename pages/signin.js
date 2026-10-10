@@ -6,9 +6,9 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
-export default function Singin() {
-  const [showSignin, setShowSignin] = useState(true);
-  const [errorSignin, setErrorSignin] = useState("");
+export default function SignIn() {
+  const [showSignup, setShowSignup] = useState(true);
+  const [errorSignup, setErrorSignup] = useState("");
   const [errorLogin, setErrorLogin] = useState("");
   const router = useRouter();
   const { user, setUser } = useContext(UserContext);
@@ -19,7 +19,7 @@ export default function Singin() {
     }
   }, [user]);
 
-  const schemaSingin = yup.object().shape({
+  const schemaSignup = yup.object().shape({
     name: yup
       .string()
       .min(2)
@@ -50,7 +50,7 @@ export default function Singin() {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schemaSingin),
+    resolver: yupResolver(schemaSignup),
   });
 
   const {
@@ -61,9 +61,9 @@ export default function Singin() {
     resolver: yupResolver(schemaLogin),
   });
 
-  const signin = async (data) => {
+  const signup = async (data) => {
     try {
-      const response = await axios.post("/api/auth/singin", data);
+      const response = await axios.post("/api/auth/signup", data);
       const { user, token } = response.data;
 
       setUser(user);
@@ -73,7 +73,7 @@ export default function Singin() {
 
       router.push("/");
     } catch (error) {
-      setErrorSignin(
+      setErrorSignup(
         error.response?.data?.message || "Sorry, try again later"
       );
     }
@@ -105,15 +105,15 @@ export default function Singin() {
       <div className=" shadow-md max-w-[400px]  border-gray-300 bg-white rounded-md mt-3">
         <div
           className={`rounded-t-md border-t-2 p-4 ${
-            !showSignin ? " bg-slate-100" : ""
+            !showSignup ? " bg-slate-100" : ""
           }`}
         >
           <div className="flex gap-3 items-center">
             <input
               type="radio"
-              name="singin"
-              onChange={() => setShowSignin(true)}
-              checked={showSignin}
+              name="authMode"
+              onChange={() => setShowSignup(true)}
+              checked={showSignup}
               className="h-4 w-4 checked:ring-orange-400 text-orange-400 checked:bg-orange-400 hover:bg-orange-400"
             />
             <h3 className="font-bold text-medium text-[14px]">
@@ -123,12 +123,12 @@ export default function Singin() {
               </span>
             </h3>
           </div>
-          <div className={showSignin ? "" : "hidden"}>
-            <p className="text-[12px] text-red-600 pl-4 pt-2">{errorSignin}</p>
+          <div className={showSignup ? "" : "hidden"}>
+            <p className="text-[12px] text-red-600 pl-4 pt-2">{errorSignup}</p>
             <form
               className="flex flex-col mx-1"
-              id="singin"
-              onSubmit={handleSubmit(signin)}
+              id="signup"
+              onSubmit={handleSubmit(signup)}
             >
               <label htmlFor="name" className="pl-2 py-2 font-semibold">
                 First and last name
@@ -168,7 +168,7 @@ export default function Singin() {
               </p>
               <button
                 type="submit"
-                form="singin"
+                form="signup"
                 className="mt-5 p-3 rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
               >
                 Continue
@@ -178,15 +178,15 @@ export default function Singin() {
         </div>
         <div
           className={`rounded-b-md border-t-2 p-4 ${
-            showSignin ? " bg-slate-100" : ""
+            showSignup ? " bg-slate-100" : ""
           }`}
         >
           <div className="flex gap-3 items-center">
             <input
               type="radio"
-              name="singin"
-              onChange={() => setShowSignin(false)}
-              checked={!showSignin}
+              name="authMode"
+              onChange={() => setShowSignup(false)}
+              checked={!showSignup}
               className="h-4 w-4 checked:ring-orange-400  text-orange-400 checked:bg-orange-400 hover:bg-orange-400 focus:border-transparent focus:ring-0"
             />
             <h3 className="font-bold text-medium text-[14px]">
@@ -197,7 +197,7 @@ export default function Singin() {
               </span>
             </h3>
           </div>
-          <div className={showSignin ? "hidden" : ""}>
+          <div className={showSignup ? "hidden" : ""}>
             <p className="text-[12px] text-red-600 pl-4 pt-2">{errorLogin}</p>
             <form
               className="flex flex-col mx-1"

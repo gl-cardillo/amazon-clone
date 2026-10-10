@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Swal from "sweetalert2";
-import { swalStyle, handleSuccess, handleError } from "../utils/utils";
+import { swalStyle, handleSuccess } from "../utils/utils";
 
 export default function Profile() {
   const [showDetails, setShowDetails] = useState(false);
@@ -58,7 +58,6 @@ export default function Profile() {
     }
     try {
       const response = await axios.put("/api/user/updateProfile", {
-        id: user._id,
         name: data.name,
         dateOfBirth,
         city: data.city,
@@ -78,7 +77,7 @@ export default function Profile() {
     const user = JSON.parse(localStorage.getItem("user_amazon_lc"));
 
     if (!user) {
-      router.push("/singin");
+      router.push("/signin");
       return;
     }
 

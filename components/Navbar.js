@@ -124,7 +124,7 @@ export default function Navbar() {
           )}
         </div>
         <div className="flex  gap-5 md:gap-5">
-          <Link href={user ? "/profile" : "/singin"}>
+          <Link href={user ? "/profile" : "/signin"}>
             <a>
               <AiOutlineUser className="text-white text-3xl" />
             </a>

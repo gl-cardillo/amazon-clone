@@ -20,7 +20,7 @@ export default function Cart() {
   useEffect(() => {
     if (!authReady) return;
     if (!user) {
-      router.push("/singin");
+      router.push("/signin");
       return;
     }
 

@@ -1,4 +1,3 @@
-import axios from "axios";
 import Category from "../index";
 import { catalogs } from "../../../../utils/catalogs";
 import { getDataSubcategory } from "../../../api/subcategory/[subcategoryId]";

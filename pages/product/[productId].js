@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { UserContext, CurrencyContext } from "../../utils/context";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useRouter } from "next/router";
@@ -149,7 +149,7 @@ export default function Product({
         </div>
 
         <button
-          onClick={() => addToCart(product.id)}
+          onClick={addToCart}
           className="p-2 w-[300px] h-12 text-[14px] rounded-[5px] text-gray-800 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] shadow"
         >
           Add to Cart
@@ -176,7 +176,7 @@ export default function Product({
               </button>
               <button
                 className="mt-5 p-1 w-[120px] text-[14px] rounded-[5px] text-gray-800 shadow bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
-                onClick={() => router.push("/singin")}
+                onClick={() => router.push("/signin")}
               >
                 Go to login page
               </button>

@@ -4,7 +4,7 @@ const User = require("../../../models/User");
 
 dbConnect();
 
-export default async (req, res, next) => {
+export default async (req, res) => {
   switch (req.method) {
     case "POST":
       try {

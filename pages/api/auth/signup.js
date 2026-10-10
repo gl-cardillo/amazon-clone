@@ -15,14 +15,11 @@ export default async (req, res) => {
     }
     // create hashed password for the account
     const hashedPassword = await bcrypt.hash(password, 10);
-    const firstname = name.split(" ")[0];
     const user = new User({
       email,
       name,
-      firstname,
       password: hashedPassword,
       cart: [],
-      
     });
 
     const savedUser = await user.save();
