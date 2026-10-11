@@ -3,9 +3,8 @@ const User = require("../../../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
-dbConnect();
-
 export default async (req, res) => {
+  await dbConnect();
   const { email, name, password } = req.body;
   try {
     //if email is not available

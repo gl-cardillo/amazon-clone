@@ -2,9 +2,8 @@ import dbConnect from "../../../utils/dbConnect";
 const Review = require("../../../models/Review");
 import verifyToken from "../../../utils/verifyToken";
 
-dbConnect();
-
 export const getDataReview = async (productId) => {
+  await dbConnect();
   const reviews = await Review.find({ productId }).sort([['date', -1]]);
 
   if (reviews.length < 1) {
@@ -27,6 +26,7 @@ export const getDataReview = async (productId) => {
 };
 
 export default async (req, res) => {
+  await dbConnect();
   switch (req.method) {
     case "GET":
       try {

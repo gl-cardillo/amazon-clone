@@ -95,7 +95,6 @@ export default function Profile() {
   const logOut = () => {
     setUser(null);
     localStorage.clear();
-    delete axios.defaults.headers.Authorization;
     router.push("/");
   };
 

@@ -105,11 +105,9 @@ export default function Cart() {
                       </div>
                       <div className="flex gap-5 flex-col">
                         <Link href={`/product/${productCart.product._id}`}>
-                          <a>
-                            <h3 className="text-sm font-semibold">
-                              {productCart.product.name}
-                            </h3>
-                          </a>
+                          <h3 className="text-sm font-semibold">
+                            {productCart.product.name}
+                          </h3>
                         </Link>
                         <div>
                           <div className="flex gap-2 items-center">

@@ -2,9 +2,8 @@ import dbConnect from "../../../utils/dbConnect";
 import verifyToken from "../../../utils/verifyToken";
 const User = require("../../../models/User");
 
-dbConnect();
-
 export default async (req, res) => {
+  await dbConnect();
   try {
     const result = verifyToken(req);
 

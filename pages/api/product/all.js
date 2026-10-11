@@ -1,20 +1,21 @@
 import dbConnect from "../../../utils/dbConnect";
 const Product = require("../../../models/Product")
 
-dbConnect();
-
 export const getAllProduct = async () => {
+  await dbConnect();
   const products = await Product.find({});
   return products
 };
 
 export const searchProducts = async (query) => {
+  await dbConnect();
   // escape regex characters so the query is matched literally
   const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   return Product.find({ name: { $regex: escaped, $options: "i" } });
 };
 
 export default async (req, res) => {
+  await dbConnect();
   if (req.method !== "GET") {
     return res.status(405).json({ message: "Method not allowed" });
   }

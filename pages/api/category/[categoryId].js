@@ -2,8 +2,8 @@ import dbConnect from "../../../utils/dbConnect";
 import { getAverageReview } from "../review/getRating/[productId]";
 const Product = require("../../../models/Product");
 
-dbConnect();
 export const getDataCategory = async (categoryId) => {
+  await dbConnect();
   const products = await Product.find({ categoryId });
   const productsAndAverage = [];
   //get review for each product
@@ -15,6 +15,7 @@ export const getDataCategory = async (categoryId) => {
   return productsAndAverage;
 };
 export default async (req, res) => {
+  await dbConnect();
   try {
     const products = await getDataCategory(req.query.categoryId);
 

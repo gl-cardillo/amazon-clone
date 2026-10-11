@@ -8,13 +8,15 @@ import { BsSearch, BsCart2 } from "react-icons/bs";
 import { AiOutlineUser } from "react-icons/ai";
 
 export default function Navbar() {
-  // shared by the desktop and mobile inputs, only one is visible at a time
+  // shared by the desktop and mobile inputs
   const [query, setQuery] = useState("");
-  const [cartQuantity, setCartQuantity] = useState(0);
   const [showSearch, setShowSearch] = useState(false);
   const [products, setProducts] = useState([]);
   const router = useRouter();
   const { user } = useContext(UserContext);
+  const cartQuantity = user
+    ? user.cart.reduce((accum, cart) => accum + cart.quantity, 0)
+    : 0;
 
   const trimmedQuery = query.toLowerCase().trim();
   const search =
@@ -29,7 +31,7 @@ export default function Navbar() {
     setShowSearch(false);
   };
 
-  // delay so a click on a suggestion lands before the list disappears
+  // delay so a suggestion click lands before the list closes
   const blur = () => {
     setTimeout(clearSearch, 200);
   };
@@ -47,16 +49,6 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    if (user) {
-      setCartQuantity(
-        user.cart.reduce((accum, cart) => accum + cart.quantity, 0)
-      );
-    } else {
-      setCartQuantity(0);
-    }
-  }, [user]);
-
-  useEffect(() => {
     const getData = async () => {
       try {
         const res = await axios.get(`/api/product/all`);
@@ -71,16 +63,14 @@ export default function Navbar() {
   return (
     <div className="flex fixed flex-col w-full bg-[#131921] z-10">
       <div className="flex justify-between gap-3 px-3 md:px-5 pt-3 h-[50px] md:h-[60px]">
-        <Link href="/">
-          <a className="py-1">
-            <Image
-              src={"/images/logo.svg"}
-              width={"100px"}
-              height={"35px"}
-              alt="logo"
-              unoptimized
-            />
-          </a>
+        <Link href="/" className="py-1">
+          <Image
+            src="/images/logo.svg"
+            width={100}
+            height={35}
+            alt="logo"
+            unoptimized
+          />
         </Link>
         <div onBlur={blur}>
           <form
@@ -102,21 +92,19 @@ export default function Navbar() {
               {search.slice(0, 4).map((product, index) => {
                 return (
                   <Link key={index} href={`/product/${product._id}`}>
-                    <a>
-                      <div
-                        onClick={clearSearch}
-                        className=" flex bg-white px-1 py-3 gap-2 items-center"
-                      >
-                        <img
-                          src={product.picUrl}
-                          className=" object-contain hidden sm:block min-w-[30px] h-[40px]"
-                          alt="product"
-                        />
-                        <p className="whitespace-nowrap overflow-hidden text-xs font-semibold ">
-                          {product.name}
-                        </p>
-                      </div>
-                    </a>
+                    <div
+                      onClick={clearSearch}
+                      className=" flex bg-white px-1 py-3 gap-2 items-center"
+                    >
+                      <img
+                        src={product.picUrl}
+                        className=" object-contain hidden sm:block min-w-[30px] h-[40px]"
+                        alt="product"
+                      />
+                      <p className="whitespace-nowrap overflow-hidden text-xs font-semibold ">
+                        {product.name}
+                      </p>
+                    </div>
                   </Link>
                 );
               })}
@@ -125,15 +113,11 @@ export default function Navbar() {
         </div>
         <div className="flex  gap-5 md:gap-5">
           <Link href={user ? "/profile" : "/signin"}>
-            <a>
-              <AiOutlineUser className="text-white text-3xl" />
-            </a>
+            <AiOutlineUser className="text-white text-3xl" />
           </Link>
           <div>
             <Link href="/cart">
-              <a>
-                <BsCart2 className="text-white text-3xl" />
-              </a>
+              <BsCart2 className="text-white text-3xl" />
             </Link>
             {cartQuantity > 0 && (
               <p className="text-bg-slate-900 bg-orange-300 h-[20px] w-[20px] flex items-center justify-center rounded-full absolute top-8 right-1.5 md:right-2.5">

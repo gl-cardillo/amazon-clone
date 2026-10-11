@@ -2,9 +2,8 @@ import mongoose from "mongoose";
 import dbConnect from "../../../utils/dbConnect";
 const Product = require("../../../models/Product");
 
-dbConnect();
-
 export const getDataProductId = async (productId) => {
+  await dbConnect();
   // findById throws a CastError on malformed ids, treat them as not found
   if (!mongoose.isValidObjectId(productId)) {
     return null;
@@ -14,6 +13,7 @@ export const getDataProductId = async (productId) => {
 };
 
 export default async (req, res) => {
+  await dbConnect();
   try {
     const product = await getDataProductId(req.query.productId);
     if (!product) {

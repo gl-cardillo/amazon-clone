@@ -4,7 +4,6 @@ import { UserContext, CurrencyContext } from "../../utils/context";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useRouter } from "next/router";
 import { handleRating } from "../../utils/utils";
-import { getAllProduct } from "../api/product/all";
 import { getDataProductId } from "../api/product/[productId]";
 import { getDataReview } from "../api/review/[productId]";
 import ImageSelector from "../../components/ImageSelector";
@@ -189,9 +188,6 @@ export default function Product({
 }
 
 export async function getServerSideProps(context) {
-  // if not called returns mongoose.models undefined
-  await getAllProduct();
-
   let res = await getDataProductId(context.query.productId);
   if (!res) {
     return { notFound: true };

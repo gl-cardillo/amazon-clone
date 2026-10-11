@@ -1,9 +1,8 @@
 import dbConnect from "../../../../utils/dbConnect";
 const Review = require("../../../../models/Review");
 
-dbConnect();
-
 export const getAverageReview = async (productId) => {
+  await dbConnect();
   const reviews = await Review.find({ productId });
   if (reviews.length < 1) {
     return 0;
@@ -16,6 +15,7 @@ export const getAverageReview = async (productId) => {
 };
 
 export default async (req, res) => {
+  await dbConnect();
   try {
     // 0 means no reviews yet, which is a valid result
     const average = await getAverageReview(req.query.productId);

@@ -12,28 +12,25 @@ export default function Card({ product, reviewAverage }) {
 
   return (
     <Link href={`/product/${product._id}`}>
-      <a>
-        <div className="flex gap-5 p-2 m-2 border-2 rounded bg-white w-full md:w-[245px] md:h-[400px] md:flex-col lg:w-[300px] hover:scale-[1.01] shadow hover:shadow-lg transition-transform duration-200 ease-in-out">
-          <div className="min-w-[130px] w-[130px] h-[150px] md:w-full md:h-[210px] relative overflow-hidden rounded bg-slate-50">
-            <Image
-              src={product.picUrl}
-              alt={product.name}
-              layout="fill"
-              objectFit={isCover ? "contain" : "cover"}
-            />
-          </div>
-          <div>
-            <p className="font-semibold text-sm md:text-md ">{product.name}</p>
-            <div className="flex gap-1 my-5">{handleRating(reviewAverage)}</div>
-            <p className="font-bold ">
-              {currencySymbol}
-              {(Math.round(product.price * currencyRate * 100) / 100).toFixed(
-                2
-              )}
-            </p>
-          </div>
+      <div className="flex gap-5 p-2 m-2 border-2 rounded bg-white w-full md:w-[245px] md:h-[400px] md:flex-col lg:w-[300px] hover:scale-[1.01] shadow hover:shadow-lg transition-transform duration-200 ease-in-out">
+        <div className="min-w-[130px] w-[130px] h-[150px] md:w-full md:h-[210px] relative overflow-hidden rounded bg-slate-50">
+          <Image
+            src={product.picUrl}
+            alt={product.name}
+            fill
+            sizes="(min-width: 1024px) 300px, (min-width: 768px) 245px, 130px"
+            className={isCover ? "object-contain" : "object-cover"}
+          />
         </div>
-      </a>
+        <div>
+          <p className="font-semibold text-sm md:text-md ">{product.name}</p>
+          <div className="flex gap-1 my-5">{handleRating(reviewAverage)}</div>
+          <p className="font-bold ">
+            {currencySymbol}
+            {(Math.round(product.price * currencyRate * 100) / 100).toFixed(2)}
+          </p>
+        </div>
+      </div>
     </Link>
   );
 }

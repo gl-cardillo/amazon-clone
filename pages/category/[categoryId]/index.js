@@ -20,29 +20,25 @@ export default function Category({ productsAndAverage }) {
           return (
             <div key={index}>
               <Link href={category.link}>
-                <a>
-                  <h3
-                    className={`${
-                      category.id === categoryId && "font-bold text-lg"
-                    }  mt-1 hover:scale-[1.02] transition-transform duration-200 ease-in-out`}
-                  >
-                    {category.name}
-                  </h3>
-                </a>
+                <h3
+                  className={`${
+                    category.id === categoryId && "font-bold text-lg"
+                  }  mt-1 hover:scale-[1.02] transition-transform duration-200 ease-in-out`}
+                >
+                  {category.name}
+                </h3>
               </Link>
               {category.id === categoryId &&
                 category.subcategory.map((subcategory, index) => {
                   return (
                     <Link key={index} href={`${category.link}/${subcategory}`}>
-                      <a>
-                        <p
-                          className={`${
-                            subcategory === subcategoryId && "font-bold text-lg"
-                          } pl-5 hover:scale-[1.02] transition-transform duration-200 ease-in-out`}
-                        >
-                          {subcategory}
-                        </p>
-                      </a>
+                      <p
+                        className={`${
+                          subcategory === subcategoryId && "font-bold text-lg"
+                        } pl-5 hover:scale-[1.02] transition-transform duration-200 ease-in-out`}
+                      >
+                        {subcategory}
+                      </p>
                     </Link>
                   );
                 })}
@@ -58,15 +54,13 @@ export default function Category({ productsAndAverage }) {
           {currentCategory?.subcategory.map((subcategory, index) => {
             return (
               <Link key={index} href={`/category/${categoryId}/${subcategory}`}>
-                <a>
-                  <p
-                    className={`${
-                      subcategory === subcategoryId && "font-bold text-lg"
-                    } pl-2`}
-                  >
-                    {subcategory}
-                  </p>
-                </a>
+                <p
+                  className={`${
+                    subcategory === subcategoryId && "font-bold text-lg"
+                  } pl-2`}
+                >
+                  {subcategory}
+                </p>
               </Link>
             );
           })}

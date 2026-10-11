@@ -3,9 +3,8 @@ import verifyToken from "../../../utils/verifyToken";
 const User = require("../../../models/User");
 const Product = require("../../../models/Product");
 
-dbConnect();
-
 export default async (req, res) => {
+  await dbConnect();
   try {
     const result = verifyToken(req);
     if (!result) {

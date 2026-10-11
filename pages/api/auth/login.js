@@ -3,9 +3,8 @@ const User = require("../../../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
-dbConnect();
-
 export default async (req, res) => {
+  await dbConnect();
   try {
     const user = await User.findOne({ email: req.body.emailLogin });
     //if user is the test account, set the right password

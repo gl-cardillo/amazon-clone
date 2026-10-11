@@ -69,7 +69,6 @@ export default function SignIn() {
       setUser(user);
       localStorage.setItem("user_amazon_lc", JSON.stringify(user));
       localStorage.setItem("token_amazon_lc", JSON.stringify(token));
-      axios.defaults.headers.Authorization = `Bearer ${token}`;
 
       router.push("/");
     } catch (error) {
@@ -91,7 +90,6 @@ export default function SignIn() {
       setUser(user);
       localStorage.setItem("user_amazon_lc", JSON.stringify(user));
       localStorage.setItem("token_amazon_lc", JSON.stringify(token));
-      axios.defaults.headers.Authorization = `Bearer ${token}`;
 
       router.push("/");
     } catch (error) {

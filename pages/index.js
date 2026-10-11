@@ -48,25 +48,24 @@ export default function Home() {
           {slideImages.map((slideImage, index) => (
             <div className="each-slide" key={index}>
               <Link href={slideImage.link}>
-                <a>
-                  <div className="h-[250px] md:h-[350px] lg:h-[400px] xl:h-[550px] 3xl:h-[700px] w-full relative">
-                    <Image
-                      src={slideImage.image}
-                      layout="fill"
-                      objectFit="cover"
-                      objectPosition={slideImage.position}
-                      alt={slideImage.caption.join(" ")}
-                      priority={index === 0}
-                    />
-                    <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 via-black/10 to-transparent">
-                      <h2 className="p-5 md:p-10 lg:px-16 font-serif font-bold text-white text-2xl md:text-4xl lg:text-5xl drop-shadow-lg">
-                        {slideImage.caption[0]}
-                        <br />
-                        {slideImage.caption[1]}
-                      </h2>
-                    </div>
+                <div className="h-[250px] md:h-[350px] lg:h-[400px] xl:h-[550px] 3xl:h-[700px] w-full relative">
+                  <Image
+                    src={slideImage.image}
+                    fill
+                    sizes="100vw"
+                    className="object-cover"
+                    style={{ objectPosition: slideImage.position }}
+                    alt={slideImage.caption.join(" ")}
+                    priority={index === 0}
+                  />
+                  <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 via-black/10 to-transparent">
+                    <h2 className="p-5 md:p-10 lg:px-16 font-serif font-bold text-white text-2xl md:text-4xl lg:text-5xl drop-shadow-lg">
+                      {slideImage.caption[0]}
+                      <br />
+                      {slideImage.caption[1]}
+                    </h2>
                   </div>
-                </a>
+                </div>
               </Link>
             </div>
           ))}
@@ -80,17 +79,16 @@ export default function Home() {
               className="p-3 m-3 max-w-xs bg-white hover:scale-[1.01] shadow rounded hover:shadow-lg transition-transform duration-300 ease-in-out"
             >
               <Link href={catalog.link}>
-                <a>
-                  <h2 className="font-bold pb-2 text-lg">{catalog.name}</h2>
-                  <Image
-                    src={catalog.image}
-                    width={400}
-                    height={400}
-                    objectFit="cover"
-                    alt={catalog.name}
-                  />
-                  <p className=" text-slate-500">See more...</p>
-                </a>
+                <h2 className="font-bold pb-2 text-lg">{catalog.name}</h2>
+                <Image
+                  src={catalog.image}
+                  width={400}
+                  height={400}
+                  sizes="320px"
+                  className="object-cover"
+                  alt={catalog.name}
+                />
+                <p className=" text-slate-500">See more...</p>
               </Link>
             </div>
           );
