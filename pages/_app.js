@@ -14,6 +14,18 @@ if (typeof window !== "undefined") {
     }
     return config;
   });
+  // an expired or old token logs the user out
+  axios.interceptors.response.use(undefined, (error) => {
+    if (
+      error.response?.status === 401 &&
+      localStorage.getItem("token_amazon_lc")
+    ) {
+      localStorage.removeItem("token_amazon_lc");
+      localStorage.removeItem("user_amazon_lc");
+      window.location.assign("/signin");
+    }
+    return Promise.reject(error);
+  });
 }
 
 function MyApp({ Component, pageProps }) {

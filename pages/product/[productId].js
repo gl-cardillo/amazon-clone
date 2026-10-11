@@ -4,8 +4,8 @@ import { UserContext, CurrencyContext } from "../../utils/context";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useRouter } from "next/router";
 import { handleRating } from "../../utils/utils";
-import { getDataProductId } from "../api/product/[productId]";
-import { getDataReview } from "../api/review/[productId]";
+import { getProductById } from "../../lib/products";
+import { getReviewSummary } from "../../lib/reviews";
 import ImageSelector from "../../components/ImageSelector";
 import Reviews from "../../components/Reviews";
 
@@ -188,13 +188,13 @@ export default function Product({
 }
 
 export async function getServerSideProps(context) {
-  let res = await getDataProductId(context.query.productId);
+  let res = await getProductById(context.query.productId);
   if (!res) {
     return { notFound: true };
   }
   res = JSON.parse(JSON.stringify(res));
 
-  let resReview = await getDataReview(context.query.productId);
+  let resReview = await getReviewSummary(context.query.productId);
   resReview = JSON.parse(JSON.stringify(resReview));
 
   return {

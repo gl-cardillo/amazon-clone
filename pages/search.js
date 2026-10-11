@@ -1,6 +1,5 @@
 import Card from "../components/Card";
-import { searchProducts } from "./api/product/all";
-import { getAverageReview } from "./api/review/getRating/[productId]";
+import { searchProducts } from "../lib/products";
 
 export default function Search({ query, productsAndAverage }) {
   return (
@@ -29,12 +28,7 @@ export async function getServerSideProps(context) {
     return { props: { query, productsAndAverage: [] } };
   }
 
-  const products = await searchProducts(query);
-  const productsAndAverage = [];
-  for (let i = 0; i < products.length; i++) {
-    const average = await getAverageReview(products[i]._id);
-    productsAndAverage.push({ reviewAverage: average, product: products[i] });
-  }
+  const productsAndAverage = await searchProducts(query);
 
   return {
     props: {

@@ -2,7 +2,7 @@ import Card from "../../../components/Card";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { catalogs } from "../../../utils/catalogs";
-import { getDataCategory } from "../../api/category/[categoryId]";
+import { getProductsByCategory } from "../../../lib/products";
 
 export default function Category({ productsAndAverage }) {
   const router = useRouter();
@@ -85,7 +85,7 @@ export default function Category({ productsAndAverage }) {
 }
 
 export const getStaticProps = async ({ params }) => {
-  const res = await getDataCategory(params.categoryId);
+  const res = await getProductsByCategory(params.categoryId);
   const productsAndAverage = JSON.parse(JSON.stringify(res));
 
   return { props: { productsAndAverage } };

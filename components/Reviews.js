@@ -38,10 +38,8 @@ export default function Reviews({
     }
     try {
       await axios.post(`/api/review/${product._id}`, {
-        productId: product._id,
-        text: data.review,
-        reviewAuthor: user.name,
-        ratingForm,
+        review: data.review,
+        rating: ratingForm,
       });
       reset();
       setRatingForm(null);

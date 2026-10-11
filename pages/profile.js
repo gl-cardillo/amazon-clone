@@ -30,16 +30,8 @@ export default function Profile() {
   });
 
   const updateProfile = async (data) => {
-    // date-only strings parse as utc midnight, so no time is stored
-    const dateOfBirth = data.dateOfBirth ? new Date(data.dateOfBirth) : null;
     try {
-      const response = await axios.put("/api/user/updateProfile", {
-        name: data.name,
-        dateOfBirth,
-        city: data.city,
-        address: data.address,
-        postcode: data.postcode,
-      });
+      const response = await axios.put("/api/user/updateProfile", data);
 
       localStorage.setItem("user_amazon_lc", JSON.stringify(response.data));
       setUser(response.data);

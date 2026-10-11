@@ -48,6 +48,42 @@ export const reviewSchema = z.object({
   review: z.string().min(2, "review must be at least 2 characters"),
 });
 
+// api request bodies
+
+// the test account logs in without a password
+export const loginRequestSchema = z.object({
+  emailLogin: z.email("Credentials are incorrect"),
+  passwordLogin: z.string().optional(),
+});
+
+export const reviewRequestSchema = reviewSchema.extend({
+  rating: z
+    .number("Select a star")
+    .int("Select a star")
+    .min(1, "Select a star")
+    .max(5, "Select a star"),
+});
+
+const productIdField = z.string().min(1, "productId is required");
+
+export const addToCartSchema = z.object({
+  productId: productIdField,
+  quantity: z
+    .number()
+    .int()
+    .min(1, "Quantity must be at least 1")
+    .max(9, "The limit is 9"),
+});
+
+export const updateCartSchema = z.object({
+  productId: productIdField,
+  n: z.enum(["+1", "-1"]),
+});
+
+export const removeFromCartSchema = z.object({
+  productId: productIdField,
+});
+
 export type SignupInput = z.infer<typeof signupSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 export type ProfileInput = z.infer<typeof profileSchema>;
