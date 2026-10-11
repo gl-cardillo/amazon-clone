@@ -6,10 +6,10 @@ import { UserContext, CurrencyContext } from "../utils/context";
 import { HiOutlineLogout } from "react-icons/hi";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Swal from "sweetalert2";
 import { swalStyle, handleSuccess } from "../utils/utils";
+import { profileSchema } from "../utils/schemas";
 
 export default function Profile() {
   const [showDetails, setShowDetails] = useState(false);
@@ -20,42 +20,18 @@ export default function Profile() {
   const { user, setUser } = useContext(UserContext);
   const router = useRouter();
 
-  const schema = yup.object().shape({
-    name: yup
-      .string()
-      .min(2)
-      .max(50)
-      .matches(/^[a-zA-Z0-9 _]{0,}$/, {
-        message: "Special character not allowed.",
-      })
-      .required("name is a required field"),
-    address: yup.string().max(50),
-    city: yup.string().max(30),
-    postcode: yup.string().max(10),
-    dateOfBirth: yup
-      .date()
-      .nullable()
-      .transform((curr, orig) => (orig === "" ? null : curr))
-      .max(new Date(), "Are you from the future?"),
-  });
-
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: zodResolver(profileSchema),
   });
 
   const updateProfile = async (data) => {
-    // only way i found to store date of birth without time in mongodb
-    let dateOfBirth = null;
-    if (data.dateOfBirth) {
-      const date = new Date(data.dateOfBirth);
-      const userTimezoneOffset = date.getTimezoneOffset() * 60000;
-      dateOfBirth = new Date(date.getTime() - userTimezoneOffset);
-    }
+    // date-only strings parse as utc midnight, so no time is stored
+    const dateOfBirth = data.dateOfBirth ? new Date(data.dateOfBirth) : null;
     try {
       const response = await axios.put("/api/user/updateProfile", {
         name: data.name,
@@ -81,15 +57,14 @@ export default function Profile() {
       return;
     }
 
-    let defaultValues = {
-      name: user.name,
-      address: user.address,
-      city: user.city,
-      postcode: user.postcode,
-      dateOfBirth: user.dateOfBirth_toISODate,
-    };
-
-    reset({ ...defaultValues });
+    // the schema expects strings, missing fields would fail validation
+    reset({
+      name: user.name ?? "",
+      address: user.address ?? "",
+      city: user.city ?? "",
+      postcode: user.postcode ?? "",
+      dateOfBirth: user.dateOfBirth_toISODate ?? "",
+    });
   }, [user]);
 
   const logOut = () => {

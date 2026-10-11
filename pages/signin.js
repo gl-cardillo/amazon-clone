@@ -3,8 +3,8 @@ import { useState, useEffect, useContext } from "react";
 import { UserContext } from "../utils/context";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signupSchema, loginSchema } from "../utils/schemas";
 
 export default function SignIn() {
   const [showSignup, setShowSignup] = useState(true);
@@ -19,38 +19,12 @@ export default function SignIn() {
     }
   }, [user]);
 
-  const schemaSignup = yup.object().shape({
-    name: yup
-      .string()
-      .min(2)
-      .max(50)
-      .matches(/^[a-zA-Z0-9 _]{0,}$/, {
-        message: "Special character not allowed.",
-      })
-      .required("name is a required field"),
-    email: yup.string().email().required(),
-    password: yup
-      .string()
-      .min(8)
-      .max(15)
-      .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?])[A-Za-z\d@$!%*#?]{8,}$/, {
-        message:
-          "Password must be eight characters, at least one letter, one number and one special character(@$!%*#?)",
-      })
-      .required(),
-  });
-
-  const schemaLogin = yup.object().shape({
-    emailLogin: yup.string().email().required("Email is required"),
-    passwordLogin: yup.string().required("Password is required"),
-  });
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: yupResolver(schemaSignup),
+    resolver: zodResolver(signupSchema),
   });
 
   const {
@@ -58,7 +32,7 @@ export default function SignIn() {
     handleSubmit: handleSubmitLogin,
     formState: { errors: errorsLogin },
   } = useForm({
-    resolver: yupResolver(schemaLogin),
+    resolver: zodResolver(loginSchema),
   });
 
   const signup = async (data) => {

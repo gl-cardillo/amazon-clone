@@ -3,9 +3,9 @@ import { BsStarFill, BsStar } from "react-icons/bs";
 import { useState, useContext } from "react";
 import { UserContext } from "../utils/context";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
+import { reviewSchema } from "../utils/schemas";
 
 export default function Reviews({
   reviews,
@@ -22,17 +22,13 @@ export default function Reviews({
   const [sort, setSort] = useState("recent");
   const router = useRouter();
 
-  const schema = yup.object().shape({
-    review: yup.string().min(2),
-  });
-
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: zodResolver(reviewSchema),
   });
 
   const addReview = async (data) => {
