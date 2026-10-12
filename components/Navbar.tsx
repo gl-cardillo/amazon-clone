@@ -1,37 +1,25 @@
 import Link from "next/link";
 import Image from "next/image";
-import axios from "axios";
 import { useRouter } from "next/router";
-import {
-  useState,
-  useEffect,
-  useContext,
-  type ChangeEvent,
-  type FormEvent,
-} from "react";
-import { UserContext } from "../utils/context";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { BsSearch, BsCart2 } from "react-icons/bs";
 import { AiOutlineUser } from "react-icons/ai";
-import type { Product } from "@/types";
+import { useMe } from "../hooks/useAuth";
+import { useProductSearch } from "../hooks/useProductSearch";
 
 export default function Navbar() {
   // shared by the desktop and mobile inputs
   const [query, setQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
-  const [products, setProducts] = useState<Product[]>([]);
   const router = useRouter();
-  const { user } = useContext(UserContext);
+  const { user } = useMe();
+  const { data: results = [] } = useProductSearch(query);
   const cartQuantity = user
     ? user.cart.reduce((accum, cart) => accum + cart.quantity, 0)
     : 0;
 
-  const trimmedQuery = query.toLowerCase().trim();
-  const search =
-    trimmedQuery === ""
-      ? []
-      : products.filter((product) =>
-          product.name.toLowerCase().includes(trimmedQuery)
-        );
+  const trimmedQuery = query.trim();
+  const search = trimmedQuery === "" ? [] : results;
 
   const clearSearch = () => {
     setQuery("");
@@ -54,18 +42,6 @@ export default function Navbar() {
     router.push({ pathname: "/search", query: { q: query.trim() } });
     clearSearch();
   };
-
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const res = await axios.get<Product[]>(`/api/product/all`);
-        setProducts(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getData();
-  }, []);
 
   return (
     <div className="flex fixed flex-col w-full bg-[#131921] z-10">
@@ -96,9 +72,9 @@ export default function Navbar() {
           </form>
           {showSearch && (
             <div className="z-10 absolute mt-[80px] -ml-[47%] w-[calc(95%-65px)] z-1 rounded-md  border-solid border-b-2 border-x-2 border-slate-200 sm:w-[calc(95%-55px)] sm:-ml-[48%] md:ml-[0%] md:-mt-[5px] md:w-[258px] lg:w-[308px]">
-              {search.slice(0, 4).map((product, index) => {
+              {search.slice(0, 4).map(({ product }) => {
                 return (
-                  <Link key={index} href={`/product/${product._id}`}>
+                  <Link key={product._id} href={`/product/${product._id}`}>
                     <div
                       onClick={clearSearch}
                       className=" flex bg-white px-1 py-3 gap-2 items-center"

@@ -1,100 +1,63 @@
-import axios from "axios";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useContext } from "react";
-import { UserContext, CurrencyContext } from "../utils/context";
+import { CurrencyContext } from "../utils/context";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { saveUser } from "../utils/storage";
-import type { CartProduct, User } from "@/types";
-
-type Step = "+1" | "-1";
+import { useMe } from "../hooks/useAuth";
+import {
+  useCart,
+  useRemoveFromCart,
+  useUpdateCartQuantity,
+  type CartStep,
+} from "../hooks/useCart";
+import { MAX_CART_QUANTITY } from "../utils/constants";
 
 export default function Cart() {
   const { currencySymbol, currencyRate } = useContext(CurrencyContext);
-  const { user, setUser, authReady } = useContext(UserContext);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [cartQuantity, setCartQuantity] = useState(0);
-  const [cart, setCart] = useState<CartProduct[] | null>(null);
-  const [disableButton, setDisableButton] = useState(false);
+  const { user, isLoading } = useMe();
+  const { data: cart } = useCart();
+  const updateCartQuantity = useUpdateCartQuantity();
+  const removeFromCart = useRemoveFromCart();
   // id of the product that hit the quantity limit
   const [limitReachedId, setLimitReachedId] = useState<string | null>(null);
   const router = useRouter();
+  // one change at a time, concurrent saves of the same user would conflict
+  const disableButton =
+    updateCartQuantity.isPending || removeFromCart.isPending;
+
+  const cartQuantity = (cart ?? []).reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
+  const totalPrice = (cart ?? []).reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  );
 
   useEffect(() => {
-    if (!authReady) return;
-    if (!user) {
+    if (!isLoading && !user) {
       router.push("/signin");
-      return;
     }
+  }, [isLoading, user, router]);
 
-    const getCart = async () => {
-      try {
-        const response = await axios.get<{ cart: CartProduct[] }>(
-          "/api/cart/getCartProduct"
-        );
-        const { cart } = response.data;
-        setCart(cart);
-        setCartQuantity(cart.reduce((accum, cart) => accum + cart.quantity, 0));
-        const price = cart
-          .map((productCart) => {
-            return productCart.product.price * productCart.quantity;
-          })
-          .reduce((a, b) => a + b, 0);
-        setTotalPrice(price);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const removeProduct = (productId: string) => {
+    setLimitReachedId(null);
+    removeFromCart.mutate(productId);
+  };
 
-    getCart();
-  }, [user, authReady, router]);
-
-  const updateQuantity = async (
-    productId: string,
-    quantity: number,
-    n: Step
-  ) => {
+  const updateQuantity = (productId: string, quantity: number, n: CartStep) => {
     if (quantity === 1 && n === "-1") {
       removeProduct(productId);
       return;
     }
-    if (quantity === 9 && n === "+1") {
+    if (quantity === MAX_CART_QUANTITY && n === "+1") {
       setLimitReachedId(productId);
       return;
     }
-    setDisableButton(true);
-    try {
-      const response = await axios.put<User>("/api/cart/addToCart", {
-        productId,
-        n,
-      });
-      setUser(response.data);
-      saveUser(response.data);
-      setLimitReachedId(null);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setDisableButton(false);
-    }
-  };
-
-  const removeProduct = async (productId: string) => {
-    setDisableButton(true);
-    try {
-      // axios.delete takes the body under `data`
-      const response = await axios.delete<User>("/api/cart/addToCart", {
-        data: { productId },
-      });
-      setUser(response.data);
-      saveUser(response.data);
-      setLimitReachedId(null);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setDisableButton(false);
-    }
+    setLimitReachedId(null);
+    updateCartQuantity.mutate({ productId, n });
   };
 
   return (
@@ -167,7 +130,7 @@ export default function Cart() {
                           </div>
                           {limitReachedId === productCart.product._id && (
                             <p className="text-red-500 text-[12px]">
-                              The limit is 9
+                              The limit is {MAX_CART_QUANTITY}
                             </p>
                           )}
                         </div>

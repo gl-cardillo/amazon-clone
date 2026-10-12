@@ -1,18 +1,4 @@
 import { createContext, type Dispatch, type SetStateAction } from "react";
-import type { User } from "@/types";
-
-export interface UserContextValue {
-  user: User | null;
-  setUser: Dispatch<SetStateAction<User | null>>;
-  // false until the user has been restored from localStorage
-  authReady: boolean;
-}
-
-export const UserContext = createContext<UserContextValue>({
-  user: null,
-  setUser: () => {},
-  authReady: false,
-});
 
 export type CurrencySymbol = "£" | "€" | "$";
 

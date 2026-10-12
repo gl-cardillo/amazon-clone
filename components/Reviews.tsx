@@ -1,8 +1,8 @@
 import axios from "axios";
 import Image from "next/image";
 import { BsStarFill, BsStar } from "react-icons/bs";
-import { useState, useContext, type Dispatch, type SetStateAction } from "react";
-import { UserContext } from "../utils/context";
+import { useState, type Dispatch, type SetStateAction } from "react";
+import { useMe } from "../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
@@ -28,7 +28,7 @@ export default function Reviews({
 }: ReviewsProps) {
   //used for star rating
   const starsLoop = [0, 1, 2, 3, 4];
-  const { user } = useContext(UserContext);
+  const { user } = useMe();
   const [ratingForm, setRatingForm] = useState<number | null>(null);
   const [errorRating, setErrorRating] = useState("");
   const [filter, setFilter] = useState(ALL_RATINGS);
@@ -56,7 +56,8 @@ export default function Reviews({
       });
       reset();
       setRatingForm(null);
-      router.push(`/product/${product._id}`);
+      // rerun getServerSideProps so the new review shows up
+      router.replace(router.asPath, undefined, { scroll: false });
     } catch (error) {
       console.error(error);
     }

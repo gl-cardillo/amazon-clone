@@ -1,6 +1,4 @@
-import axios from "axios";
-import { useState, useEffect, useContext } from "react";
-import { UserContext } from "../utils/context";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,26 +8,22 @@ import {
   type LoginInput,
   type SignupInput,
 } from "../utils/schemas";
-import { saveSession } from "../utils/storage";
-import type { User } from "@/types";
-
-interface AuthResponse {
-  user: User;
-  token: string;
-}
-
-// fall back to a generic message when the server sent none
-const errorMessage = (error: unknown) =>
-  (axios.isAxiosError(error) && error.response?.data?.message) ||
-  "Sorry, try again later";
+import { errorMessage, useLogin, useMe, useSignup } from "../hooks/useAuth";
 
 export default function SignIn() {
   const [showSignup, setShowSignup] = useState(true);
-  const [errorSignup, setErrorSignup] = useState("");
-  const [errorLogin, setErrorLogin] = useState("");
   const router = useRouter();
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useMe();
+  const signupMutation = useSignup();
+  const loginMutation = useLogin();
+  const errorSignup = signupMutation.isError
+    ? errorMessage(signupMutation.error)
+    : "";
+  const errorLogin = loginMutation.isError
+    ? errorMessage(loginMutation.error)
+    : "";
 
+  // also runs right after a successful login or signup
   useEffect(() => {
     if (user) {
       router.push("/");
@@ -52,33 +46,10 @@ export default function SignIn() {
     resolver: zodResolver(loginSchema),
   });
 
-  const signup = async (data: SignupInput) => {
-    try {
-      const response = await axios.post<AuthResponse>("/api/auth/signup", data);
-      const { user, token } = response.data;
-      setUser(user);
-      saveSession(user, token);
-      router.push("/");
-    } catch (error) {
-      setErrorSignup(errorMessage(error));
-    }
-  };
+  const signup = (data: SignupInput) => signupMutation.mutate(data);
 
   // called without data by the test account button
-  const login = async (data?: LoginInput) => {
-    try {
-      const response = await axios.post<AuthResponse>(
-        "/api/auth/login",
-        data ?? { emailLogin: "testAccount@example.com" }
-      );
-      const { user, token } = response.data;
-      setUser(user);
-      saveSession(user, token);
-      router.push("/");
-    } catch (error) {
-      setErrorLogin(errorMessage(error));
-    }
-  };
+  const login = (data?: LoginInput) => loginMutation.mutate(data);
 
   return (
     <div className=" flex flex-col mx-3 xs:mx-auto xs:max-w-[400px] my-10 ">

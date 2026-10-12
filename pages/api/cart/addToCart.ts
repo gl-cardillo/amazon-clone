@@ -9,8 +9,7 @@ import {
 } from "@/utils/schemas";
 import { getProductById } from "@/lib/products";
 import { methodNotAllowed, parseBody } from "@/lib/api";
-
-const MAX_QUANTITY = 9;
+import { MAX_CART_QUANTITY } from "@/utils/constants";
 
 export default async function handler(
   req: NextApiRequest,
@@ -41,7 +40,10 @@ export default async function handler(
       if (!item) {
         user.cart.push({ productId: body.productId, quantity: body.quantity });
       } else {
-        item.quantity = Math.min(item.quantity + body.quantity, MAX_QUANTITY);
+        item.quantity = Math.min(
+          item.quantity + body.quantity,
+          MAX_CART_QUANTITY
+        );
       }
     }
 
@@ -53,7 +55,7 @@ export default async function handler(
         return res.status(404).json({ message: "Product not in cart" });
       }
       const quantity = item.quantity + (body.n === "+1" ? 1 : -1);
-      if (quantity < 1 || quantity > MAX_QUANTITY) {
+      if (quantity < 1 || quantity > MAX_CART_QUANTITY) {
         return res.status(400).json({ message: "The limit is 9" });
       }
       item.quantity = quantity;

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { MAX_CART_QUANTITY } from "./constants";
 
 const nameField = z
   .string()
@@ -72,7 +73,7 @@ export const addToCartSchema = z.object({
     .number()
     .int()
     .min(1, "Quantity must be at least 1")
-    .max(9, "The limit is 9"),
+    .max(MAX_CART_QUANTITY, `The limit is ${MAX_CART_QUANTITY}`),
 });
 
 export const updateCartSchema = z.object({

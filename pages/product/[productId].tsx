@@ -1,6 +1,5 @@
-import axios from "axios";
 import { useState, useContext } from "react";
-import { UserContext, CurrencyContext } from "../../utils/context";
+import { CurrencyContext } from "../../utils/context";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useRouter } from "next/router";
 import { handleRating } from "../../utils/utils";
@@ -8,9 +7,11 @@ import { getProductById } from "../../lib/products";
 import { getReviewSummary } from "../../lib/reviews";
 import ImageSelector from "../../components/ImageSelector";
 import Reviews from "../../components/Reviews";
-import { saveUser } from "../../utils/storage";
+import { useMe } from "../../hooks/useAuth";
+import { useAddToCart } from "../../hooks/useCart";
+import { MAX_CART_QUANTITY } from "../../utils/constants";
 import type { GetServerSideProps } from "next";
-import type { Product as ProductType, Review, ReviewSummary, User } from "@/types";
+import type { Product as ProductType, Review, ReviewSummary } from "@/types";
 
 interface ProductProps {
   product: ProductType;
@@ -29,29 +30,23 @@ export default function Product({
   const [askLogin, setAskLogin] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const router = useRouter();
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useMe();
+  const addToCartMutation = useAddToCart();
   const { currencySymbol, currencyRate } = useContext(CurrencyContext);
 
-  const addToCart = async () => {
+  const addToCart = () => {
     if (!user) {
       setAskLogin(true);
       return;
     }
-    try {
-      const response = await axios.post<User>("/api/cart/addToCart", {
-        productId: product._id,
-        quantity,
-      });
-      setUser(response.data);
-      saveUser(response.data);
-      setQuantity(1);
-    } catch (error) {
-      console.error(error);
-    }
+    addToCartMutation.mutate(
+      { productId: product._id, quantity },
+      { onSuccess: () => setQuantity(1) }
+    );
   };
 
   const increaseQuantity = () => {
-    if (quantity === 9) return;
+    if (quantity === MAX_CART_QUANTITY) return;
     setQuantity(quantity + 1);
   };
 
@@ -158,6 +153,7 @@ export default function Product({
 
         <button
           onClick={addToCart}
+          disabled={addToCartMutation.isPending}
           className="p-2 w-[300px] h-12 text-[14px] rounded-[5px] text-gray-800 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] shadow"
         >
           Add to Cart

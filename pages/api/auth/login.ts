@@ -5,8 +5,7 @@ import User from "@/models/User";
 import { signToken } from "@/utils/auth";
 import { loginRequestSchema } from "@/utils/schemas";
 import { methodNotAllowed, parseBody } from "@/lib/api";
-
-const TEST_ACCOUNT_EMAIL = "testAccount@example.com";
+import { TEST_ACCOUNT_EMAIL } from "@/utils/constants";
 
 export default async function handler(
   req: NextApiRequest,

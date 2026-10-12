@@ -1,13 +1,8 @@
-import axios from "axios";
 import Image from "next/image";
 import { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { BsFillPencilFill } from "react-icons/bs";
-import {
-  UserContext,
-  CurrencyContext,
-  type CurrencySymbol,
-} from "../utils/context";
+import { CurrencyContext, type CurrencySymbol } from "../utils/context";
 import { HiOutlineLogout } from "react-icons/hi";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useForm } from "react-hook-form";
@@ -15,8 +10,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Swal from "sweetalert2";
 import { swalStyle, handleSuccess } from "../utils/utils";
 import { profileSchema, type ProfileInput } from "../utils/schemas";
-import { clearSession, readUser, saveUser } from "../utils/storage";
-import type { User } from "@/types";
+import { TEST_ACCOUNT_EMAIL } from "../utils/constants";
+import {
+  useDeleteAccount,
+  useLogout,
+  useMe,
+  useUpdateProfile,
+} from "../hooks/useAuth";
 
 const CURRENCY_RATES: Record<CurrencySymbol, number> = {
   "£": 1,
@@ -30,7 +30,10 @@ export default function Profile() {
 
   const { currencySymbol, setCurrencySymbol, setCurrencyRate } =
     useContext(CurrencyContext);
-  const { user, setUser } = useContext(UserContext);
+  const { user, isLoading } = useMe();
+  const updateProfileMutation = useUpdateProfile();
+  const deleteAccount = useDeleteAccount();
+  const logout = useLogout();
   const router = useRouter();
 
   const {
@@ -42,26 +45,18 @@ export default function Profile() {
     resolver: zodResolver(profileSchema),
   });
 
-  const updateProfile = async (data: ProfileInput) => {
-    try {
-      const response = await axios.put<User>("/api/user/updateProfile", data);
-
-      saveUser(response.data);
-      setUser(response.data);
-      setEditProfile(false);
-    } catch (error) {
-      console.error(error);
-    }
+  const updateProfile = (data: ProfileInput) => {
+    updateProfileMutation.mutate(data, {
+      onSuccess: () => setEditProfile(false),
+    });
   };
 
   useEffect(() => {
-    const user = readUser();
-
+    if (isLoading) return;
     if (!user) {
       router.push("/signin");
       return;
     }
-
     // the schema expects strings, missing fields would fail validation
     reset({
       name: user.name ?? "",
@@ -70,21 +65,12 @@ export default function Profile() {
       postcode: user.postcode ?? "",
       dateOfBirth: user.dateOfBirth_toISODate ?? "",
     });
-  }, [user, reset, router]);
+  }, [isLoading, user, reset, router]);
 
-  const logOut = () => {
-    setUser(null);
-    clearSession();
-    router.push("/");
-  };
-
-  const deleteAccount = async () => {
-    try {
-      await axios.delete("/api/user/deleteAccount");
-      logOut();
-    } catch (error) {
-      console.error(error);
-    }
+  // leave the page first, otherwise the redirect above sends us to /signin
+  const logOut = async () => {
+    await router.push("/");
+    logout();
   };
 
   const confirmDelete = () => {
@@ -96,12 +82,14 @@ export default function Profile() {
       cancelButtonText: "Delete",
       ...swalStyle,
     }).then((result) => {
+      Swal.close();
       if (result.isDismissed) {
-        deleteAccount();
-        Swal.close();
-        handleSuccess("Account deleted successfully");
-      } else {
-        Swal.close();
+        deleteAccount.mutate(undefined, {
+          onSuccess: async () => {
+            await logOut();
+            handleSuccess("Account deleted successfully");
+          },
+        });
       }
     });
   };
@@ -302,7 +290,7 @@ export default function Profile() {
           <HiOutlineLogout className="text-3xl" />
           <p className="font-semibold text-lg">Log out</p>
         </button>
-        {user && user.email !== "testAccount@example.com" && (
+        {user && user.email !== TEST_ACCOUNT_EMAIL && (
           <button
             onClick={confirmDelete}
             className="p-1 text-red-400 border-[3px] border-red-400"

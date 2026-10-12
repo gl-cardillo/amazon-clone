@@ -2,15 +2,11 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Layout from "../components/Layout";
 import axios from "axios";
-import {
-  UserContext,
-  CurrencyContext,
-  type CurrencySymbol,
-} from "../utils/context";
-import { clearSession, readToken, readUser } from "../utils/storage";
-import { useState, useEffect } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { CurrencyContext, type CurrencySymbol } from "../utils/context";
+import { clearToken, readToken } from "../utils/storage";
+import { useState } from "react";
 import { SkeletonTheme } from "react-loading-skeleton";
-import type { User } from "@/types";
 
 // attach the saved token to every request
 if (typeof window !== "undefined") {
@@ -28,7 +24,7 @@ if (typeof window !== "undefined") {
       error.response?.status === 401 &&
       readToken()
     ) {
-      clearSession();
+      clearToken();
       // full reload so no logged-in state survives
       // eslint-disable-next-line @next/next/no-location-assign-relative-destination
       window.location.assign("/signin");
@@ -37,24 +33,21 @@ if (typeof window !== "undefined") {
   });
 }
 
+// client errors won't succeed on a retry, server errors might
+const shouldRetry = (failureCount: number, error: unknown) =>
+  failureCount < 2 &&
+  !(axios.isAxiosError(error) && (error.response?.status ?? 500) < 500);
+
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const [user, setUser] = useState<User | null>(null);
-  const [authReady, setAuthReady] = useState(false);
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({ defaultOptions: { queries: { retry: shouldRetry } } })
+  );
   const [currencySymbol, setCurrencySymbol] = useState<CurrencySymbol>("£");
   const [currencyRate, setCurrencyRate] = useState(1);
 
-  // localStorage is only readable after hydration
-  useEffect(() => {
-    const user = readUser();
-    if (user && readToken()) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setUser(user);
-    }
-    setAuthReady(true);
-  }, []);
-
   return (
-    <UserContext.Provider value={{ user, setUser, authReady }}>
+    <QueryClientProvider client={queryClient}>
       <CurrencyContext.Provider
         value={{
           currencySymbol,
@@ -69,6 +62,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           </Layout>
         </SkeletonTheme>
       </CurrencyContext.Provider>
-    </UserContext.Provider>
+    </QueryClientProvider>
   );
 }
