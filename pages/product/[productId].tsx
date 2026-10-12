@@ -8,13 +8,23 @@ import { getProductById } from "../../lib/products";
 import { getReviewSummary } from "../../lib/reviews";
 import ImageSelector from "../../components/ImageSelector";
 import Reviews from "../../components/Reviews";
+import { saveUser } from "../../utils/storage";
+import type { GetServerSideProps } from "next";
+import type { Product as ProductType, Review, ReviewSummary, User } from "@/types";
+
+interface ProductProps {
+  product: ProductType;
+  reviews: Review[];
+  ratingArray: ReviewSummary["ratingArray"];
+  ratingAverage: number;
+}
 
 export default function Product({
   product,
   reviews,
   ratingArray,
   ratingAverage,
-}) {
+}: ProductProps) {
   const [showDescription, setShowDescription] = useState(false);
   const [askLogin, setAskLogin] = useState(false);
   const [quantity, setQuantity] = useState(1);
@@ -28,16 +38,15 @@ export default function Product({
       return;
     }
     try {
-      const response = await axios.post("/api/cart/addToCart", {
+      const response = await axios.post<User>("/api/cart/addToCart", {
         productId: product._id,
         quantity,
-        userId: user._id,
       });
       setUser(response.data);
-      localStorage.setItem("user_amazon_lc", JSON.stringify(response.data));
+      saveUser(response.data);
       setQuantity(1);
     } catch (error) {
-      console.log(error.message);
+      console.error(error);
     }
   };
 
@@ -187,22 +196,25 @@ export default function Product({
   );
 }
 
-export async function getServerSideProps(context) {
-  let res = await getProductById(context.query.productId);
-  if (!res) {
+export const getServerSideProps: GetServerSideProps<ProductProps> = async (
+  context
+) => {
+  const productId = String(context.params?.productId);
+  const product = await getProductById(productId);
+  if (!product) {
     return { notFound: true };
   }
-  res = JSON.parse(JSON.stringify(res));
+  const summary = await getReviewSummary(productId);
 
-  let resReview = await getReviewSummary(context.query.productId);
-  resReview = JSON.parse(JSON.stringify(resReview));
-
+  // round-trip through json so mongoose documents become plain props
   return {
-    props: {
-      product: res,
-      reviews: resReview.reviews,
-      ratingArray: resReview.ratingArray,
-      ratingAverage: resReview.average,
-    },
+    props: JSON.parse(
+      JSON.stringify({
+        product,
+        reviews: summary.reviews,
+        ratingArray: summary.ratingArray,
+        ratingAverage: summary.average,
+      })
+    ),
   };
-}
+};

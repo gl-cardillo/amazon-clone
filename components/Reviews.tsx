@@ -1,25 +1,38 @@
 import axios from "axios";
+import Image from "next/image";
 import { BsStarFill, BsStar } from "react-icons/bs";
-import { useState, useContext } from "react";
+import { useState, useContext, type Dispatch, type SetStateAction } from "react";
 import { UserContext } from "../utils/context";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
-import { reviewSchema } from "../utils/schemas";
+import { reviewSchema, type ReviewInput } from "../utils/schemas";
+import type { Product, Review, ReviewSummary } from "@/types";
+
+type SortMethod = "recent" | "rating";
+
+interface ReviewsProps {
+  reviews: Review[];
+  ratingArray: ReviewSummary["ratingArray"];
+  product: Product;
+  setAskLogin: Dispatch<SetStateAction<boolean>>;
+}
+
+const ALL_RATINGS = [1, 2, 3, 4, 5];
 
 export default function Reviews({
   reviews,
   ratingArray,
   product,
   setAskLogin,
-}) {
+}: ReviewsProps) {
   //used for star rating
   const starsLoop = [0, 1, 2, 3, 4];
   const { user } = useContext(UserContext);
-  const [ratingForm, setRatingForm] = useState(null);
+  const [ratingForm, setRatingForm] = useState<number | null>(null);
   const [errorRating, setErrorRating] = useState("");
-  const [filter, setFilter] = useState([1, 2, 3, 4, 5]);
-  const [sort, setSort] = useState("recent");
+  const [filter, setFilter] = useState(ALL_RATINGS);
+  const [sort, setSort] = useState<SortMethod>("recent");
   const router = useRouter();
 
   const {
@@ -27,11 +40,11 @@ export default function Reviews({
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({
+  } = useForm<ReviewInput>({
     resolver: zodResolver(reviewSchema),
   });
 
-  const addReview = async (data) => {
+  const addReview = async (data: ReviewInput) => {
     if (!ratingForm) {
       setErrorRating("Select a star");
       return;
@@ -45,35 +58,18 @@ export default function Reviews({
       setRatingForm(null);
       router.push(`/product/${product._id}`);
     } catch (error) {
-      console.log(error.message);
+      console.error(error);
     }
   };
 
-  const handleFilter = (value) => {
-    switch (value) {
-      case "0":
-        setFilter([1, 2, 3, 4, 5]);
-        break;
-      case "1":
-        setFilter([1]);
-        break;
-      case "2":
-        setFilter([2]);
-        break;
-      case "3":
-        setFilter([3]);
-        break;
-      case "4":
-        setFilter([4]);
-        break;
-      case "5":
-        setFilter([5]);
-        break;
-
-      default:
-        break;
-    }
+  // "0" means all ratings
+  const handleFilter = (value: string) => {
+    setFilter(value === "0" ? ALL_RATINGS : [Number(value)]);
   };
+
+  // percentage of reviews with this many stars
+  const share = (stars: number) =>
+    reviews.length > 0 ? ((ratingArray[stars] ?? 0) / reviews.length) * 100 : 0;
 
   // sort a copy, the reviews prop must not be mutated
   const sortedReviews = [...reviews].sort((a, b) =>
@@ -101,23 +97,12 @@ export default function Reviews({
                   <td className="w-[60px] text-blue-500">{star + 1} star</td>
                   <td className="h-[22px] w-[160px] bg-[#F0F2F2] rounded">
                     <div
-                      style={{
-                        width: `${
-                          ratingArray[star + 1] !== 0
-                            ? (ratingArray[star + 1] / reviews.length) * 100 +
-                              "%"
-                            : "0%"
-                        }`,
-                      }}
+                      style={{ width: `${share(star + 1)}%` }}
                       className={`h-[20px] bg-[#FFA41C] rounded shadow`}
                     ></div>
                   </td>
                   <td className="text-right w-[50px] text-blue-500">
-                    {ratingArray[star + 1] !== 0
-                      ? Math.round(
-                          (ratingArray[star + 1] / reviews.length) * 100
-                        ) + "%"
-                      : "0%"}
+                    {Math.round(share(star + 1))}%
                   </td>
                 </tr>
               ))}
@@ -133,15 +118,11 @@ export default function Reviews({
           <select
             id="sortBy"
             value={sort}
-            onChange={(e) => setSort(e.target.value)}
+            onChange={(e) => setSort(e.target.value as SortMethod)}
             className="cursor-pointer text-sm w-[140px] border-gray-300 rounded shadow-sm"
           >
-            <option value="recent" name="filter">
-              Most recent
-            </option>
-            <option value="rating" name="filter">
-              Rating
-            </option>
+            <option value="recent">Most recent</option>
+            <option value="rating">Rating</option>
           </select>
         </div>
         <div className="self-center mt-6 flex flex-col items-center gap-1">
@@ -153,24 +134,12 @@ export default function Reviews({
             onChange={(e) => handleFilter(e.target.value)}
             className="cursor-pointer text-sm w-[140px] border-gray-300 rounded shadow-sm"
           >
-            <option value="0" name="filter">
-              All rating
-            </option>
-            <option value="1" name="filter">
-              1 star
-            </option>
-            <option value="2" name="filter">
-              2 star
-            </option>
-            <option value="3" name="filter">
-              3 star
-            </option>
-            <option value="4" name="filter">
-              4 star
-            </option>
-            <option value="5" name="filter">
-              5 star
-            </option>
+            <option value="0">All rating</option>
+            <option value="1">1 star</option>
+            <option value="2">2 star</option>
+            <option value="3">3 star</option>
+            <option value="4">4 star</option>
+            <option value="5">5 star</option>
           </select>
         </div>
       </div>
@@ -179,16 +148,19 @@ export default function Reviews({
           <div>
             {sortedReviews
               .filter((review) => filter.includes(review.rating))
-              .map((review, index) => (
+              .map((review) => (
                 <div
                   className="mt-8 pb-2 border-solid border-b-2 border-slate-200"
-                  key={index}
+                  key={review._id}
                 >
                   <div className="flex gap-3 items-center">
-                    <img
+                    <Image
                       className="w-[40px] h-[40px] rounded-full"
                       src="/images/user.svg"
+                      width={40}
+                      height={40}
                       alt="avatar"
+                      unoptimized
                     />{" "}
                     <p className="text-xl">{review.reviewAuthor}</p>
                   </div>
@@ -224,7 +196,7 @@ export default function Reviews({
           <div className="flex items-center flex-col gap-2">
             <div className="flex gap-3 items-center">
               {starsLoop.map((numb, index) =>
-                ratingForm > numb ? (
+                (ratingForm ?? 0) > numb ? (
                   <BsStarFill
                     key={index}
                     className="text-[#FFA41C] text-xl"
@@ -251,12 +223,10 @@ export default function Reviews({
             <form
               className="flex flex-col items-center mt-2"
               onSubmit={handleSubmit(addReview)}
-              
             >
               <textarea
                 className="w-full p-1 text resize-none rounded-sm h-24 border-gray-300 shadow"
                 id="text"
-                name="text"
                 {...register("review")}
               />
               <p className="text-[12px] text-red-600 pt-1">

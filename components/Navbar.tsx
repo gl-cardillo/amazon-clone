@@ -2,16 +2,23 @@ import Link from "next/link";
 import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useState, useEffect, useContext } from "react";
+import {
+  useState,
+  useEffect,
+  useContext,
+  type ChangeEvent,
+  type FormEvent,
+} from "react";
 import { UserContext } from "../utils/context";
 import { BsSearch, BsCart2 } from "react-icons/bs";
 import { AiOutlineUser } from "react-icons/ai";
+import type { Product } from "@/types";
 
 export default function Navbar() {
   // shared by the desktop and mobile inputs
   const [query, setQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const router = useRouter();
   const { user } = useContext(UserContext);
   const cartQuantity = user
@@ -36,12 +43,12 @@ export default function Navbar() {
     setTimeout(clearSearch, 200);
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
     setShowSearch(e.target.value !== "");
   };
 
-  const submitSearch = (e) => {
+  const submitSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (trimmedQuery === "") return;
     router.push({ pathname: "/search", query: { q: query.trim() } });
@@ -51,7 +58,7 @@ export default function Navbar() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await axios.get(`/api/product/all`);
+        const res = await axios.get<Product[]>(`/api/product/all`);
         setProducts(res.data);
       } catch (error) {
         console.log(error);
@@ -96,10 +103,12 @@ export default function Navbar() {
                       onClick={clearSearch}
                       className=" flex bg-white px-1 py-3 gap-2 items-center"
                     >
-                      <img
+                      <Image
                         src={product.picUrl}
-                        className=" object-contain hidden sm:block min-w-[30px] h-[40px]"
-                        alt="product"
+                        width={30}
+                        height={40}
+                        className="object-contain hidden sm:block min-w-[30px] h-[40px]"
+                        alt={product.name}
                       />
                       <p className="whitespace-nowrap overflow-hidden text-xs font-semibold ">
                         {product.name}

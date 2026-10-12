@@ -4,7 +4,24 @@ import { UserContext } from "../utils/context";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signupSchema, loginSchema } from "../utils/schemas";
+import {
+  signupSchema,
+  loginSchema,
+  type LoginInput,
+  type SignupInput,
+} from "../utils/schemas";
+import { saveSession } from "../utils/storage";
+import type { User } from "@/types";
+
+interface AuthResponse {
+  user: User;
+  token: string;
+}
+
+// fall back to a generic message when the server sent none
+const errorMessage = (error: unknown) =>
+  (axios.isAxiosError(error) && error.response?.data?.message) ||
+  "Sorry, try again later";
 
 export default function SignIn() {
   const [showSignup, setShowSignup] = useState(true);
@@ -17,13 +34,13 @@ export default function SignIn() {
     if (user) {
       router.push("/");
     }
-  }, [user]);
+  }, [user, router]);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<SignupInput>({
     resolver: zodResolver(signupSchema),
   });
 
@@ -31,43 +48,35 @@ export default function SignIn() {
     register: registerLogin,
     handleSubmit: handleSubmitLogin,
     formState: { errors: errorsLogin },
-  } = useForm({
+  } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
   });
 
-  const signup = async (data) => {
+  const signup = async (data: SignupInput) => {
     try {
-      const response = await axios.post("/api/auth/signup", data);
+      const response = await axios.post<AuthResponse>("/api/auth/signup", data);
       const { user, token } = response.data;
-
       setUser(user);
-      localStorage.setItem("user_amazon_lc", JSON.stringify(user));
-      localStorage.setItem("token_amazon_lc", JSON.stringify(token));
-
+      saveSession(user, token);
       router.push("/");
     } catch (error) {
-      setErrorSignup(
-        error.response?.data?.message || "Sorry, try again later"
-      );
+      setErrorSignup(errorMessage(error));
     }
   };
 
-  const login = async (data) => {
-    if (!data) {
-      data = { emailLogin: "testAccount@example.com" };
-    }
-
+  // called without data by the test account button
+  const login = async (data?: LoginInput) => {
     try {
-      const response = await axios.post("/api/auth/login", data);
+      const response = await axios.post<AuthResponse>(
+        "/api/auth/login",
+        data ?? { emailLogin: "testAccount@example.com" }
+      );
       const { user, token } = response.data;
-
       setUser(user);
-      localStorage.setItem("user_amazon_lc", JSON.stringify(user));
-      localStorage.setItem("token_amazon_lc", JSON.stringify(token));
-
+      saveSession(user, token);
       router.push("/");
     } catch (error) {
-      setErrorLogin(error.response?.data?.message || "Sorry, try again later");
+      setErrorLogin(errorMessage(error));
     }
   };
 
@@ -181,7 +190,7 @@ export default function SignIn() {
               <input
                 className="p-2.5 rounded-[3px] border-solid border-1 border-slate-400 focus:outline-orange-300 focus:border-transparent focus:ring-0"
                 type="email"
-                id="email_login"
+                id="emailLogin"
                 {...registerLogin("emailLogin")}
               />
               <p className="text-[12px] text-red-600 pt-1">
@@ -196,7 +205,7 @@ export default function SignIn() {
               <input
                 className="p-2.5 rounded-[3px] border-solid border-1 border-slate-400 focus:outline-orange-300 focus:border-transparent focus:ring-0"
                 type="password"
-                id="password_login"
+                id="passwordLogin"
                 {...registerLogin("passwordLogin")}
               />
               <p className="text-[12px] text-red-600 pt-1">

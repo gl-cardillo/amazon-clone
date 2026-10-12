@@ -3,8 +3,17 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { catalogs } from "../../../utils/catalogs";
 import { getProductsByCategory } from "../../../lib/products";
+import type { GetStaticPaths, GetStaticProps } from "next";
+import type { ProductWithRating } from "@/types";
 
-export default function Category({ productsAndAverage }) {
+export interface CategoryProps {
+  productsAndAverage: ProductWithRating[];
+}
+
+// rebuild the page at most once a minute so new ratings show up
+export const REVALIDATE_SECONDS = 60;
+
+export default function Category({ productsAndAverage }: CategoryProps) {
   const router = useRouter();
   const categoryId = router.query.categoryId;
   const subcategoryId = router.query.subcategory || null;
@@ -69,10 +78,10 @@ export default function Category({ productsAndAverage }) {
           {productsAndAverage.length === 0 && (
             <p className="text-center pt-5">No products found</p>
           )}
-          {productsAndAverage.map((products, index) => {
+          {productsAndAverage.map((products) => {
             return (
               <Card
-                key={index}
+                key={products.product._id}
                 product={products.product}
                 reviewAverage={products.reviewAverage}
               />
@@ -84,14 +93,16 @@ export default function Category({ productsAndAverage }) {
   );
 }
 
-export const getStaticProps = async ({ params }) => {
-  const res = await getProductsByCategory(params.categoryId);
+export const getStaticProps: GetStaticProps<CategoryProps> = async ({
+  params,
+}) => {
+  const res = await getProductsByCategory(String(params?.categoryId));
   const productsAndAverage = JSON.parse(JSON.stringify(res));
 
-  return { props: { productsAndAverage } };
+  return { props: { productsAndAverage }, revalidate: REVALIDATE_SECONDS };
 };
 
-export const getStaticPaths = () => {
+export const getStaticPaths: GetStaticPaths = () => {
   const paths = catalogs.map((category) => {
     return {
       params: { categoryId: category.id },

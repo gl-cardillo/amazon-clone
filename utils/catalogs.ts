@@ -1,4 +1,12 @@
-export const catalogs = [
+export interface Catalog {
+  name: string;
+  id: string;
+  image: string;
+  link: string;
+  subcategory: string[];
+}
+
+export const catalogs: Catalog[] = [
   {
     name: "Electronics",
     id: "electronics",

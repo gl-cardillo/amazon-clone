@@ -1,10 +1,10 @@
 import { BsStarFill, BsStarHalf, BsStar } from "react-icons/bs";
-import Swal from "sweetalert2";
+import Swal, { type SweetAlertOptions } from "sweetalert2";
 
-export const handleRating = (rating) => {
+export const handleRating = (rating?: number) => {
   const stars = [];
   for (let i = 0; i < 5; i++) {
-    if (i >= rating || rating === undefined) {
+    if (rating === undefined || i >= rating) {
       stars.push(<BsStar key={i} className="text-[#FFA41C] text-xl" />);
     } else if (i < rating && rating - i < 1) {
       stars.push(<BsStarHalf key={i} className="text-[#FFA41C] text-xl" />);
@@ -15,12 +15,12 @@ export const handleRating = (rating) => {
   return stars;
 };
 
-export const swalStyle = {
+export const swalStyle: SweetAlertOptions = {
   allowOutsideClick: false,
   backdrop: false,
 };
 
-export const handleError = (text) => {
+export const handleError = (text: string) => {
   Swal.fire({
     title: "Something went wrong",
     text,
@@ -34,7 +34,7 @@ export const handleError = (text) => {
   });
 };
 
-export const handleSuccess = (title, refresh = false) => {
+export const handleSuccess = (title: string, refresh = false) => {
   Swal.mixin({
     toast: true,
     position: "top-end",

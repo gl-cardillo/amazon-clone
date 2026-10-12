@@ -3,8 +3,14 @@ import { useContext } from "react";
 import { CurrencyContext } from "../utils/context";
 import { handleRating } from "../utils/utils";
 import Image from "next/image";
+import type { Product } from "@/types";
 
-export default function Card({ product, reviewAverage }) {
+interface CardProps {
+  product: Product;
+  reviewAverage?: number;
+}
+
+export default function Card({ product, reviewAverage }: CardProps) {
   const { currencySymbol, currencyRate } = useContext(CurrencyContext);
   // book and game covers are portrait, show them whole instead of cropping
   const isCover =

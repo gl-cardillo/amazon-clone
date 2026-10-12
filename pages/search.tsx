@@ -1,7 +1,14 @@
 import Card from "../components/Card";
 import { searchProducts } from "../lib/products";
+import type { GetServerSideProps } from "next";
+import type { ProductWithRating } from "@/types";
 
-export default function Search({ query, productsAndAverage }) {
+interface SearchProps {
+  query: string;
+  productsAndAverage: ProductWithRating[];
+}
+
+export default function Search({ query, productsAndAverage }: SearchProps) {
   return (
     <div className="m-5">
       <h2 className="text-xl font-bold">Search Result</h2>
@@ -22,8 +29,10 @@ export default function Search({ query, productsAndAverage }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const query = (context.query.q || "").toString().trim();
+export const getServerSideProps: GetServerSideProps<SearchProps> = async (
+  context
+) => {
+  const query = typeof context.query.q === "string" ? context.query.q.trim() : "";
   if (!query) {
     return { props: { query, productsAndAverage: [] } };
   }
@@ -36,4 +45,4 @@ export async function getServerSideProps(context) {
       productsAndAverage: JSON.parse(JSON.stringify(productsAndAverage)),
     },
   };
-}
+};

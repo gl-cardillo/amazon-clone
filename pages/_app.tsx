@@ -1,14 +1,21 @@
 import "../styles/globals.css";
+import type { AppProps } from "next/app";
 import Layout from "../components/Layout";
 import axios from "axios";
-import { UserContext, CurrencyContext } from "../utils/context";
+import {
+  UserContext,
+  CurrencyContext,
+  type CurrencySymbol,
+} from "../utils/context";
+import { clearSession, readToken, readUser } from "../utils/storage";
 import { useState, useEffect } from "react";
 import { SkeletonTheme } from "react-loading-skeleton";
+import type { User } from "@/types";
 
 // attach the saved token to every request
 if (typeof window !== "undefined") {
   axios.interceptors.request.use((config) => {
-    const token = JSON.parse(localStorage.getItem("token_amazon_lc"));
+    const token = readToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -17,29 +24,29 @@ if (typeof window !== "undefined") {
   // an expired or old token logs the user out
   axios.interceptors.response.use(undefined, (error) => {
     if (
+      axios.isAxiosError(error) &&
       error.response?.status === 401 &&
-      localStorage.getItem("token_amazon_lc")
+      readToken()
     ) {
-      localStorage.removeItem("token_amazon_lc");
-      localStorage.removeItem("user_amazon_lc");
+      clearSession();
+      // full reload so no logged-in state survives
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination
       window.location.assign("/signin");
     }
     return Promise.reject(error);
   });
 }
 
-function MyApp({ Component, pageProps }) {
-  const [user, setUser] = useState(null);
-  // false until the user has been restored from localStorage
+export default function MyApp({ Component, pageProps }: AppProps) {
+  const [user, setUser] = useState<User | null>(null);
   const [authReady, setAuthReady] = useState(false);
-  const [currencySymbol, setCurrencySymbol] = useState("£");
+  const [currencySymbol, setCurrencySymbol] = useState<CurrencySymbol>("£");
   const [currencyRate, setCurrencyRate] = useState(1);
 
   // localStorage is only readable after hydration
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user_amazon_lc"));
-    const token = JSON.parse(localStorage.getItem("token_amazon_lc"));
-    if (user && token) {
+    const user = readUser();
+    if (user && readToken()) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setUser(user);
     }
@@ -65,5 +72,3 @@ function MyApp({ Component, pageProps }) {
     </UserContext.Provider>
   );
 }
-
-export default MyApp;

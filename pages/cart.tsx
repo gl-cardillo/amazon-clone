@@ -1,20 +1,25 @@
 import axios from "axios";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect, useContext } from "react";
 import { UserContext, CurrencyContext } from "../utils/context";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { saveUser } from "../utils/storage";
+import type { CartProduct, User } from "@/types";
+
+type Step = "+1" | "-1";
 
 export default function Cart() {
   const { currencySymbol, currencyRate } = useContext(CurrencyContext);
   const { user, setUser, authReady } = useContext(UserContext);
   const [totalPrice, setTotalPrice] = useState(0);
   const [cartQuantity, setCartQuantity] = useState(0);
-  const [cart, setCart] = useState(null);
+  const [cart, setCart] = useState<CartProduct[] | null>(null);
   const [disableButton, setDisableButton] = useState(false);
   // id of the product that hit the quantity limit
-  const [limitReachedId, setLimitReachedId] = useState(null);
+  const [limitReachedId, setLimitReachedId] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -26,7 +31,9 @@ export default function Cart() {
 
     const getCart = async () => {
       try {
-        const response = await axios.get("/api/cart/getCartProduct");
+        const response = await axios.get<{ cart: CartProduct[] }>(
+          "/api/cart/getCartProduct"
+        );
         const { cart } = response.data;
         setCart(cart);
         setCartQuantity(cart.reduce((accum, cart) => accum + cart.quantity, 0));
@@ -37,14 +44,18 @@ export default function Cart() {
           .reduce((a, b) => a + b, 0);
         setTotalPrice(price);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 
     getCart();
-  }, [user, authReady]);
+  }, [user, authReady, router]);
 
-  const updateQuantity = async (productId, quantity, n) => {
+  const updateQuantity = async (
+    productId: string,
+    quantity: number,
+    n: Step
+  ) => {
     if (quantity === 1 && n === "-1") {
       removeProduct(productId);
       return;
@@ -55,29 +66,32 @@ export default function Cart() {
     }
     setDisableButton(true);
     try {
-      const response = await axios.put("/api/cart/addToCart", { productId, n });
+      const response = await axios.put<User>("/api/cart/addToCart", {
+        productId,
+        n,
+      });
       setUser(response.data);
-      localStorage.setItem("user_amazon_lc", JSON.stringify(response.data));
+      saveUser(response.data);
       setLimitReachedId(null);
     } catch (error) {
-      console.log(error.message);
+      console.error(error);
     } finally {
       setDisableButton(false);
     }
   };
 
-  const removeProduct = async (productId) => {
+  const removeProduct = async (productId: string) => {
     setDisableButton(true);
     try {
       // axios.delete takes the body under `data`
-      const response = await axios.delete("/api/cart/addToCart", {
+      const response = await axios.delete<User>("/api/cart/addToCart", {
         data: { productId },
       });
       setUser(response.data);
-      localStorage.setItem("user_amazon_lc", JSON.stringify(response.data));
+      saveUser(response.data);
       setLimitReachedId(null);
     } catch (error) {
-      console.log(error.message);
+      console.error(error);
     } finally {
       setDisableButton(false);
     }
@@ -90,17 +104,20 @@ export default function Cart() {
         {cart ? (
           cart.length > 0 ? (
             <div>
-              {cart.map((productCart, index) => {
+              {cart.map((productCart) => {
                 return (
                   <div
-                    key={index}
+                    key={productCart.product._id}
                     className="flex min-h-[100px] justify-between my-5 py-2 border-b border-slate-200 "
                   >
                     <div className="flex gap-3 items-center">
                       <div className="w-[100px] flex item-center justify-center">
-                        <img
+                        <Image
                           src={productCart.product.picUrl}
-                          className="min-w-[50px] h-[70px]"
+                          width={50}
+                          height={70}
+                          className="min-w-[50px] h-[70px] w-auto object-contain"
+                          alt={productCart.product.name}
                         />
                       </div>
                       <div className="flex gap-5 flex-col">

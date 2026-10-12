@@ -1,15 +1,28 @@
 import axios from "axios";
+import Image from "next/image";
 import { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { BsFillPencilFill } from "react-icons/bs";
-import { UserContext, CurrencyContext } from "../utils/context";
+import {
+  UserContext,
+  CurrencyContext,
+  type CurrencySymbol,
+} from "../utils/context";
 import { HiOutlineLogout } from "react-icons/hi";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Swal from "sweetalert2";
 import { swalStyle, handleSuccess } from "../utils/utils";
-import { profileSchema } from "../utils/schemas";
+import { profileSchema, type ProfileInput } from "../utils/schemas";
+import { clearSession, readUser, saveUser } from "../utils/storage";
+import type { User } from "@/types";
+
+const CURRENCY_RATES: Record<CurrencySymbol, number> = {
+  "£": 1,
+  "€": 1.18,
+  $: 1.2,
+};
 
 export default function Profile() {
   const [showDetails, setShowDetails] = useState(false);
@@ -25,24 +38,24 @@ export default function Profile() {
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({
+  } = useForm<ProfileInput>({
     resolver: zodResolver(profileSchema),
   });
 
-  const updateProfile = async (data) => {
+  const updateProfile = async (data: ProfileInput) => {
     try {
-      const response = await axios.put("/api/user/updateProfile", data);
+      const response = await axios.put<User>("/api/user/updateProfile", data);
 
-      localStorage.setItem("user_amazon_lc", JSON.stringify(response.data));
+      saveUser(response.data);
       setUser(response.data);
       setEditProfile(false);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user_amazon_lc"));
+    const user = readUser();
 
     if (!user) {
       router.push("/signin");
@@ -57,11 +70,11 @@ export default function Profile() {
       postcode: user.postcode ?? "",
       dateOfBirth: user.dateOfBirth_toISODate ?? "",
     });
-  }, [user]);
+  }, [user, reset, router]);
 
   const logOut = () => {
     setUser(null);
-    localStorage.clear();
+    clearSession();
     router.push("/");
   };
 
@@ -70,7 +83,7 @@ export default function Profile() {
       await axios.delete("/api/user/deleteAccount");
       logOut();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -93,33 +106,21 @@ export default function Profile() {
     });
   };
 
-  const setCurrency = (symbol) => {
-    if (symbol === currencySymbol) return;
-    switch (symbol) {
-      case "£":
-        setCurrencySymbol("£");
-        setCurrencyRate(1);
-        break;
-      case "€":
-        setCurrencySymbol("€");
-        setCurrencyRate(1.18);
-        break;
-      case "$":
-        setCurrencySymbol("$");
-        setCurrencyRate(1.2);
-        break;
-      default:
-        break;
-    }
+  const setCurrency = (symbol: CurrencySymbol) => {
+    setCurrencySymbol(symbol);
+    setCurrencyRate(CURRENCY_RATES[symbol]);
   };
 
   return (
     <div className=" mt-5 mx-6 md:mx-44 lg:mx-[300px] xl:mx-[500px] 2xl:mx-[600px] 3xl:mx-[800px] flex items-center flex-col p-5 bg-white rounded-md gap-3 shadow">
       <h2 className="font-bold text-xl">Welcome {user && user.firstName}</h2>
-      <img
+      <Image
         className="w-[50px] h-[50px] rounded-full"
         src="/images/user.svg"
+        width={50}
+        height={50}
         alt="avatar"
+        unoptimized
       />
       <div className="flex gap-2 items-center">
         <p>Details</p>
