@@ -1,4 +1,7 @@
-import { Schema, model, models, type InferSchemaType, type Model } from "mongoose";
+import mongoose, { type InferSchemaType, type Model } from "mongoose";
+
+// destructured so plain node scripts can import the models too
+const { Schema, model, models } = mongoose;
 
 const productSchema = new Schema({
   name: { type: String, required: true },
@@ -14,6 +17,9 @@ const productSchema = new Schema({
   categoryName: { type: String },
   subcategory: { type: String },
 });
+
+productSchema.index({ categoryId: 1 });
+productSchema.index({ subcategory: 1 });
 
 export type ProductDocument = InferSchemaType<typeof productSchema>;
 

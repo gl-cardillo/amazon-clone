@@ -1,5 +1,8 @@
-import { Schema, model, models, type InferSchemaType, type Model } from "mongoose";
+import mongoose, { type InferSchemaType, type Model } from "mongoose";
 import { DateTime } from "luxon";
+
+// destructured so plain node scripts can import the models too
+const { Schema, model, models } = mongoose;
 
 const reviewSchema = new Schema(
   {
@@ -15,6 +18,8 @@ const reviewSchema = new Schema(
     toJSON: { virtuals: true },
   }
 );
+
+reviewSchema.index({ productId: 1 });
 
 reviewSchema.virtual("date_formatted").get(function () {
   return DateTime.fromJSDate(this.date).toLocaleString(DateTime.DATE_FULL);

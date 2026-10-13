@@ -1,5 +1,8 @@
-import { Schema, model, models, type InferSchemaType, type Model } from "mongoose";
+import mongoose, { type InferSchemaType, type Model } from "mongoose";
 import { DateTime } from "luxon";
+
+// destructured so plain node scripts can import the models too
+const { Schema, model, models } = mongoose;
 
 const cartItemSchema = new Schema(
   {
@@ -12,7 +15,8 @@ const cartItemSchema = new Schema(
 const userSchema = new Schema(
   {
     name: { type: String, required: true },
-    email: { type: String, required: true },
+    // stored lowercased, the unique index relies on it
+    email: { type: String, required: true, lowercase: true, trim: true },
     // only loaded when asked for with select("+password")
     password: { type: String, required: true, select: false },
     cart: { type: [cartItemSchema], default: [] },
@@ -33,6 +37,8 @@ const userSchema = new Schema(
     },
   }
 );
+
+userSchema.index({ email: 1 }, { unique: true });
 
 userSchema.virtual("dateOfBirth_formatted").get(function () {
   if (!this.dateOfBirth) return null;

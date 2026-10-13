@@ -22,7 +22,8 @@ export default async function dbConnect() {
   if (!cached.promise) {
     const uri = process.env.MONGO_URI;
     if (!uri) throw new Error("MONGO_URI is not set");
-    cached.promise = mongoose.connect(uri);
+    // indexes are built by scripts/migrations, not on every cold start
+    cached.promise = mongoose.connect(uri, { autoIndex: false });
   }
   try {
     cached.conn = await cached.promise;

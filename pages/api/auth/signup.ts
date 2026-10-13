@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
+import { mongo } from "mongoose";
 import dbConnect from "@/utils/dbConnect";
 import User from "@/models/User";
 import { signToken } from "@/utils/auth";
@@ -27,6 +28,10 @@ export default async function handler(
     });
     return res.status(200).json({ user, token: signToken(user.id) });
   } catch (error) {
+    // the unique index catches a signup racing the exists check above
+    if (error instanceof mongo.MongoServerError && error.code === 11000) {
+      return res.status(400).json({ message: "Email not available" });
+    }
     console.error(error);
     return res.status(500).json({ message: "Sorry, try again later" });
   }

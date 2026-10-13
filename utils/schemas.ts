@@ -11,6 +11,8 @@ export const signupSchema = z.object({
   name: nameField,
   email: z
     .string()
+    .trim()
+    .toLowerCase()
     .min(1, "email is a required field")
     .pipe(z.email("email must be a valid email")),
   password: z
@@ -26,6 +28,8 @@ export const signupSchema = z.object({
 export const loginSchema = z.object({
   emailLogin: z
     .string()
+    .trim()
+    .toLowerCase()
     .min(1, "Email is required")
     .pipe(z.email("emailLogin must be a valid email")),
   passwordLogin: z.string().min(1, "Password is required"),
@@ -53,7 +57,11 @@ export const reviewSchema = z.object({
 
 // the test account logs in without a password
 export const loginRequestSchema = z.object({
-  emailLogin: z.email("Credentials are incorrect"),
+  emailLogin: z
+    .string()
+    .trim()
+    .toLowerCase()
+    .pipe(z.email("Credentials are incorrect")),
   passwordLogin: z.string().optional(),
 });
 

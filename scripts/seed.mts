@@ -3,10 +3,10 @@ import { TEST_ACCOUNT_EMAIL } from "../utils/constants.ts";
 
 // copies the catalogue and the test account into a dev or test database
 
-const source = process.env.SEED_SOURCE_MONGO_URI;
+const source = process.env.PROD_MONGO_URI;
 const target = process.env.MONGO_URI;
 if (!source || !target) {
-  throw new Error("SEED_SOURCE_MONGO_URI and MONGO_URI must both be set");
+  throw new Error("PROD_MONGO_URI and MONGO_URI must both be set");
 }
 
 const dbName = (uri: string) => new URL(uri).pathname.slice(1);
