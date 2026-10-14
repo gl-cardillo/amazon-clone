@@ -11,11 +11,6 @@ export async function getAverageRatings(productIds: string[]) {
   return new Map(rows.map((row) => [row._id, row.average]));
 }
 
-export async function getAverageRating(productId: string) {
-  const averages = await getAverageRatings([productId]);
-  return averages.get(productId) ?? 0;
-}
-
 export async function getReviewSummary(productId: string) {
   await dbConnect();
   const reviews = await Review.find({ productId }).sort({ date: -1 });

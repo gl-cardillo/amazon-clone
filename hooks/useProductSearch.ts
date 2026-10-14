@@ -3,7 +3,7 @@ import axios from "axios";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import type { ProductWithRating } from "@/types";
 
-export function useDebouncedValue<T>(value: T, delay = 300) {
+function useDebouncedValue<T>(value: T, delay = 300) {
   const [debounced, setDebounced] = useState(value);
   useEffect(() => {
     const id = setTimeout(() => setDebounced(value), delay);

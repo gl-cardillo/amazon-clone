@@ -20,37 +20,13 @@ export const swalStyle: SweetAlertOptions = {
   backdrop: false,
 };
 
-export const handleError = (text: string) => {
+export const handleSuccess = (title: string) => {
   Swal.fire({
-    title: "Something went wrong",
-    text,
-    position: "top",
-    confirmButtonText: "Close",
-    ...swalStyle,
-  }).then((result) => {
-    if (result.isConfirmed) {
-      Swal.close();
-    }
-  });
-};
-
-export const handleSuccess = (title: string, refresh = false) => {
-  Swal.mixin({
     toast: true,
     position: "top-end",
     showConfirmButton: false,
     timer: 2000,
-  })
-    .fire({
-      icon: "success",
-      title,
-    })
-    .then((result) => {
-      if (result.isConfirmed) {
-        if (refresh) {
-          window.location.reload();
-        }
-        Swal.close();
-      }
-    });
+    icon: "success",
+    title,
+  });
 };

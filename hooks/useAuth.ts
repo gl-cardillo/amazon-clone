@@ -24,7 +24,7 @@ interface AuthResponse {
 }
 
 // undefined until localStorage can be read, which is after hydration
-export function useToken(): string | null | undefined {
+function useToken(): string | null | undefined {
   const raw = useSyncExternalStore(
     subscribeToken,
     getTokenSnapshot,

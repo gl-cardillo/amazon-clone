@@ -7,7 +7,7 @@ import {
 import { ME_KEY, useMe } from "./useAuth";
 import type { CartProduct, User } from "@/types";
 
-export const CART_KEY = ["cart"];
+const CART_KEY = ["cart"];
 const CART_URL = "/api/cart/addToCart";
 
 export type CartStep = "+1" | "-1";

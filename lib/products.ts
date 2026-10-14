@@ -13,11 +13,6 @@ async function withRatings(products: ProductDoc[]) {
   }));
 }
 
-export async function getAllProducts() {
-  await dbConnect();
-  return Product.find({});
-}
-
 export async function getProductById(productId: string) {
   // findById throws a CastError on malformed ids, treat them as not found
   if (!isValidObjectId(productId)) return null;

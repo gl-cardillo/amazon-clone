@@ -1,7 +1,7 @@
 import type { NextApiRequest } from "next";
 import jwt from "jsonwebtoken";
 
-export interface TokenPayload {
+interface TokenPayload {
   id: string;
 }
 

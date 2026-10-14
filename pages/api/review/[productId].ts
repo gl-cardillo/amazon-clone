@@ -4,7 +4,7 @@ import User from "@/models/User";
 import { verifyToken } from "@/utils/auth";
 import { reviewRequestSchema } from "@/utils/schemas";
 import { getProductById } from "@/lib/products";
-import { createReview, getReviewSummary, hasReviewed } from "@/lib/reviews";
+import { createReview, hasReviewed } from "@/lib/reviews";
 import {
   isDuplicateKeyError,
   methodNotAllowed,
@@ -18,15 +18,6 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const productId = String(req.query.productId);
-
-  if (req.method === "GET") {
-    try {
-      return res.status(200).json(await getReviewSummary(productId));
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Sorry, try again later" });
-    }
-  }
 
   if (req.method === "POST") {
     const token = verifyToken(req);
@@ -67,5 +58,5 @@ export default async function handler(
     }
   }
 
-  return methodNotAllowed(res, ["GET", "POST"]);
+  return methodNotAllowed(res, ["POST"]);
 }
