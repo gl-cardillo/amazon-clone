@@ -30,6 +30,11 @@ export async function getReviewSummary(productId: string) {
   return { reviews, ratingArray, average };
 }
 
+export async function hasReviewed(userId: string, productId: string) {
+  await dbConnect();
+  return Boolean(await Review.exists({ userId, productId }));
+}
+
 export async function createReview(review: {
   productId: string;
   userId: string;

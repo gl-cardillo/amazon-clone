@@ -21,18 +21,61 @@ const to = await mongoose.createConnection(target).asPromise();
 
 async function copy(collection: string, filter: Record<string, unknown> = {}) {
   const docs = await from.collection(collection).find(filter).toArray();
-  await to.collection(collection).deleteMany({});
+  // drop rather than empty, so indexes start from production's state too
+  const existing = await to.db!.listCollections({ name: collection }).toArray();
+  if (existing.length > 0) await to.dropCollection(collection);
   if (docs.length > 0) {
     await to.collection(collection).insertMany(docs);
   }
   console.log(`${collection}: copied ${docs.length}`);
 }
 
+// case-insensitive, production may still store it with capitals
+const testAccountEmail = new RegExp(
+  `^${TEST_ACCOUNT_EMAIL.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`,
+  "i"
+);
+
+// stand-ins for review authors, so dev matches production without personal data
+async function addReviewAuthors() {
+  const authorIds = await from.collection("reviews").distinct("userId");
+  const authors = await from
+    .collection("users")
+    .find({
+      _id: { $in: authorIds.map((id) => new mongoose.Types.ObjectId(id)) },
+      email: { $not: testAccountEmail },
+    })
+    .project({ _id: 1 })
+    .toArray();
+  const names = await from
+    .collection("reviews")
+    .aggregate([{ $group: { _id: "$userId", name: { $first: "$reviewAuthor" } } }])
+    .toArray();
+  const nameById = new Map(names.map((n) => [n._id, n.name]));
+  if (authors.length > 0) {
+    await to.collection("users").insertMany(
+      authors.map(({ _id }) => ({
+        _id,
+        name: nameById.get(String(_id)) ?? "Reviewer",
+        email: `reviewer-${_id}@example.invalid`,
+        // not a valid bcrypt hash, so nobody can log in as a stand-in
+        password: "!",
+        cart: [],
+      }))
+    );
+  }
+  console.log(`users: added ${authors.length} review author stand-ins`);
+}
+
 try {
   await copy("products");
   await copy("reviews");
   // real users stay in production, only the shared test account is copied
-  await copy("users", { email: TEST_ACCOUNT_EMAIL });
+  await copy("users", { email: testAccountEmail });
+  await to
+    .collection("users")
+    .updateMany({}, [{ $set: { email: { $toLower: "$email" } } }]);
+  await addReviewAuthors();
   console.log(`seeded ${targetDb} from ${dbName(source)}`);
 } finally {
   await from.close();

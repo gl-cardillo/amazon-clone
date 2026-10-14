@@ -2,7 +2,7 @@ import axios from "axios";
 import Image from "next/image";
 import { BsStarFill, BsStar } from "react-icons/bs";
 import { useState, type Dispatch, type SetStateAction } from "react";
-import { useMe } from "../hooks/useAuth";
+import { errorMessage, useMe } from "../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
@@ -34,6 +34,9 @@ export default function Reviews({
   const [filter, setFilter] = useState(ALL_RATINGS);
   const [sort, setSort] = useState<SortMethod>("recent");
   const router = useRouter();
+  // one review per product, the api rejects a second one with 409
+  const alreadyReviewed =
+    user !== null && reviews.some((review) => review.userId === user._id);
 
   const {
     register,
@@ -59,7 +62,7 @@ export default function Reviews({
       // rerun getServerSideProps so the new review shows up
       router.replace(router.asPath, undefined, { scroll: false });
     } catch (error) {
-      console.error(error);
+      setErrorRating(errorMessage(error));
     }
   };
 
@@ -191,7 +194,11 @@ export default function Reviews({
           <p className="text-center pt-5">No reviews for this product</p>
         )}
       </div>
-      {user ? (
+      {alreadyReviewed ? (
+        <p className="text-center pt-5 text-slate-600">
+          You reviewed this product
+        </p>
+      ) : user ? (
         <div>
           <h4 className="my-3 font-semibold text-gray-700">Leave a review</h4>
           <div className="flex items-center flex-col gap-2">

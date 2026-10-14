@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "@/utils/dbConnect";
 import User from "@/models/User";
+import Review from "@/models/Review";
 import { verifyToken } from "@/utils/auth";
 import { methodNotAllowed } from "@/lib/api";
 
@@ -15,8 +16,15 @@ export default async function handler(
   }
 
   try {
-    await dbConnect();
-    const deleted = await User.findByIdAndDelete(token.id);
+    const { connection } = await dbConnect();
+    // the account and its reviews go together or not at all
+    const deleted = await connection.transaction(async (session) => {
+      const user = await User.findByIdAndDelete(token.id, { session });
+      if (user) {
+        await Review.deleteMany({ userId: user.id }, { session });
+      }
+      return user;
+    });
     if (!deleted) {
       return res.status(404).json({ message: "User not found" });
     }

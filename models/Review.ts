@@ -20,6 +20,8 @@ const reviewSchema = new Schema(
 );
 
 reviewSchema.index({ productId: 1 });
+// one review per user and product
+reviewSchema.index({ userId: 1, productId: 1 }, { unique: true });
 
 reviewSchema.virtual("date_formatted").get(function () {
   return DateTime.fromJSDate(this.date).toLocaleString(DateTime.DATE_FULL);

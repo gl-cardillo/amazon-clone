@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { z } from "zod";
+import { mongo } from "mongoose";
 
 // sends a 400 with the first issue and returns null when the body is invalid
 export function parseBody<T extends z.ZodType>(
@@ -13,6 +14,11 @@ export function parseBody<T extends z.ZodType>(
     return null;
   }
   return result.data;
+}
+
+// a write rejected by a unique index
+export function isDuplicateKeyError(error: unknown) {
+  return error instanceof mongo.MongoServerError && error.code === 11000;
 }
 
 export function methodNotAllowed(res: NextApiResponse, allowed: string[]) {

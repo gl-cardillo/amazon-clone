@@ -4,8 +4,14 @@ import User from "@/models/User";
 import { verifyToken } from "@/utils/auth";
 import { reviewRequestSchema } from "@/utils/schemas";
 import { getProductById } from "@/lib/products";
-import { createReview, getReviewSummary } from "@/lib/reviews";
-import { methodNotAllowed, parseBody } from "@/lib/api";
+import { createReview, getReviewSummary, hasReviewed } from "@/lib/reviews";
+import {
+  isDuplicateKeyError,
+  methodNotAllowed,
+  parseBody,
+} from "@/lib/api";
+
+const ALREADY_REVIEWED = "You already reviewed this product";
 
 export default async function handler(
   req: NextApiRequest,
@@ -39,6 +45,9 @@ export default async function handler(
       if (!(await getProductById(productId))) {
         return res.status(404).json({ message: "Product not found" });
       }
+      if (await hasReviewed(user.id, productId)) {
+        return res.status(409).json({ message: ALREADY_REVIEWED });
+      }
       // author comes from the account, not from the request
       await createReview({
         productId,
@@ -49,6 +58,10 @@ export default async function handler(
       });
       return res.status(200).json({ message: "Review added" });
     } catch (error) {
+      // the unique index catches two posts racing the check above
+      if (isDuplicateKeyError(error)) {
+        return res.status(409).json({ message: ALREADY_REVIEWED });
+      }
       console.error(error);
       return res.status(500).json({ message: "Sorry, try again later" });
     }

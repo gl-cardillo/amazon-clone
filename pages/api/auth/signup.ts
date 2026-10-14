@@ -1,11 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
-import { mongo } from "mongoose";
 import dbConnect from "@/utils/dbConnect";
 import User from "@/models/User";
 import { signToken } from "@/utils/auth";
 import { signupSchema } from "@/utils/schemas";
-import { methodNotAllowed, parseBody } from "@/lib/api";
+import {
+  isDuplicateKeyError,
+  methodNotAllowed,
+  parseBody,
+} from "@/lib/api";
 
 export default async function handler(
   req: NextApiRequest,
@@ -29,7 +32,7 @@ export default async function handler(
     return res.status(200).json({ user, token: signToken(user.id) });
   } catch (error) {
     // the unique index catches a signup racing the exists check above
-    if (error instanceof mongo.MongoServerError && error.code === 11000) {
+    if (isDuplicateKeyError(error)) {
       return res.status(400).json({ message: "Email not available" });
     }
     console.error(error);
