@@ -147,9 +147,19 @@ export default function Product({
       <div className="flex flex-col items-center gap-3 rounded-md bg-white py-5 shadow md:mx-24 lg:mx-52 xl:mx-[400px] 3xl:mx-[600px]">
         <p className="font-semibold text-green-700">In Stock</p>
         <div className="flex w-[70px] gap-3 rounded-2xl border-2 border-solid border-[#f0c14b] px-[9px]">
-          <button onClick={() => decreaseQuantity()}>-</button>
+          <button
+            onClick={() => decreaseQuantity()}
+            aria-label="Decrease quantity"
+          >
+            -
+          </button>
           <p>{quantity}</p>
-          <button onClick={() => increaseQuantity()}>+</button>
+          <button
+            onClick={() => increaseQuantity()}
+            aria-label="Increase quantity"
+          >
+            +
+          </button>
         </div>
 
         <button

@@ -64,6 +64,7 @@ export default function SignIn() {
             <input
               type="radio"
               name="authMode"
+              aria-label="Create account"
               onChange={() => setShowSignup(true)}
               checked={showSignup}
               className="h-4 w-4 text-orange-400 checked:bg-orange-400 checked:ring-orange-400 hover:bg-orange-400"
@@ -71,7 +72,7 @@ export default function SignIn() {
             <h3 className="text-medium text-[14px] font-bold">
               Create account.
               <span className="text-md text-[13px] font-bold">
-                New to amazon?
+                New here?
               </span>
             </h3>
           </div>
@@ -80,6 +81,7 @@ export default function SignIn() {
             <form
               className="mx-1 flex flex-col"
               id="signup"
+              aria-label="Create account"
               onSubmit={handleSubmit(signup)}
             >
               <label htmlFor="name" className="py-2 pl-2 font-semibold">
@@ -137,6 +139,7 @@ export default function SignIn() {
             <input
               type="radio"
               name="authMode"
+              aria-label="Sign in"
               onChange={() => setShowSignup(false)}
               checked={!showSignup}
               className="h-4 w-4 text-orange-400 checked:bg-orange-400 checked:ring-orange-400 hover:bg-orange-400 focus:border-transparent focus:ring-0"
@@ -153,6 +156,7 @@ export default function SignIn() {
             <p className="pl-4 pt-2 text-[12px] text-red-600">{errorLogin}</p>
             <form
               className="mx-1 flex flex-col"
+              aria-label="Sign in"
               onSubmit={handleSubmitLogin(login)}
             >
               <label htmlFor="emailLogin" className="py-2 pl-2 font-semibold">

@@ -203,27 +203,24 @@ export default function Reviews({
           <h4 className="my-3 font-semibold text-gray-700">Leave a review</h4>
           <div className="flex flex-col items-center gap-2">
             <div className="flex items-center gap-3">
-              {starsLoop.map((numb, index) =>
-                (ratingForm ?? 0) > numb ? (
-                  <BsStarFill
-                    key={index}
-                    className="text-xl text-[#FFA41C]"
-                    onClick={() => {
-                      setErrorRating("");
-                      setRatingForm(numb + 1);
-                    }}
-                  />
-                ) : (
-                  <BsStar
-                    key={index}
-                    className="text-xl text-[#FFA41C]"
-                    onClick={() => {
-                      setErrorRating("");
-                      setRatingForm(numb + 1);
-                    }}
-                  />
-                ),
-              )}
+              {starsLoop.map((numb) => (
+                <button
+                  key={numb}
+                  type="button"
+                  aria-label={`Rate ${numb + 1} star${numb > 0 ? "s" : ""}`}
+                  aria-pressed={ratingForm === numb + 1}
+                  onClick={() => {
+                    setErrorRating("");
+                    setRatingForm(numb + 1);
+                  }}
+                >
+                  {(ratingForm ?? 0) > numb ? (
+                    <BsStarFill className="text-xl text-[#FFA41C]" />
+                  ) : (
+                    <BsStar className="text-xl text-[#FFA41C]" />
+                  )}
+                </button>
+              ))}
             </div>
             <p className="text-sm text-red-500">{errorRating}</p>
           </div>
@@ -235,6 +232,7 @@ export default function Reviews({
               <textarea
                 className="text h-24 w-full resize-none rounded-sm border-gray-300 p-1 shadow"
                 id="text"
+                aria-label="Your review"
                 {...register("review")}
               />
               <p className="pt-1 text-[12px] text-red-600">

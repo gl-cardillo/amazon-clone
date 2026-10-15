@@ -62,6 +62,7 @@ export default function Navbar() {
           >
             <input
               type="text"
+              aria-label="Search products"
               className="h-[38px] rounded-l border-transparent p-1 focus:border-transparent focus:outline-none focus:ring-0 md:w-[300px] lg:w-[350px]"
               value={query}
               onChange={handleSearch}
@@ -71,7 +72,11 @@ export default function Navbar() {
             </button>
           </form>
           {showSearch && (
-            <div className="z-1 absolute z-10 -ml-[47%] mt-[80px] w-[calc(95%-65px)] rounded-md border-x-2 border-b-2 border-solid border-slate-200 sm:-ml-[48%] sm:w-[calc(95%-55px)] md:-mt-[5px] md:ml-[0%] md:w-[258px] lg:w-[308px]">
+            <div
+              role="group"
+              aria-label="Search suggestions"
+              className="z-1 absolute z-10 -ml-[47%] mt-[80px] w-[calc(95%-65px)] rounded-md border-x-2 border-b-2 border-solid border-slate-200 sm:-ml-[48%] sm:w-[calc(95%-55px)] md:-mt-[5px] md:ml-[0%] md:w-[258px] lg:w-[308px]"
+            >
               {search.slice(0, 4).map(({ product }) => {
                 return (
                   <Link key={product._id} href={`/product/${product._id}`}>
@@ -97,15 +102,26 @@ export default function Navbar() {
           )}
         </div>
         <div className="flex gap-5 md:gap-5">
-          <Link href={user ? "/profile" : "/signin"}>
+          <Link
+            href={user ? "/profile" : "/signin"}
+            aria-label={user ? "Account" : "Sign in"}
+          >
             <AiOutlineUser className="text-3xl text-white" />
           </Link>
           <div>
-            <Link href="/cart">
+            <Link
+              href="/cart"
+              aria-label={
+                cartQuantity > 0 ? `Cart, ${cartQuantity} items` : "Cart"
+              }
+            >
               <BsCart2 className="text-3xl text-white" />
             </Link>
             {cartQuantity > 0 && (
-              <p className="text-bg-slate-900 absolute right-1.5 top-8 flex h-[20px] w-[20px] items-center justify-center rounded-full bg-orange-300 md:right-2.5">
+              <p
+                aria-hidden="true"
+                className="text-bg-slate-900 absolute right-1.5 top-8 flex h-[20px] w-[20px] items-center justify-center rounded-full bg-orange-300 md:right-2.5"
+              >
                 {cartQuantity}
               </p>
             )}
@@ -119,6 +135,7 @@ export default function Navbar() {
       >
         <input
           type="text"
+          aria-label="Search products"
           className="h-[44px] w-full rounded-lg border-transparent p-1 focus:border-transparent focus:ring-0"
           value={query}
           onChange={handleSearch}

@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "test:e2e": "playwright test",
     "seed": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/seed.mts",
     "migrate": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
     "db:reset": "npm run seed && npm run migrate -- scripts/migrations/001-normalize-emails.mts --apply && npm run migrate -- scripts/migrations/002-review-rules.mts --apply"
@@ -34,6 +35,7 @@
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.64.1",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/luxon": "^3.7.6",
     "@types/node": "^22.20.5",

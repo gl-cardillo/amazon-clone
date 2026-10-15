@@ -116,6 +116,8 @@ export default function Profile() {
           onClick={() => {
             setShowDetails(!showDetails);
           }}
+          aria-label="Show details"
+          aria-expanded={showDetails}
         >
           <MdKeyboardArrowDown
             className={`${showDetails && "rotate-180 text-xl"} "text-xl"`}
@@ -232,10 +234,13 @@ export default function Profile() {
           </div>
         ) : (
           <div className="flex min-w-[120px] flex-col">
-            <BsFillPencilFill
+            <button
               onClick={() => setEditProfile(!editProfile)}
+              aria-label="Edit details"
               className="mb-2 self-end"
-            />
+            >
+              <BsFillPencilFill />
+            </button>
             <p>
               <span className="font-bold">Name:</span> {user && user.name}
             </p>

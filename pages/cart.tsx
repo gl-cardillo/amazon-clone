@@ -101,6 +101,7 @@ export default function Cart() {
                                   )
                                 }
                                 disabled={disableButton}
+                                aria-label="Decrease quantity"
                               >
                                 -
                               </button>
@@ -114,6 +115,7 @@ export default function Cart() {
                                   )
                                 }
                                 disabled={disableButton}
+                                aria-label="Increase quantity"
                               >
                                 +
                               </button>
