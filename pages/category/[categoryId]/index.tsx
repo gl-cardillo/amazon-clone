@@ -18,21 +18,21 @@ export default function Category({ productsAndAverage }: CategoryProps) {
   const categoryId = router.query.categoryId;
   const subcategoryId = router.query.subcategory || null;
   const currentCategory = catalogs.find(
-    (category) => category.id === categoryId
+    (category) => category.id === categoryId,
   );
 
   return (
     <div className="flex min-h-screen gap-3">
-      <div className="hidden md:block fixed h-[calc(100vh-60px)] border-r-2 p-2 min-w-[210px] bg-white">
-        <h2 className="text-2xl font-bold mb-3">Categories</h2>
+      <div className="fixed hidden h-[calc(100vh-60px)] min-w-[210px] border-r-2 bg-white p-2 md:block">
+        <h2 className="mb-3 text-2xl font-bold">Categories</h2>
         {catalogs.map((category, index) => {
           return (
             <div key={index}>
               <Link href={category.link}>
                 <h3
                   className={`${
-                    category.id === categoryId && "font-bold text-lg"
-                  }  mt-1 hover:scale-[1.02] transition-transform duration-200 ease-in-out`}
+                    category.id === categoryId && "text-lg font-bold"
+                  } mt-1 transition-transform duration-200 ease-in-out hover:scale-[1.02]`}
                 >
                   {category.name}
                 </h3>
@@ -43,8 +43,8 @@ export default function Category({ productsAndAverage }: CategoryProps) {
                     <Link key={index} href={`${category.link}/${subcategory}`}>
                       <p
                         className={`${
-                          subcategory === subcategoryId && "font-bold text-lg"
-                        } pl-5 hover:scale-[1.02] transition-transform duration-200 ease-in-out`}
+                          subcategory === subcategoryId && "text-lg font-bold"
+                        } pl-5 transition-transform duration-200 ease-in-out hover:scale-[1.02]`}
                       >
                         {subcategory}
                       </p>
@@ -56,16 +56,16 @@ export default function Category({ productsAndAverage }: CategoryProps) {
         })}
       </div>
       <div className="w-full md:ml-[210px]">
-        <h3 className=" md:hidden font-bold text-2xl pl-1 mb-2  border-b-2 border-slate-300">
+        <h3 className="mb-2 border-b-2 border-slate-300 pl-1 text-2xl font-bold md:hidden">
           {currentCategory?.name}
         </h3>
-        <div className="md:hidden flex items-center">
+        <div className="flex items-center md:hidden">
           {currentCategory?.subcategory.map((subcategory, index) => {
             return (
               <Link key={index} href={`/category/${categoryId}/${subcategory}`}>
                 <p
                   className={`${
-                    subcategory === subcategoryId && "font-bold text-lg"
+                    subcategory === subcategoryId && "text-lg font-bold"
                   } pl-2`}
                 >
                   {subcategory}
@@ -74,9 +74,9 @@ export default function Category({ productsAndAverage }: CategoryProps) {
             );
           })}
         </div>
-        <div className="md:flex md:flex-wrap justify-center my-2">
+        <div className="my-2 justify-center md:flex md:flex-wrap">
           {productsAndAverage.length === 0 && (
-            <p className="text-center pt-5">No products found</p>
+            <p className="pt-5 text-center">No products found</p>
           )}
           {productsAndAverage.map((products) => {
             return (

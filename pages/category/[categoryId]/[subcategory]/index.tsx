@@ -20,7 +20,7 @@ export const getStaticPaths: GetStaticPaths = () => {
   const paths = catalogs.flatMap((category) =>
     category.subcategory.map((subcategory) => ({
       params: { categoryId: category.id, subcategory },
-    }))
+    })),
   );
 
   return { paths, fallback: false };

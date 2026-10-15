@@ -18,8 +18,8 @@ export default function Card({ product, reviewAverage }: CardProps) {
 
   return (
     <Link href={`/product/${product._id}`}>
-      <div className="flex gap-5 p-2 m-2 border-2 rounded bg-white w-full md:w-[245px] md:h-[400px] md:flex-col lg:w-[300px] hover:scale-[1.01] shadow hover:shadow-lg transition-transform duration-200 ease-in-out">
-        <div className="min-w-[130px] w-[130px] h-[150px] md:w-full md:h-[210px] relative overflow-hidden rounded bg-slate-50">
+      <div className="m-2 flex w-full gap-5 rounded border-2 bg-white p-2 shadow transition-transform duration-200 ease-in-out hover:scale-[1.01] hover:shadow-lg md:h-[400px] md:w-[245px] md:flex-col lg:w-[300px]">
+        <div className="relative h-[150px] w-[130px] min-w-[130px] overflow-hidden rounded bg-slate-50 md:h-[210px] md:w-full">
           <Image
             src={product.picUrl}
             alt={product.name}
@@ -29,9 +29,9 @@ export default function Card({ product, reviewAverage }: CardProps) {
           />
         </div>
         <div>
-          <p className="font-semibold text-sm md:text-md ">{product.name}</p>
-          <div className="flex gap-1 my-5">{handleRating(reviewAverage)}</div>
-          <p className="font-bold ">
+          <p className="md:text-md text-sm font-semibold">{product.name}</p>
+          <div className="my-5 flex gap-1">{handleRating(reviewAverage)}</div>
+          <p className="font-bold">
             {currencySymbol}
             {(Math.round(product.price * currencyRate * 100) / 100).toFixed(2)}
           </p>

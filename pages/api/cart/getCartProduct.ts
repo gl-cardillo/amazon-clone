@@ -7,7 +7,7 @@ import { methodNotAllowed } from "@/lib/api";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (req.method !== "GET") return methodNotAllowed(res, ["GET"]);
   const token = verifyToken(req);
@@ -22,7 +22,7 @@ export default async function handler(
       return res.status(404).json({ message: "User not found" });
     }
     const products = await getProductsById(
-      user.cart.map((item) => item.productId)
+      user.cart.map((item) => item.productId),
     );
     const byId = new Map(products.map((product) => [product.id, product]));
     // keep the cart order and skip products that no longer exist

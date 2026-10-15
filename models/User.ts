@@ -9,7 +9,7 @@ const cartItemSchema = new Schema(
     productId: { type: String, required: true },
     quantity: { type: Number, required: true, min: 1, max: 9 },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const userSchema = new Schema(
@@ -35,7 +35,7 @@ const userSchema = new Schema(
         return ret;
       },
     },
-  }
+  },
 );
 
 userSchema.index({ email: 1 }, { unique: true });
@@ -43,7 +43,7 @@ userSchema.index({ email: 1 }, { unique: true });
 userSchema.virtual("dateOfBirth_formatted").get(function () {
   if (!this.dateOfBirth) return null;
   return DateTime.fromJSDate(this.dateOfBirth).toLocaleString(
-    DateTime.DATE_SHORT
+    DateTime.DATE_SHORT,
   );
 });
 

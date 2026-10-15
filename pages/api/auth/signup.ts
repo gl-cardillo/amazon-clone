@@ -4,15 +4,11 @@ import dbConnect from "@/utils/dbConnect";
 import User from "@/models/User";
 import { signToken } from "@/utils/auth";
 import { signupSchema } from "@/utils/schemas";
-import {
-  isDuplicateKeyError,
-  methodNotAllowed,
-  parseBody,
-} from "@/lib/api";
+import { isDuplicateKeyError, methodNotAllowed, parseBody } from "@/lib/api";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (req.method !== "POST") return methodNotAllowed(res, ["POST"]);
   const body = parseBody(signupSchema, req, res);

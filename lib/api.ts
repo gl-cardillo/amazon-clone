@@ -6,7 +6,7 @@ import { mongo } from "mongoose";
 export function parseBody<T extends z.ZodType>(
   schema: T,
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ): z.infer<T> | null {
   const result = schema.safeParse(req.body);
   if (!result.success) {

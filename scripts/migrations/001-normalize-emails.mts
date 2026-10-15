@@ -12,16 +12,25 @@ try {
   // two accounts that only differ in case would break the unique index
   const clashes = await users
     .aggregate([
-      { $group: { _id: { $toLower: { $trim: { input: "$email" } } }, n: { $sum: 1 } } },
+      {
+        $group: {
+          _id: { $toLower: { $trim: { input: "$email" } } },
+          n: { $sum: 1 },
+        },
+      },
       { $match: { n: { $gt: 1 } } },
     ])
     .toArray();
   if (clashes.length > 0) {
-    throw new Error(`emails that clash once lowercased: ${clashes.map((c) => c._id).join(", ")}`);
+    throw new Error(
+      `emails that clash once lowercased: ${clashes.map((c) => c._id).join(", ")}`,
+    );
   }
 
   const toNormalize = await users
-    .find({ $expr: { $ne: ["$email", { $toLower: { $trim: { input: "$email" } } }] } })
+    .find({
+      $expr: { $ne: ["$email", { $toLower: { $trim: { input: "$email" } } }] },
+    })
     .project({ email: 1 })
     .toArray();
   console.log(`emails to normalize: ${toNormalize.length}`);

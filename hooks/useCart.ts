@@ -1,9 +1,5 @@
 import axios from "axios";
-import {
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ME_KEY, useMe } from "./useAuth";
 import type { CartProduct, User } from "@/types";
 
@@ -26,7 +22,7 @@ export function useCart() {
 // every cart endpoint returns the updated user, which holds the cart
 function useCartMutation<TVariables>(
   request: (variables: TVariables) => Promise<User>,
-  optimistic?: (cart: CartProduct[], variables: TVariables) => CartProduct[]
+  optimistic?: (cart: CartProduct[], variables: TVariables) => CartProduct[],
 ) {
   const queryClient = useQueryClient();
   return useMutation({
@@ -53,7 +49,7 @@ function useCartMutation<TVariables>(
 export function useAddToCart() {
   return useCartMutation(
     async (variables: { productId: string; quantity: number }) =>
-      (await axios.post<User>(CART_URL, variables)).data
+      (await axios.post<User>(CART_URL, variables)).data,
   );
 }
 
@@ -65,8 +61,8 @@ export function useUpdateCartQuantity() {
       cart.map((item) =>
         item.product._id === productId
           ? { ...item, quantity: item.quantity + (n === "+1" ? 1 : -1) }
-          : item
-      )
+          : item,
+      ),
   );
 }
 
@@ -74,6 +70,6 @@ export function useRemoveFromCart() {
   return useCartMutation(
     async (productId: string) =>
       (await axios.delete<User>(CART_URL, { data: { productId } })).data,
-    (cart, productId) => cart.filter((item) => item.product._id !== productId)
+    (cart, productId) => cart.filter((item) => item.product._id !== productId),
   );
 }

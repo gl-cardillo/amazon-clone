@@ -13,7 +13,7 @@ import { MAX_CART_QUANTITY } from "@/utils/constants";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (!["POST", "PUT", "DELETE"].includes(req.method ?? "")) {
     return methodNotAllowed(res, ["POST", "PUT", "DELETE"]);
@@ -42,7 +42,7 @@ export default async function handler(
       } else {
         item.quantity = Math.min(
           item.quantity + body.quantity,
-          MAX_CART_QUANTITY
+          MAX_CART_QUANTITY,
         );
       }
     }

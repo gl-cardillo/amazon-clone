@@ -41,7 +41,7 @@ export default function Product({
     }
     addToCartMutation.mutate(
       { productId: product._id, quantity },
-      { onSuccess: () => setQuantity(1) }
+      { onSuccess: () => setQuantity(1) },
     );
   };
 
@@ -56,22 +56,22 @@ export default function Product({
   };
 
   return (
-    <div className="flex flex-col bg-slate-100 mx-2 mb-4">
-      <div className="flex flex-col items-center gap-5 p-5 my-3 bg-white rounded-md md:hidden">
-        <h3 className="font-bold text-xl">{product.name}</h3>
-        <div className="flex items-center ">
+    <div className="mx-2 mb-4 flex flex-col bg-slate-100">
+      <div className="my-3 flex flex-col items-center gap-5 rounded-md bg-white p-5 md:hidden">
+        <h3 className="text-xl font-bold">{product.name}</h3>
+        <div className="flex items-center">
           {handleRating(ratingAverage)}{" "}
-          <p className="text-sm pl-2">
+          <p className="pl-2 text-sm">
             {(Math.round(ratingAverage * 100) / 100).toFixed(1)} out of 5
           </p>
         </div>
         <ImageSelector product={product} />
-        <p className="font-bold text-xl self-center">
+        <p className="self-center text-xl font-bold">
           {currencySymbol}
           {(Math.round(product.price * currencyRate * 100) / 100).toFixed(2)}
         </p>
         <div className="flex flex-col items-center">
-          <div className="flex gap-1 items-center mb-2 font-semibold">
+          <div className="mb-2 flex items-center gap-1 font-semibold">
             <p>About this item</p>
             <button
               onClick={() => {
@@ -84,7 +84,7 @@ export default function Product({
             </button>
           </div>
           {showDescription && (
-            <div className=" max-w-sm">
+            <div className="max-w-sm">
               <p>&#8226;{product.description}</p>
               <p>&#8226;{product.description2 && product.description2}</p>
               <p>&#8226;{product.description3}</p>
@@ -92,34 +92,35 @@ export default function Product({
           )}
         </div>
       </div>
-      <div className="hidden md:flex flex-col bg-white my-3 p-3 items-center rounded-md shadow md:mx-24 lg:mx-52 xl:mx-[400px] 3xl:mx-[600px]">
-        <div className="flex gap-5 items-center justify-between w-full h-[320px]">
-          <div className="p-2 w-1/3">
+      <div className="my-3 hidden flex-col items-center rounded-md bg-white p-3 shadow md:mx-24 md:flex lg:mx-52 xl:mx-[400px] 3xl:mx-[600px]">
+        <div className="flex h-[320px] w-full items-center justify-between gap-5">
+          <div className="w-1/3 p-2">
             <ImageSelector product={product} />
           </div>
-          <div className="flex flex-col pt-5 justify-around h-[320px] align-baseline  w-[60%]">
-            <h3 className="font-bold text-lg lg:text-xl xl:text-3xl ">
+          <div className="flex h-[320px] w-[60%] flex-col justify-around pt-5 align-baseline">
+            <h3 className="text-lg font-bold lg:text-xl xl:text-3xl">
               {product.name}
             </h3>
-            <div className="flex gap-2 ">
+            <div className="flex gap-2">
               <p className="font-bold">
-                {product.categoryName === "Books" ? "Author" : "Manufacturer"}:{" "}
+                {product.categoryName === "Books" ? "Author" : "Manufacturer"}
+                :{" "}
               </p>
               <p>{product.manufacturer}</p>
             </div>
-            <div className="flex gap-1 ">
+            <div className="flex gap-1">
               {handleRating(ratingAverage)}{" "}
-              <p className="text-lg pl-2">
+              <p className="pl-2 text-lg">
                 {(Math.round(ratingAverage * 100) / 100).toFixed(1)} out of 5
               </p>
             </div>
-            <p className="font-bold text-lg xl:text-xl ">
+            <p className="text-lg font-bold xl:text-xl">
               {currencySymbol}
               {(Math.round(product.price * currencyRate * 100) / 100).toFixed(
-                2
+                2,
               )}
             </p>
-            <div className="flex gap-1 items-center mb-2 ">
+            <div className="mb-2 flex items-center gap-1">
               <p>About this item</p>
               <button
                 onClick={() => {
@@ -136,16 +137,16 @@ export default function Product({
           </div>
         </div>
         {showDescription && (
-          <div className="self-end  w-[60%]">
+          <div className="w-[60%] self-end">
             <p className="text-sm">&#8226;{product.description}</p>
             <p className="py-2 text-sm">&#8226;{product.description2}</p>
             <p className="text-sm">&#8226;{product.description3}</p>
           </div>
         )}
       </div>
-      <div className="bg-white py-5 gap-3 items-center flex flex-col rounded-md md:mx-24 lg:mx-52 xl:mx-[400px] 3xl:mx-[600px] shadow">
-        <p className="text-green-700 font-semibold">In Stock</p>
-        <div className="flex w-[70px] gap-3 px-[9px] border-solid border-2 border-[#f0c14b] rounded-2xl">
+      <div className="flex flex-col items-center gap-3 rounded-md bg-white py-5 shadow md:mx-24 lg:mx-52 xl:mx-[400px] 3xl:mx-[600px]">
+        <p className="font-semibold text-green-700">In Stock</p>
+        <div className="flex w-[70px] gap-3 rounded-2xl border-2 border-solid border-[#f0c14b] px-[9px]">
           <button onClick={() => decreaseQuantity()}>-</button>
           <p>{quantity}</p>
           <button onClick={() => increaseQuantity()}>+</button>
@@ -154,7 +155,7 @@ export default function Product({
         <button
           onClick={addToCart}
           disabled={addToCartMutation.isPending}
-          className="p-2 w-[300px] h-12 text-[14px] rounded-[5px] text-gray-800 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] shadow"
+          className="h-12 w-[300px] rounded-[5px] bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] p-2 text-[14px] text-gray-800 shadow"
         >
           Add to Cart
         </button>
@@ -166,20 +167,20 @@ export default function Product({
         setAskLogin={setAskLogin}
       />
       {askLogin && (
-        <div className="fixed z-[10] top-0 left-0 w-full h-full bg-black/50">
-          <div className="absolute z-3 top-1/2 left-1/2 w-[300px] text-[18px] bg-white transform -translate-x-1/2 -translate-y-1/2 p-4 rounded-md border-2 border-[#f0c14b]">
+        <div className="fixed left-0 top-0 z-[10] h-full w-full bg-black/50">
+          <div className="z-3 absolute left-1/2 top-1/2 w-[300px] -translate-x-1/2 -translate-y-1/2 transform rounded-md border-2 border-[#f0c14b] bg-white p-4 text-[18px]">
             <p className="text-center font-semibold text-gray-600">
               You need to login first
             </p>
             <div className="flex justify-around">
               <button
-                className="mt-5 p-2 w-[120px] text-[14px] rounded-[5px] text-gray-800 shadow bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                className="mt-5 w-[120px] rounded-[5px] bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] p-2 text-[14px] text-gray-800 shadow"
                 onClick={() => setAskLogin(false)}
               >
                 Cancel
               </button>
               <button
-                className="mt-5 p-1 w-[120px] text-[14px] rounded-[5px] text-gray-800 shadow bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                className="mt-5 w-[120px] rounded-[5px] bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] p-1 text-[14px] text-gray-800 shadow"
                 onClick={() => router.push("/signin")}
               >
                 Go to login page
@@ -193,7 +194,7 @@ export default function Product({
 }
 
 export const getServerSideProps: GetServerSideProps<ProductProps> = async (
-  context
+  context,
 ) => {
   const productId = String(context.params?.productId);
   const product = await getProductById(productId);
@@ -210,7 +211,7 @@ export const getServerSideProps: GetServerSideProps<ProductProps> = async (
         reviews: summary.reviews,
         ratingArray: summary.ratingArray,
         ratingAverage: summary.average,
-      })
+      }),
     ),
   };
 };

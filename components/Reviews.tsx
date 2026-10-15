@@ -79,13 +79,13 @@ export default function Reviews({
   const sortedReviews = [...reviews].sort((a, b) =>
     sort === "rating"
       ? b.rating - a.rating
-      : new Date(b.date).getTime() - new Date(a.date).getTime()
+      : new Date(b.date).getTime() - new Date(a.date).getTime(),
   );
 
   return (
-    <div className="bg-white mt-3 p-5 flex flex-col rounded-md md:px-10 shadow md:mx-24 lg:mx-52 xl:mx-[400px] 3xl:mx-[600px]">
+    <div className="mt-3 flex flex-col rounded-md bg-white p-5 shadow md:mx-24 md:px-10 lg:mx-52 xl:mx-[400px] 3xl:mx-[600px]">
       <div className="flex flex-col items-center">
-        <h3 className="font-bold text-2xl text-gray-700">Customer reviews</h3>
+        <h3 className="text-2xl font-bold text-gray-700">Customer reviews</h3>
         <p className="mb-3 text-slate-600">
           {reviews.length} global rating{reviews.length > 1 && "s"}
         </p>
@@ -94,18 +94,18 @@ export default function Reviews({
             <tbody>
               {starsLoop.map((star, index) => (
                 <tr
-                  className="flex mb-2 items-center cursor-pointer hover:scale-[1.02] transition-transform duration-200 ease-in-out"
+                  className="mb-2 flex cursor-pointer items-center transition-transform duration-200 ease-in-out hover:scale-[1.02]"
                   key={index}
                   onClick={() => handleFilter(`${star + 1}`)}
                 >
                   <td className="w-[60px] text-blue-500">{star + 1} star</td>
-                  <td className="h-[22px] w-[160px] bg-[#F0F2F2] rounded">
+                  <td className="h-[22px] w-[160px] rounded bg-[#F0F2F2]">
                     <div
                       style={{ width: `${share(star + 1)}%` }}
-                      className={`h-[20px] bg-[#FFA41C] rounded shadow`}
+                      className={`h-[20px] rounded bg-[#FFA41C] shadow`}
                     ></div>
                   </td>
-                  <td className="text-right w-[50px] text-blue-500">
+                  <td className="w-[50px] text-right text-blue-500">
                     {Math.round(share(star + 1))}%
                   </td>
                 </tr>
@@ -114,8 +114,8 @@ export default function Reviews({
           </table>
         </div>
       </div>
-      <div className="flex gap-4  justify-center">
-        <div className="self-center mt-6 flex flex-col items-center gap-1">
+      <div className="flex justify-center gap-4">
+        <div className="mt-6 flex flex-col items-center gap-1 self-center">
           <label htmlFor="sortBy" className="font-bold text-gray-700">
             Sort by
           </label>
@@ -123,20 +123,20 @@ export default function Reviews({
             id="sortBy"
             value={sort}
             onChange={(e) => setSort(e.target.value as SortMethod)}
-            className="cursor-pointer text-sm w-[140px] border-gray-300 rounded shadow-sm"
+            className="w-[140px] cursor-pointer rounded border-gray-300 text-sm shadow-sm"
           >
             <option value="recent">Most recent</option>
             <option value="rating">Rating</option>
           </select>
         </div>
-        <div className="self-center mt-6 flex flex-col items-center gap-1">
+        <div className="mt-6 flex flex-col items-center gap-1 self-center">
           <label htmlFor="filterBy" className="font-bold text-gray-700">
             Filter by
           </label>
           <select
             id="filterBy"
             onChange={(e) => handleFilter(e.target.value)}
-            className="cursor-pointer text-sm w-[140px] border-gray-300 rounded shadow-sm"
+            className="w-[140px] cursor-pointer rounded border-gray-300 text-sm shadow-sm"
           >
             <option value="0">All rating</option>
             <option value="1">1 star</option>
@@ -154,12 +154,12 @@ export default function Reviews({
               .filter((review) => filter.includes(review.rating))
               .map((review) => (
                 <div
-                  className="mt-8 pb-2 border-solid border-b-2 border-slate-200"
+                  className="mt-8 border-b-2 border-solid border-slate-200 pb-2"
                   key={review._id}
                 >
-                  <div className="flex gap-3 items-center">
+                  <div className="flex items-center gap-3">
                     <Image
-                      className="w-[40px] h-[40px] rounded-full"
+                      className="h-[40px] w-[40px] rounded-full"
                       src="/images/user.svg"
                       width={40}
                       height={40}
@@ -168,22 +168,22 @@ export default function Reviews({
                     />{" "}
                     <p className="text-xl">{review.reviewAuthor}</p>
                   </div>
-                  <div className="flex gap-1 my-2">
+                  <div className="my-2 flex gap-1">
                     {starsLoop.map((numb, index) =>
                       review.rating > numb ? (
                         <BsStarFill
                           key={index}
-                          className="text-[#FFA41C] text-lg"
+                          className="text-lg text-[#FFA41C]"
                         />
                       ) : (
                         <BsStar
                           key={index}
-                          className="text-[#FFA41C] text-lg"
+                          className="text-lg text-[#FFA41C]"
                         />
-                      )
+                      ),
                     )}
                   </div>
-                  <p className="text-sm mb-2">
+                  <p className="mb-2 text-sm">
                     Reviewed on {review.date_formatted}
                   </p>
                   <p>{review.text}</p>
@@ -191,23 +191,23 @@ export default function Reviews({
               ))}
           </div>
         ) : (
-          <p className="text-center pt-5">No reviews for this product</p>
+          <p className="pt-5 text-center">No reviews for this product</p>
         )}
       </div>
       {alreadyReviewed ? (
-        <p className="text-center pt-5 text-slate-600">
+        <p className="pt-5 text-center text-slate-600">
           You reviewed this product
         </p>
       ) : user ? (
         <div>
           <h4 className="my-3 font-semibold text-gray-700">Leave a review</h4>
-          <div className="flex items-center flex-col gap-2">
-            <div className="flex gap-3 items-center">
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex items-center gap-3">
               {starsLoop.map((numb, index) =>
                 (ratingForm ?? 0) > numb ? (
                   <BsStarFill
                     key={index}
-                    className="text-[#FFA41C] text-xl"
+                    className="text-xl text-[#FFA41C]"
                     onClick={() => {
                       setErrorRating("");
                       setRatingForm(numb + 1);
@@ -216,32 +216,32 @@ export default function Reviews({
                 ) : (
                   <BsStar
                     key={index}
-                    className="text-[#FFA41C] text-xl"
+                    className="text-xl text-[#FFA41C]"
                     onClick={() => {
                       setErrorRating("");
                       setRatingForm(numb + 1);
                     }}
                   />
-                )
+                ),
               )}
             </div>
-            <p className="text-red-500 text-sm">{errorRating}</p>
+            <p className="text-sm text-red-500">{errorRating}</p>
           </div>
           <div>
             <form
-              className="flex flex-col items-center mt-2"
+              className="mt-2 flex flex-col items-center"
               onSubmit={handleSubmit(addReview)}
             >
               <textarea
-                className="w-full p-1 text resize-none rounded-sm h-24 border-gray-300 shadow"
+                className="text h-24 w-full resize-none rounded-sm border-gray-300 p-1 shadow"
                 id="text"
                 {...register("review")}
               />
-              <p className="text-[12px] text-red-600 pt-1">
+              <p className="pt-1 text-[12px] text-red-600">
                 {errors?.review?.message}
               </p>
               <button
-                className=" mt-2 p-2 w-[120px] text-[14px] rounded-[5px] shadow bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                className="mt-2 w-[120px] rounded-[5px] bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] p-2 text-[14px] shadow"
                 type="submit"
               >
                 Add review
@@ -251,7 +251,7 @@ export default function Reviews({
         </div>
       ) : (
         <button
-          className=" text-lg self-center mt-5 p-1 w-[200px] h-12 text-[14px] rounded-[5px] shadow bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+          className="mt-5 h-12 w-[200px] self-center rounded-[5px] bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] p-1 text-[14px] text-lg shadow"
           onClick={() => setAskLogin(true)}
         >
           Write a review

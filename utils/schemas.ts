@@ -21,7 +21,7 @@ export const signupSchema = z.object({
     .max(15, "password must be at most 15 characters")
     .regex(
       /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?])[A-Za-z\d@$!%*#?]{8,}$/,
-      "Password must be eight characters, at least one letter, one number and one special character(@$!%*#?)"
+      "Password must be eight characters, at least one letter, one number and one special character(@$!%*#?)",
     ),
 });
 
@@ -45,7 +45,7 @@ export const profileSchema = z.object({
     .string()
     .refine(
       (value) => value === "" || new Date(value) <= new Date(),
-      "Are you from the future?"
+      "Are you from the future?",
     ),
 });
 

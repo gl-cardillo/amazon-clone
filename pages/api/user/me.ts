@@ -6,7 +6,7 @@ import { methodNotAllowed } from "@/lib/api";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (req.method !== "GET") return methodNotAllowed(res, ["GET"]);
   const token = verifyToken(req);

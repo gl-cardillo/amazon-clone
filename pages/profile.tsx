@@ -100,17 +100,17 @@ export default function Profile() {
   };
 
   return (
-    <div className=" mt-5 mx-6 md:mx-44 lg:mx-[300px] xl:mx-[500px] 2xl:mx-[600px] 3xl:mx-[800px] flex items-center flex-col p-5 bg-white rounded-md gap-3 shadow">
-      <h2 className="font-bold text-xl">Welcome {user && user.firstName}</h2>
+    <div className="mx-6 mt-5 flex flex-col items-center gap-3 rounded-md bg-white p-5 shadow md:mx-44 lg:mx-[300px] xl:mx-[500px] 2xl:mx-[600px] 3xl:mx-[800px]">
+      <h2 className="text-xl font-bold">Welcome {user && user.firstName}</h2>
       <Image
-        className="w-[50px] h-[50px] rounded-full"
+        className="h-[50px] w-[50px] rounded-full"
         src="/images/user.svg"
         width={50}
         height={50}
         alt="avatar"
         unoptimized
       />
-      <div className="flex gap-2 items-center">
+      <div className="flex items-center gap-2">
         <p>Details</p>
         <button
           onClick={() => {
@@ -126,10 +126,10 @@ export default function Profile() {
         (editProfile ? (
           <div className="flex flex-col">
             <form onSubmit={handleSubmit(updateProfile)}>
-              <div className="mt-3 flex flex-col relative">
+              <div className="relative mt-3 flex flex-col">
                 <label
                   htmlFor="name"
-                  className="absolute -top-2.5 left-2 bg-white px-1 text-blue-500 text-sm"
+                  className="absolute -top-2.5 left-2 bg-white px-1 text-sm text-blue-500"
                 >
                   Name
                 </label>
@@ -138,16 +138,16 @@ export default function Profile() {
                   type="text"
                   id="name"
                   name="name"
-                  className="w-[228px] border-gray-300 rounded shadow"
+                  className="w-[228px] rounded border-gray-300 shadow"
                 />
-                <p className="text-[12px] text-red-600 pt-1">
+                <p className="pt-1 text-[12px] text-red-600">
                   {errors?.name?.message}
                 </p>
               </div>
-              <div className="mt-3 flex flex-col relative">
+              <div className="relative mt-3 flex flex-col">
                 <label
                   htmlFor="address"
-                  className="absolute -top-2.5 left-2 bg-white px-1 text-blue-500 text-sm"
+                  className="absolute -top-2.5 left-2 bg-white px-1 text-sm text-blue-500"
                 >
                   Address
                 </label>
@@ -156,16 +156,16 @@ export default function Profile() {
                   type="text"
                   id="address"
                   name="address"
-                  className="w-[228px] border-gray-300 rounded shadow"
+                  className="w-[228px] rounded border-gray-300 shadow"
                 />
-                <p className="text-[12px] text-red-600 pt-1">
+                <p className="pt-1 text-[12px] text-red-600">
                   {errors?.address?.message}
                 </p>
               </div>
-              <div className="mt-3 flex flex-col relative">
+              <div className="relative mt-3 flex flex-col">
                 <label
                   htmlFor="city"
-                  className="absolute -top-2.5 left-2 bg-white px-1 text-blue-500 text-sm"
+                  className="absolute -top-2.5 left-2 bg-white px-1 text-sm text-blue-500"
                 >
                   City
                 </label>
@@ -174,13 +174,13 @@ export default function Profile() {
                   type="text"
                   id="city"
                   name="city"
-                  className="w-[228px] border-gray-300 rounded shadow"
+                  className="w-[228px] rounded border-gray-300 shadow"
                 />
               </div>
-              <div className="mt-3 flex flex-col relative">
+              <div className="relative mt-3 flex flex-col">
                 <label
                   htmlFor="postcode"
-                  className="absolute -top-2.5 left-2 bg-white px-1 text-blue-500 text-sm"
+                  className="absolute -top-2.5 left-2 bg-white px-1 text-sm text-blue-500"
                 >
                   Postcode
                 </label>
@@ -189,16 +189,16 @@ export default function Profile() {
                   type="text"
                   id="postcode"
                   name="postcode"
-                  className="w-[228px] border-gray-300 rounded shadow"
+                  className="w-[228px] rounded border-gray-300 shadow"
                 />
-                <p className="text-[12px] text-red-600 pt-1">
+                <p className="pt-1 text-[12px] text-red-600">
                   {errors?.postcode?.message}
                 </p>
               </div>
-              <div className="mt-3 flex flex-col relative">
+              <div className="relative mt-3 flex flex-col">
                 <label
                   htmlFor="dateOfBirth"
-                  className="absolute -top-2.5 left-2 bg-white px-1 text-blue-500 text-sm"
+                  className="absolute -top-2.5 left-2 bg-white px-1 text-sm text-blue-500"
                 >
                   Date of birth
                 </label>
@@ -207,23 +207,23 @@ export default function Profile() {
                   type="date"
                   name="dateOfBirth"
                   id="dateOfBirth"
-                  className="w-[228px] border-gray-300 rounded shadow"
+                  className="w-[228px] rounded border-gray-300 shadow"
                 />
-                <p className="text-[12px] text-red-600 pt-1">
+                <p className="pt-1 text-[12px] text-red-600">
                   {errors?.dateOfBirth?.message}
                 </p>
               </div>
               <div className="flex gap-2">
                 <button
                   type="submit"
-                  className="mt-5 w-[110px] text-[14px] rounded py-0.5 shadow bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                  className="mt-5 w-[110px] rounded bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] py-0.5 text-[14px] shadow"
                 >
                   Update
                 </button>
                 <button
                   onClick={() => setEditProfile(false)}
                   type="button"
-                  className="mt-5 w-[110px] text-[14px] rounded shadow bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                  className="mt-5 w-[110px] rounded bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] text-[14px] shadow"
                 >
                   Cancel
                 </button>
@@ -231,10 +231,10 @@ export default function Profile() {
             </form>
           </div>
         ) : (
-          <div className="flex flex-col min-w-[120px] ">
+          <div className="flex min-w-[120px] flex-col">
             <BsFillPencilFill
               onClick={() => setEditProfile(!editProfile)}
-              className="self-end mb-2"
+              className="mb-2 self-end"
             />
             <p>
               <span className="font-bold">Name:</span> {user && user.name}
@@ -257,13 +257,13 @@ export default function Profile() {
           </div>
         ))}
       <div>
-        <p className="text-center my-3">Currency:</p>
+        <p className="my-3 text-center">Currency:</p>
         <div className="flex gap-5">
           <button
             onClick={() => setCurrency("£")}
             className={`${
               currencySymbol === "£" && "bg-[#f7dfa5]"
-            } h-[40px] w-[40px] text-xl border border-[#f0c14b] hover:bg-[#f7dfa5] rounded shadow`}
+            } h-[40px] w-[40px] rounded border border-[#f0c14b] text-xl shadow hover:bg-[#f7dfa5]`}
           >
             £
           </button>
@@ -271,7 +271,7 @@ export default function Profile() {
             onClick={() => setCurrency("€")}
             className={`${
               currencySymbol === "€" && "bg-[#f7dfa5]"
-            } h-[40px] w-[40px] text-xl border border-[#f0c14b] hover:bg-[#f7dfa5] rounded shadow`}
+            } h-[40px] w-[40px] rounded border border-[#f0c14b] text-xl shadow hover:bg-[#f7dfa5]`}
           >
             €
           </button>
@@ -279,21 +279,21 @@ export default function Profile() {
             onClick={() => setCurrency("$")}
             className={`${
               currencySymbol === "$" && "bg-[#f7dfa5]"
-            } h-[40px] w-[40px] text-xl border border-[#f0c14b] hover:bg-[#f7dfa5] rounded shadow`}
+            } h-[40px] w-[40px] rounded border border-[#f0c14b] text-xl shadow hover:bg-[#f7dfa5]`}
           >
             $
           </button>
         </div>
       </div>
-      <div className="flex flex-col gap-7 items-center my-3">
-        <button onClick={() => logOut()} className="flex gap-2 items-center">
+      <div className="my-3 flex flex-col items-center gap-7">
+        <button onClick={() => logOut()} className="flex items-center gap-2">
           <HiOutlineLogout className="text-3xl" />
-          <p className="font-semibold text-lg">Log out</p>
+          <p className="text-lg font-semibold">Log out</p>
         </button>
         {user && user.email !== TEST_ACCOUNT_EMAIL && (
           <button
             onClick={confirmDelete}
-            className="p-1 text-red-400 border-[3px] border-red-400"
+            className="border-[3px] border-red-400 p-1 text-red-400"
           >
             Delete account
           </button>

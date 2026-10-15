@@ -9,6 +9,8 @@ export function targetUri() {
     throw new Error(`${prod ? "PROD_MONGO_URI" : "MONGO_URI"} is not set`);
   }
   const db = new URL(uri).pathname.slice(1);
-  console.log(`target: ${db}${apply ? "" : " (dry run, pass --apply to write)"}`);
+  console.log(
+    `target: ${db}${apply ? "" : " (dry run, pass --apply to write)"}`,
+  );
   return uri;
 }

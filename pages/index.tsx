@@ -31,12 +31,12 @@ export default function Home() {
     duration: 3000,
     prevArrow: (
       <button>
-        <IoIosArrowBack className="border-none ml-2 text-3xl text-white" />
+        <IoIosArrowBack className="ml-2 border-none text-3xl text-white" />
       </button>
     ),
     nextArrow: (
       <button>
-        <IoIosArrowForward className="border-none mr-2 text-3xl text-white" />
+        <IoIosArrowForward className="mr-2 border-none text-3xl text-white" />
       </button>
     ),
   };
@@ -48,7 +48,7 @@ export default function Home() {
           {slideImages.map((slideImage, index) => (
             <div className="each-slide" key={index}>
               <Link href={slideImage.link}>
-                <div className="h-[250px] md:h-[350px] lg:h-[400px] xl:h-[550px] 3xl:h-[700px] w-full relative">
+                <div className="relative h-[250px] w-full md:h-[350px] lg:h-[400px] xl:h-[550px] 3xl:h-[700px]">
                   <Image
                     src={slideImage.image}
                     fill
@@ -59,7 +59,7 @@ export default function Home() {
                     priority={index === 0}
                   />
                   <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 via-black/10 to-transparent">
-                    <h2 className="p-5 md:p-10 lg:px-16 font-serif font-bold text-white text-2xl md:text-4xl lg:text-5xl drop-shadow-lg">
+                    <h2 className="p-5 font-serif text-2xl font-bold text-white drop-shadow-lg md:p-10 md:text-4xl lg:px-16 lg:text-5xl">
                       {slideImage.caption[0]}
                       <br />
                       {slideImage.caption[1]}
@@ -71,15 +71,15 @@ export default function Home() {
           ))}
         </Slide>
       </div>
-      <div className="flex flex-wrap justify-center bg-slate-100 pt-2 ">
+      <div className="flex flex-wrap justify-center bg-slate-100 pt-2">
         {catalogs.map((catalog, index) => {
           return (
             <div
               key={index}
-              className="p-3 m-3 max-w-xs bg-white hover:scale-[1.01] shadow rounded hover:shadow-lg transition-transform duration-300 ease-in-out"
+              className="m-3 max-w-xs rounded bg-white p-3 shadow transition-transform duration-300 ease-in-out hover:scale-[1.01] hover:shadow-lg"
             >
               <Link href={catalog.link}>
-                <h2 className="font-bold pb-2 text-lg">{catalog.name}</h2>
+                <h2 className="pb-2 text-lg font-bold">{catalog.name}</h2>
                 <Image
                   src={catalog.image}
                   width={400}
@@ -88,7 +88,7 @@ export default function Home() {
                   className="object-cover"
                   alt={catalog.name}
                 />
-                <p className=" text-slate-500">See more...</p>
+                <p className="text-slate-500">See more...</p>
               </Link>
             </div>
           );

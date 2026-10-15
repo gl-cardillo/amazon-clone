@@ -9,7 +9,7 @@ import { TEST_ACCOUNT_EMAIL } from "@/utils/constants";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (req.method !== "POST") return methodNotAllowed(res, ["POST"]);
   const body = parseBody(loginRequestSchema, req, res);
@@ -24,10 +24,14 @@ export default async function handler(
   try {
     await dbConnect();
     const user = await User.findOne({ email: body.emailLogin }).select(
-      "+password"
+      "+password",
     );
     // same response for unknown email and wrong password
-    if (!user || !password || !(await bcrypt.compare(password, user.password))) {
+    if (
+      !user ||
+      !password ||
+      !(await bcrypt.compare(password, user.password))
+    ) {
       return res.status(400).json({ message: "Credentials are incorrect" });
     }
     return res.status(200).json({ user, token: signToken(user.id) });

@@ -28,19 +28,21 @@ try {
     .toArray();
   const older = duplicates.flatMap((d) => d.ids.slice(1));
   console.log(
-    `older duplicates to detach: ${older.length} across ${duplicates.length} user + product pairs`
+    `older duplicates to detach: ${older.length} across ${duplicates.length} user + product pairs`,
   );
   duplicates.forEach((d) =>
-    console.log(`  ${d.author}: ${d.ids.length} reviews on ${d._id.productId}`)
+    console.log(`  ${d.author}: ${d.ids.length} reviews on ${d._id.productId}`),
   );
 
   if (apply) {
     // a placeholder per review keeps the text and rating but ties it to no account
     const { modifiedCount } = await reviews.updateMany(
       { _id: { $in: older } },
-      [{ $set: { userId: { $concat: ["legacy-", { $toString: "$_id" }] } } }]
+      [{ $set: { userId: { $concat: ["legacy-", { $toString: "$_id" }] } } }],
     );
-    console.log(`detached ${modifiedCount}, ${await reviews.countDocuments()} reviews kept`);
+    console.log(
+      `detached ${modifiedCount}, ${await reviews.countDocuments()} reviews kept`,
+    );
     await Review.syncIndexes();
     const names = (await Review.listIndexes()).map((i) => i.name).join(", ");
     console.log(`reviews indexes: ${names}`);

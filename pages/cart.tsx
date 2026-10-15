@@ -29,11 +29,11 @@ export default function Cart() {
 
   const cartQuantity = (cart ?? []).reduce(
     (sum, item) => sum + item.quantity,
-    0
+    0,
   );
   const totalPrice = (cart ?? []).reduce(
     (sum, item) => sum + item.product.price * item.quantity,
-    0
+    0,
   );
 
   useEffect(() => {
@@ -61,8 +61,8 @@ export default function Cart() {
   };
 
   return (
-    <div className="m-5 p-2 py-5 bg-white shadow rounded-md flex flex-col sm:mx-6 md:mx-20 md:px-10 lg:mx-40 xl:mx-[400px] 2xl:mx-[500px] 3xl:mx-[600px] ">
-      <h2 className="font-bold text-xl text-gray-700 -ml-2">Shopping Basket</h2>
+    <div className="m-5 flex flex-col rounded-md bg-white p-2 py-5 shadow sm:mx-6 md:mx-20 md:px-10 lg:mx-40 xl:mx-[400px] 2xl:mx-[500px] 3xl:mx-[600px]">
+      <h2 className="-ml-2 text-xl font-bold text-gray-700">Shopping Basket</h2>
       <div>
         {cart ? (
           cart.length > 0 ? (
@@ -71,33 +71,33 @@ export default function Cart() {
                 return (
                   <div
                     key={productCart.product._id}
-                    className="flex min-h-[100px] justify-between my-5 py-2 border-b border-slate-200 "
+                    className="my-5 flex min-h-[100px] justify-between border-b border-slate-200 py-2"
                   >
-                    <div className="flex gap-3 items-center">
-                      <div className="w-[100px] flex item-center justify-center">
+                    <div className="flex items-center gap-3">
+                      <div className="item-center flex w-[100px] justify-center">
                         <Image
                           src={productCart.product.picUrl}
                           width={50}
                           height={70}
-                          className="min-w-[50px] h-[70px] w-auto object-contain"
+                          className="h-[70px] w-auto min-w-[50px] object-contain"
                           alt={productCart.product.name}
                         />
                       </div>
-                      <div className="flex gap-5 flex-col">
+                      <div className="flex flex-col gap-5">
                         <Link href={`/product/${productCart.product._id}`}>
                           <h3 className="text-sm font-semibold">
                             {productCart.product.name}
                           </h3>
                         </Link>
                         <div>
-                          <div className="flex gap-2 items-center">
-                            <div className="flex gap-3 px-1 text-sm border-solid border-2 border-slate-300 rounded-2xl">
+                          <div className="flex items-center gap-2">
+                            <div className="flex gap-3 rounded-2xl border-2 border-solid border-slate-300 px-1 text-sm">
                               <button
                                 onClick={() =>
                                   updateQuantity(
                                     productCart.product._id,
                                     productCart.quantity,
-                                    "-1"
+                                    "-1",
                                   )
                                 }
                                 disabled={disableButton}
@@ -110,7 +110,7 @@ export default function Cart() {
                                   updateQuantity(
                                     productCart.product._id,
                                     productCart.quantity,
-                                    "+1"
+                                    "+1",
                                   )
                                 }
                                 disabled={disableButton}
@@ -129,18 +129,18 @@ export default function Cart() {
                             </button>
                           </div>
                           {limitReachedId === productCart.product._id && (
-                            <p className="text-red-500 text-[12px]">
+                            <p className="text-[12px] text-red-500">
                               The limit is {MAX_CART_QUANTITY}
                             </p>
                           )}
                         </div>
                       </div>
                     </div>
-                    <p className="font-bold text-sm">
+                    <p className="text-sm font-bold">
                       {currencySymbol}
                       {(
                         Math.round(
-                          productCart.product.price * currencyRate * 100
+                          productCart.product.price * currencyRate * 100,
                         ) / 100
                       ).toFixed(2)}
                     </p>
@@ -154,7 +154,7 @@ export default function Cart() {
               <div>
                 <button
                   onClick={() => router.push("/")}
-                  className="mt-1 p-1 w-[120px] text-[14px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b]"
+                  className="mt-1 w-[120px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] p-1 text-[14px]"
                 >
                   Go to shopping!
                 </button>
@@ -165,7 +165,7 @@ export default function Cart() {
           <Skeleton height={100} count={3} />
         )}
       </div>
-      <div className="flex gap-1 items-center self-end ">
+      <div className="flex items-center gap-1 self-end">
         <p className="text-sm">{`Subtotal (${cartQuantity} items):`}</p>
         <p className="font-bold">
           {currencySymbol}

@@ -56,4 +56,4 @@ export const catalogs: Catalog[] = [
     link: "/category/kitchenProduct",
     subcategory: ["Electronics", "Cleaning"],
   },
-]; 
+];

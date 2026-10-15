@@ -8,6 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "seed": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/seed.mts",
     "migrate": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON",
     "db:reset": "npm run seed && npm run migrate -- scripts/migrations/001-normalize-emails.mts --apply && npm run migrate -- scripts/migrations/002-review-rules.mts --apply"
@@ -41,6 +43,8 @@
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.4.0",
     "postcss": "^8.5.29",
+    "prettier": "^3.9.10",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^3.4.19",
     "typescript": "^5.9.3"
   }

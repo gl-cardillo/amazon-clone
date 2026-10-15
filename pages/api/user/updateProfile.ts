@@ -7,7 +7,7 @@ import { methodNotAllowed, parseBody } from "@/lib/api";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (req.method !== "PUT") return methodNotAllowed(res, ["PUT"]);
   const token = verifyToken(req);
@@ -29,7 +29,7 @@ export default async function handler(
         // date-only strings parse as utc midnight, so no time is stored
         dateOfBirth: body.dateOfBirth ? new Date(body.dateOfBirth) : null,
       },
-      { returnDocument: "after", runValidators: true }
+      { returnDocument: "after", runValidators: true },
     );
     if (!user) {
       return res.status(404).json({ message: "User not found" });

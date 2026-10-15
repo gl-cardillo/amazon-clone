@@ -44,8 +44,8 @@ export default function Navbar() {
   };
 
   return (
-    <div className="flex fixed flex-col w-full bg-[#131921] z-10">
-      <div className="flex justify-between gap-3 px-3 md:px-5 pt-3 h-[50px] md:h-[60px]">
+    <div className="fixed z-10 flex w-full flex-col bg-[#131921]">
+      <div className="flex h-[50px] justify-between gap-3 px-3 pt-3 md:h-[60px] md:px-5">
         <Link href="/" className="py-1">
           <Image
             src="/images/logo.svg"
@@ -57,36 +57,36 @@ export default function Navbar() {
         </Link>
         <div onBlur={blur}>
           <form
-            className="hidden md:flex h-auto relative"
+            className="relative hidden h-auto md:flex"
             onSubmit={submitSearch}
           >
             <input
               type="text"
-              className="rounded-l h-[38px] p-1 focus:outline-none border-transparent focus:border-transparent focus:ring-0 md:w-[300px] lg:w-[350px]"
+              className="h-[38px] rounded-l border-transparent p-1 focus:border-transparent focus:outline-none focus:ring-0 md:w-[300px] lg:w-[350px]"
               value={query}
               onChange={handleSearch}
             />
             <button type="submit" aria-label="Search">
-              <BsSearch className="rounded-r-md bg-orange-300 h-[38px] px-1.5 w-12 rounded-l-md p-2 font-bold absolute -right-1 top-0" />
+              <BsSearch className="absolute -right-1 top-0 h-[38px] w-12 rounded-l-md rounded-r-md bg-orange-300 p-2 px-1.5 font-bold" />
             </button>
           </form>
           {showSearch && (
-            <div className="z-10 absolute mt-[80px] -ml-[47%] w-[calc(95%-65px)] z-1 rounded-md  border-solid border-b-2 border-x-2 border-slate-200 sm:w-[calc(95%-55px)] sm:-ml-[48%] md:ml-[0%] md:-mt-[5px] md:w-[258px] lg:w-[308px]">
+            <div className="z-1 absolute z-10 -ml-[47%] mt-[80px] w-[calc(95%-65px)] rounded-md border-x-2 border-b-2 border-solid border-slate-200 sm:-ml-[48%] sm:w-[calc(95%-55px)] md:-mt-[5px] md:ml-[0%] md:w-[258px] lg:w-[308px]">
               {search.slice(0, 4).map(({ product }) => {
                 return (
                   <Link key={product._id} href={`/product/${product._id}`}>
                     <div
                       onClick={clearSearch}
-                      className=" flex bg-white px-1 py-3 gap-2 items-center"
+                      className="flex items-center gap-2 bg-white px-1 py-3"
                     >
                       <Image
                         src={product.picUrl}
                         width={30}
                         height={40}
-                        className="object-contain hidden sm:block min-w-[30px] h-[40px]"
+                        className="hidden h-[40px] min-w-[30px] object-contain sm:block"
                         alt={product.name}
                       />
-                      <p className="whitespace-nowrap overflow-hidden text-xs font-semibold ">
+                      <p className="overflow-hidden whitespace-nowrap text-xs font-semibold">
                         {product.name}
                       </p>
                     </div>
@@ -96,16 +96,16 @@ export default function Navbar() {
             </div>
           )}
         </div>
-        <div className="flex  gap-5 md:gap-5">
+        <div className="flex gap-5 md:gap-5">
           <Link href={user ? "/profile" : "/signin"}>
-            <AiOutlineUser className="text-white text-3xl" />
+            <AiOutlineUser className="text-3xl text-white" />
           </Link>
           <div>
             <Link href="/cart">
-              <BsCart2 className="text-white text-3xl" />
+              <BsCart2 className="text-3xl text-white" />
             </Link>
             {cartQuantity > 0 && (
-              <p className="text-bg-slate-900 bg-orange-300 h-[20px] w-[20px] flex items-center justify-center rounded-full absolute top-8 right-1.5 md:right-2.5">
+              <p className="text-bg-slate-900 absolute right-1.5 top-8 flex h-[20px] w-[20px] items-center justify-center rounded-full bg-orange-300 md:right-2.5">
                 {cartQuantity}
               </p>
             )}
@@ -113,18 +113,18 @@ export default function Navbar() {
         </div>
       </div>
       <form
-        className="flex h-auto  py-1  self-center md:hidden w-full  px-5 relative"
+        className="relative flex h-auto w-full self-center px-5 py-1 md:hidden"
         onBlur={blur}
         onSubmit={submitSearch}
       >
         <input
           type="text"
-          className="rounded-lg h-[44px] w-full p-1 border-transparent focus:border-transparent focus:ring-0 "
+          className="h-[44px] w-full rounded-lg border-transparent p-1 focus:border-transparent focus:ring-0"
           value={query}
           onChange={handleSearch}
         />
         <button type="submit" aria-label="Search">
-          <BsSearch className="rounded-r-md bg-orange-300 h-[44px] px-1.5 w-12 rounded-l-md p-2 font-bold absolute right-4 top-[4px]" />
+          <BsSearch className="absolute right-4 top-[4px] h-[44px] w-12 rounded-l-md rounded-r-md bg-orange-300 p-2 px-1.5 font-bold" />
         </button>
       </form>
     </div>

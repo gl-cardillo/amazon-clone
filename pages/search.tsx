@@ -30,9 +30,10 @@ export default function Search({ query, productsAndAverage }: SearchProps) {
 }
 
 export const getServerSideProps: GetServerSideProps<SearchProps> = async (
-  context
+  context,
 ) => {
-  const query = typeof context.query.q === "string" ? context.query.q.trim() : "";
+  const query =
+    typeof context.query.q === "string" ? context.query.q.trim() : "";
   if (!query) {
     return { props: { query, productsAndAverage: [] } };
   }

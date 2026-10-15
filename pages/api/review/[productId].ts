@@ -5,17 +5,13 @@ import { verifyToken } from "@/utils/auth";
 import { reviewRequestSchema } from "@/utils/schemas";
 import { getProductById } from "@/lib/products";
 import { createReview, hasReviewed } from "@/lib/reviews";
-import {
-  isDuplicateKeyError,
-  methodNotAllowed,
-  parseBody,
-} from "@/lib/api";
+import { isDuplicateKeyError, methodNotAllowed, parseBody } from "@/lib/api";
 
 const ALREADY_REVIEWED = "You already reviewed this product";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const productId = String(req.query.productId);
 

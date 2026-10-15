@@ -41,7 +41,7 @@ const shouldRetry = (failureCount: number, error: unknown) =>
 export default function MyApp({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(
     () =>
-      new QueryClient({ defaultOptions: { queries: { retry: shouldRetry } } })
+      new QueryClient({ defaultOptions: { queries: { retry: shouldRetry } } }),
   );
   const [currencySymbol, setCurrencySymbol] = useState<CurrencySymbol>("£");
   const [currencyRate, setCurrencyRate] = useState(1);

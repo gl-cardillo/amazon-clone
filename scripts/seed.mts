@@ -13,7 +13,9 @@ const dbName = (uri: string) => new URL(uri).pathname.slice(1);
 const targetDb = dbName(target);
 // the target is wiped, so refuse anything that isn't clearly a scratch database
 if (targetDb === dbName(source) || !/-(dev|test)$/.test(targetDb)) {
-  throw new Error(`refusing to seed "${targetDb}", it must end in -dev or -test`);
+  throw new Error(
+    `refusing to seed "${targetDb}", it must end in -dev or -test`,
+  );
 }
 
 const from = await mongoose.createConnection(source).asPromise();
@@ -33,7 +35,7 @@ async function copy(collection: string, filter: Record<string, unknown> = {}) {
 // case-insensitive, production may still store it with capitals
 const testAccountEmail = new RegExp(
   `^${TEST_ACCOUNT_EMAIL.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`,
-  "i"
+  "i",
 );
 
 // stand-ins for review authors, so dev matches production without personal data
@@ -49,7 +51,9 @@ async function addReviewAuthors() {
     .toArray();
   const names = await from
     .collection("reviews")
-    .aggregate([{ $group: { _id: "$userId", name: { $first: "$reviewAuthor" } } }])
+    .aggregate([
+      { $group: { _id: "$userId", name: { $first: "$reviewAuthor" } } },
+    ])
     .toArray();
   const nameById = new Map(names.map((n) => [n._id, n.name]));
   if (authors.length > 0) {
@@ -61,7 +65,7 @@ async function addReviewAuthors() {
         // not a valid bcrypt hash, so nobody can log in as a stand-in
         password: "!",
         cart: [],
-      }))
+      })),
     );
   }
   console.log(`users: added ${authors.length} review author stand-ins`);

@@ -28,7 +28,7 @@ function useToken(): string | null | undefined {
   const raw = useSyncExternalStore(
     subscribeToken,
     getTokenSnapshot,
-    () => undefined
+    () => undefined,
   );
   if (raw === undefined) return undefined;
   return raw ? (JSON.parse(raw) as string) : null;
@@ -62,7 +62,7 @@ export function useLogin() {
       (
         await axios.post<AuthResponse>(
           "/api/auth/login",
-          data ?? { emailLogin: TEST_ACCOUNT_EMAIL }
+          data ?? { emailLogin: TEST_ACCOUNT_EMAIL },
         )
       ).data,
     onSuccess: (response) => startSession(queryClient, response),

@@ -4,7 +4,7 @@ import type { Product } from "@/types";
 
 export default function ImageSelector({ product }: { product: Product }) {
   const pics = [product.picUrl, product.picUrl2, product.picUrl3].filter(
-    (url): url is string => Boolean(url)
+    (url): url is string => Boolean(url),
   );
   const [pic, setPic] = useState(product.picUrl);
   return (
@@ -22,7 +22,7 @@ export default function ImageSelector({ product }: { product: Product }) {
             <button
               key={url}
               aria-label="Show image"
-              className={`w-3.5 h-3.5 rounded-full ${
+              className={`h-3.5 w-3.5 rounded-full ${
                 pic === url ? "bg-black" : "bg-slate-400"
               }`}
               onClick={() => setPic(url)}

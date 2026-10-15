@@ -16,7 +16,7 @@ const reviewSchema = new Schema(
   {
     toObject: { virtuals: true },
     toJSON: { virtuals: true },
-  }
+  },
 );
 
 reviewSchema.index({ productId: 1 });
