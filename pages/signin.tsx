@@ -71,9 +71,7 @@ export default function SignIn() {
             />
             <h3 className="text-medium text-[14px] font-bold">
               Create account.
-              <span className="text-md text-[13px] font-bold">
-                New here?
-              </span>
+              <span className="text-md text-[13px] font-bold">New here?</span>
             </h3>
           </div>
           <div className={showSignup ? "" : "hidden"}>

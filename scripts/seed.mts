@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import User from "../models/User.ts";
+import Product from "../models/Product.ts";
+import Review from "../models/Review.ts";
 import { TEST_ACCOUNT_EMAIL } from "../utils/constants.ts";
 
 // copies the catalogue and the test account into a dev or test database
@@ -23,7 +26,7 @@ const to = await mongoose.createConnection(target).asPromise();
 
 async function copy(collection: string, filter: Record<string, unknown> = {}) {
   const docs = await from.collection(collection).find(filter).toArray();
-  // drop rather than empty, so indexes start from production's state too
+  // drop rather than empty, so old indexes can't block the insert
   const existing = await to.db!.listCollections({ name: collection }).toArray();
   if (existing.length > 0) await to.dropCollection(collection);
   if (docs.length > 0) {
@@ -32,20 +35,18 @@ async function copy(collection: string, filter: Record<string, unknown> = {}) {
   console.log(`${collection}: copied ${docs.length}`);
 }
 
-// case-insensitive, production may still store it with capitals
-const testAccountEmail = new RegExp(
-  `^${TEST_ACCOUNT_EMAIL.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`,
-  "i",
-);
-
 // stand-ins for review authors, so dev matches production without personal data
 async function addReviewAuthors() {
   const authorIds = await from.collection("reviews").distinct("userId");
   const authors = await from
     .collection("users")
     .find({
-      _id: { $in: authorIds.map((id) => new mongoose.Types.ObjectId(id)) },
-      email: { $not: testAccountEmail },
+      _id: {
+        $in: authorIds
+          .filter((id) => mongoose.isValidObjectId(id))
+          .map((id) => new mongoose.Types.ObjectId(id)),
+      },
+      email: { $ne: TEST_ACCOUNT_EMAIL },
     })
     .project({ _id: 1 })
     .toArray();
@@ -75,11 +76,15 @@ try {
   await copy("products");
   await copy("reviews");
   // real users stay in production, only the shared test account is copied
-  await copy("users", { email: testAccountEmail });
-  await to
-    .collection("users")
-    .updateMany({}, [{ $set: { email: { $toLower: "$email" } } }]);
+  await copy("users", { email: TEST_ACCOUNT_EMAIL });
   await addReviewAuthors();
+  // the app connects with autoIndex off, so indexes are built here
+  for (const { modelName, schema } of [User, Product, Review]) {
+    const model = to.model(modelName, schema);
+    await model.syncIndexes();
+    const names = (await model.listIndexes()).map((i) => i.name).join(", ");
+    console.log(`${model.collection.name} indexes: ${names}`);
+  }
   console.log(`seeded ${targetDb} from ${dbName(source)}`);
 } finally {
   await from.close();
