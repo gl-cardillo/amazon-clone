@@ -75,7 +75,7 @@ export default function SignIn() {
             </h3>
           </div>
           <div className={showSignup ? "" : "hidden"}>
-            <p className="pl-4 pt-2 text-[12px] text-red-600">{errorSignup}</p>
+            <p className="pt-2 pl-4 text-[12px] text-red-600">{errorSignup}</p>
             <form
               className="mx-1 flex flex-col"
               id="signup"
@@ -86,7 +86,7 @@ export default function SignIn() {
                 First and last name
               </label>
               <input
-                className="border-1 rounded-[3px] border-solid border-slate-400 p-2.5 focus:border-transparent focus:outline-orange-300 focus:ring-0"
+                className="rounded-[3px] border border-solid border-slate-400 p-2.5 focus:border-transparent focus:ring-0 focus:outline-orange-300"
                 type="text"
                 id="name"
                 {...register("name")}
@@ -98,7 +98,7 @@ export default function SignIn() {
                 Email
               </label>
               <input
-                className="border-1 rounded-[3px] border-solid border-slate-400 p-2.5 focus:border-transparent focus:outline-orange-300 focus:ring-0"
+                className="rounded-[3px] border border-solid border-slate-400 p-2.5 focus:border-transparent focus:ring-0 focus:outline-orange-300"
                 type="email"
                 id="email"
                 {...register("email")}
@@ -110,7 +110,7 @@ export default function SignIn() {
                 Password
               </label>
               <input
-                className="border-1 rounded-[3px] border-solid border-slate-400 p-2.5 focus:border-transparent focus:outline-orange-300 focus:ring-0"
+                className="rounded-[3px] border border-solid border-slate-400 p-2.5 focus:border-transparent focus:ring-0 focus:outline-orange-300"
                 type="password"
                 id="password"
                 {...register("password")}
@@ -121,7 +121,7 @@ export default function SignIn() {
               <button
                 type="submit"
                 form="signup"
-                className="mt-5 rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] p-3"
+                className="mt-5 rounded-[5px] border border-gray-300 bg-linear-to-b from-[#f7dfa5] to-[#f0c14b] p-3"
               >
                 Continue
               </button>
@@ -151,7 +151,7 @@ export default function SignIn() {
             </h3>
           </div>
           <div className={showSignup ? "hidden" : ""}>
-            <p className="pl-4 pt-2 text-[12px] text-red-600">{errorLogin}</p>
+            <p className="pt-2 pl-4 text-[12px] text-red-600">{errorLogin}</p>
             <form
               className="mx-1 flex flex-col"
               aria-label="Sign in"
@@ -161,7 +161,7 @@ export default function SignIn() {
                 Email
               </label>
               <input
-                className="border-1 rounded-[3px] border-solid border-slate-400 p-2.5 focus:border-transparent focus:outline-orange-300 focus:ring-0"
+                className="rounded-[3px] border border-solid border-slate-400 p-2.5 focus:border-transparent focus:ring-0 focus:outline-orange-300"
                 type="email"
                 id="emailLogin"
                 {...registerLogin("emailLogin")}
@@ -176,7 +176,7 @@ export default function SignIn() {
                 Password
               </label>
               <input
-                className="border-1 rounded-[3px] border-solid border-slate-400 p-2.5 focus:border-transparent focus:outline-orange-300 focus:ring-0"
+                className="rounded-[3px] border border-solid border-slate-400 p-2.5 focus:border-transparent focus:ring-0 focus:outline-orange-300"
                 type="password"
                 id="passwordLogin"
                 {...registerLogin("passwordLogin")}
@@ -185,7 +185,7 @@ export default function SignIn() {
                 {errorsLogin?.passwordLogin?.message}
               </p>
               <button
-                className="mt-5 rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] p-3"
+                className="mt-5 rounded-[5px] border border-gray-300 bg-linear-to-b from-[#f7dfa5] to-[#f0c14b] p-3"
                 type="submit"
               >
                 Continue
@@ -199,7 +199,7 @@ export default function SignIn() {
           <span className="bg-[#f1f5f9] p-2">or</span>
         </p>
         <button
-          className="mt-5 border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] p-4 text-sm"
+          className="mt-5 border border-gray-300 bg-linear-to-b from-[#f7dfa5] to-[#f0c14b] p-4 text-sm"
           onClick={() => login()}
         >
           Login with test account

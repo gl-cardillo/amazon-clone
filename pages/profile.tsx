@@ -100,7 +100,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="mx-6 mt-5 flex flex-col items-center gap-3 rounded-md bg-white p-5 shadow md:mx-44 lg:mx-[300px] xl:mx-[500px] 2xl:mx-[600px] 3xl:mx-[800px]">
+    <div className="mx-6 mt-5 flex flex-col items-center gap-3 rounded-md bg-white p-5 shadow-sm md:mx-44 lg:mx-[300px] xl:mx-[500px] 2xl:mx-[600px] 3xl:mx-[800px]">
       <h2 className="text-xl font-bold">Welcome {user && user.firstName}</h2>
       <Image
         className="h-[50px] w-[50px] rounded-full"
@@ -140,7 +140,7 @@ export default function Profile() {
                   type="text"
                   id="name"
                   name="name"
-                  className="w-[228px] rounded border-gray-300 shadow"
+                  className="w-[228px] rounded-sm border-gray-300 shadow-sm"
                 />
                 <p className="pt-1 text-[12px] text-red-600">
                   {errors?.name?.message}
@@ -158,7 +158,7 @@ export default function Profile() {
                   type="text"
                   id="address"
                   name="address"
-                  className="w-[228px] rounded border-gray-300 shadow"
+                  className="w-[228px] rounded-sm border-gray-300 shadow-sm"
                 />
                 <p className="pt-1 text-[12px] text-red-600">
                   {errors?.address?.message}
@@ -176,7 +176,7 @@ export default function Profile() {
                   type="text"
                   id="city"
                   name="city"
-                  className="w-[228px] rounded border-gray-300 shadow"
+                  className="w-[228px] rounded-sm border-gray-300 shadow-sm"
                 />
               </div>
               <div className="relative mt-3 flex flex-col">
@@ -191,7 +191,7 @@ export default function Profile() {
                   type="text"
                   id="postcode"
                   name="postcode"
-                  className="w-[228px] rounded border-gray-300 shadow"
+                  className="w-[228px] rounded-sm border-gray-300 shadow-sm"
                 />
                 <p className="pt-1 text-[12px] text-red-600">
                   {errors?.postcode?.message}
@@ -209,7 +209,7 @@ export default function Profile() {
                   type="date"
                   name="dateOfBirth"
                   id="dateOfBirth"
-                  className="w-[228px] rounded border-gray-300 shadow"
+                  className="w-[228px] rounded-sm border-gray-300 shadow-sm"
                 />
                 <p className="pt-1 text-[12px] text-red-600">
                   {errors?.dateOfBirth?.message}
@@ -218,14 +218,14 @@ export default function Profile() {
               <div className="flex gap-2">
                 <button
                   type="submit"
-                  className="mt-5 w-[110px] rounded bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] py-0.5 text-[14px] shadow"
+                  className="mt-5 w-[110px] rounded-sm bg-linear-to-b from-[#f7dfa5] to-[#f0c14b] py-0.5 text-[14px] shadow-sm"
                 >
                   Update
                 </button>
                 <button
                   onClick={() => setEditProfile(false)}
                   type="button"
-                  className="mt-5 w-[110px] rounded bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] text-[14px] shadow"
+                  className="mt-5 w-[110px] rounded-sm bg-linear-to-b from-[#f7dfa5] to-[#f0c14b] text-[14px] shadow-sm"
                 >
                   Cancel
                 </button>

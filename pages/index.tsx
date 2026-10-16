@@ -58,7 +58,7 @@ export default function Home() {
                     alt={slideImage.caption.join(" ")}
                     priority={index === 0}
                   />
-                  <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/60 via-black/10 to-transparent">
+                  <div className="absolute inset-0 flex items-end bg-linear-to-t from-black/60 via-black/10 to-transparent">
                     <h2 className="p-5 font-serif text-2xl font-bold text-white drop-shadow-lg md:p-10 md:text-4xl lg:px-16 lg:text-5xl">
                       {slideImage.caption[0]}
                       <br />
@@ -76,16 +76,16 @@ export default function Home() {
           return (
             <div
               key={index}
-              className="m-3 max-w-xs rounded bg-white p-3 shadow transition-transform duration-300 ease-in-out hover:scale-[1.01] hover:shadow-lg"
+              className="m-3 max-w-xs rounded-sm bg-white p-3 shadow-sm transition-transform duration-300 ease-in-out hover:scale-[1.01] hover:shadow-lg"
             >
               <Link href={catalog.link}>
                 <h2 className="pb-2 text-lg font-bold">{catalog.name}</h2>
                 <Image
                   src={catalog.image}
                   width={400}
-                  height={400}
+                  height={267}
                   sizes="320px"
-                  className="object-cover"
+                  className="aspect-3/2 w-full object-cover"
                   alt={catalog.name}
                 />
                 <p className="text-slate-500">See more...</p>

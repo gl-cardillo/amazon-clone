@@ -92,7 +92,7 @@ export default function Product({
           )}
         </div>
       </div>
-      <div className="my-3 hidden flex-col items-center rounded-md bg-white p-3 shadow md:mx-24 md:flex lg:mx-52 xl:mx-[400px] 3xl:mx-[600px]">
+      <div className="my-3 hidden flex-col items-center rounded-md bg-white p-3 shadow-sm md:mx-24 md:flex lg:mx-52 xl:mx-[400px] 3xl:mx-[600px]">
         <div className="flex h-[320px] w-full items-center justify-between gap-5">
           <div className="w-1/3 p-2">
             <ImageSelector product={product} />
@@ -144,7 +144,7 @@ export default function Product({
           </div>
         )}
       </div>
-      <div className="flex flex-col items-center gap-3 rounded-md bg-white py-5 shadow md:mx-24 lg:mx-52 xl:mx-[400px] 3xl:mx-[600px]">
+      <div className="flex flex-col items-center gap-3 rounded-md bg-white py-5 shadow-sm md:mx-24 lg:mx-52 xl:mx-[400px] 3xl:mx-[600px]">
         <p className="font-semibold text-green-700">In Stock</p>
         <div className="flex w-[70px] gap-3 rounded-2xl border-2 border-solid border-[#f0c14b] px-[9px]">
           <button
@@ -165,7 +165,7 @@ export default function Product({
         <button
           onClick={addToCart}
           disabled={addToCartMutation.isPending}
-          className="h-12 w-[300px] rounded-[5px] bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] p-2 text-[14px] text-gray-800 shadow"
+          className="h-12 w-[300px] rounded-[5px] bg-linear-to-b from-[#f7dfa5] to-[#f0c14b] p-2 text-[14px] text-gray-800 shadow-sm"
         >
           Add to Cart
         </button>
@@ -177,20 +177,20 @@ export default function Product({
         setAskLogin={setAskLogin}
       />
       {askLogin && (
-        <div className="fixed left-0 top-0 z-[10] h-full w-full bg-black/50">
-          <div className="z-3 absolute left-1/2 top-1/2 w-[300px] -translate-x-1/2 -translate-y-1/2 transform rounded-md border-2 border-[#f0c14b] bg-white p-4 text-[18px]">
+        <div className="fixed top-0 left-0 z-10 h-full w-full bg-black/50">
+          <div className="absolute top-1/2 left-1/2 w-[300px] -translate-x-1/2 -translate-y-1/2 transform rounded-md border-2 border-[#f0c14b] bg-white p-4 text-[18px]">
             <p className="text-center font-semibold text-gray-600">
               You need to login first
             </p>
             <div className="flex justify-around">
               <button
-                className="mt-5 w-[120px] rounded-[5px] bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] p-2 text-[14px] text-gray-800 shadow"
+                className="mt-5 w-[120px] rounded-[5px] bg-linear-to-b from-[#f7dfa5] to-[#f0c14b] p-2 text-[14px] text-gray-800 shadow-sm"
                 onClick={() => setAskLogin(false)}
               >
                 Cancel
               </button>
               <button
-                className="mt-5 w-[120px] rounded-[5px] bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] p-1 text-[14px] text-gray-800 shadow"
+                className="mt-5 w-[120px] rounded-[5px] bg-linear-to-b from-[#f7dfa5] to-[#f0c14b] p-1 text-[14px] text-gray-800 shadow-sm"
                 onClick={() => router.push("/signin")}
               >
                 Go to login page

@@ -1,23 +1,41 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
 
-html,
-body {
-  padding: 0;
-  margin: 0;
-  background-color: #f1f5f9;
-  min-height: 100vw;
-  font-family: "Roboto", sans-serif;
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-xs: 425px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  --breakpoint-3xl: 2560px;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+/* in the base layer, so utilities still override them */
+@layer base {
+  /* v3 defaults: gray borders and pointer cursor on buttons */
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  html,
+  body {
+    background-color: #f1f5f9;
+    font-family: "Roboto", sans-serif;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
 }

@@ -61,7 +61,7 @@ export default function Cart() {
   };
 
   return (
-    <div className="m-5 flex flex-col rounded-md bg-white p-2 py-5 shadow sm:mx-6 md:mx-20 md:px-10 lg:mx-40 xl:mx-[400px] 2xl:mx-[500px] 3xl:mx-[600px]">
+    <div className="m-5 flex flex-col rounded-md bg-white p-2 py-5 shadow-sm sm:mx-6 md:mx-20 md:px-10 lg:mx-40 xl:mx-[400px] 2xl:mx-[500px] 3xl:mx-[600px]">
       <h2 className="-ml-2 text-xl font-bold text-gray-700">Shopping Basket</h2>
       <div>
         {cart ? (
@@ -156,7 +156,7 @@ export default function Cart() {
               <div>
                 <button
                   onClick={() => router.push("/")}
-                  className="mt-1 w-[120px] rounded-[5px] border-[1px] border-gray-300 bg-gradient-to-b from-[#f7dfa5] to-[#f0c14b] p-1 text-[14px]"
+                  className="mt-1 w-[120px] rounded-[5px] border border-gray-300 bg-linear-to-b from-[#f7dfa5] to-[#f0c14b] p-1 text-[14px]"
                 >
                   Go to shopping!
                 </button>

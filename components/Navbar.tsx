@@ -63,19 +63,19 @@ export default function Navbar() {
             <input
               type="text"
               aria-label="Search products"
-              className="h-[38px] rounded-l border-transparent p-1 focus:border-transparent focus:outline-none focus:ring-0 md:w-[300px] lg:w-[350px]"
+              className="h-[38px] rounded-l border-transparent p-1 focus:border-transparent focus:ring-0 focus:outline-hidden md:w-[300px] lg:w-[350px]"
               value={query}
               onChange={handleSearch}
             />
             <button type="submit" aria-label="Search">
-              <BsSearch className="absolute -right-1 top-0 h-[38px] w-12 rounded-l-md rounded-r-md bg-orange-300 p-2 px-1.5 font-bold" />
+              <BsSearch className="absolute top-0 -right-1 h-[38px] w-12 rounded-l-md rounded-r-md bg-orange-300 p-2 px-1.5 font-bold" />
             </button>
           </form>
           {showSearch && (
             <div
               role="group"
               aria-label="Search suggestions"
-              className="z-1 absolute z-10 -ml-[47%] mt-[80px] w-[calc(95%-65px)] rounded-md border-x-2 border-b-2 border-solid border-slate-200 sm:-ml-[48%] sm:w-[calc(95%-55px)] md:-mt-[5px] md:ml-[0%] md:w-[258px] lg:w-[308px]"
+              className="absolute z-10 mt-[80px] ml-[-47%] w-[calc(95%-65px)] rounded-md border-x-2 border-b-2 border-solid border-slate-200 sm:ml-[-48%] sm:w-[calc(95%-55px)] md:mt-[-5px] md:ml-[0%] md:w-[258px] lg:w-[308px]"
             >
               {search.slice(0, 4).map(({ product }) => {
                 return (
@@ -91,7 +91,7 @@ export default function Navbar() {
                         className="hidden h-[40px] min-w-[30px] object-contain sm:block"
                         alt={product.name}
                       />
-                      <p className="overflow-hidden whitespace-nowrap text-xs font-semibold">
+                      <p className="overflow-hidden text-xs font-semibold whitespace-nowrap">
                         {product.name}
                       </p>
                     </div>
@@ -120,7 +120,7 @@ export default function Navbar() {
             {cartQuantity > 0 && (
               <p
                 aria-hidden="true"
-                className="text-bg-slate-900 absolute right-1.5 top-8 flex h-[20px] w-[20px] items-center justify-center rounded-full bg-orange-300 md:right-2.5"
+                className="text-bg-slate-900 absolute top-8 right-1.5 flex h-[20px] w-[20px] items-center justify-center rounded-full bg-orange-300 md:right-2.5"
               >
                 {cartQuantity}
               </p>
@@ -141,7 +141,7 @@ export default function Navbar() {
           onChange={handleSearch}
         />
         <button type="submit" aria-label="Search">
-          <BsSearch className="absolute right-4 top-[4px] h-[44px] w-12 rounded-l-md rounded-r-md bg-orange-300 p-2 px-1.5 font-bold" />
+          <BsSearch className="absolute top-[4px] right-4 h-[44px] w-12 rounded-l-md rounded-r-md bg-orange-300 p-2 px-1.5 font-bold" />
         </button>
       </form>
     </div>

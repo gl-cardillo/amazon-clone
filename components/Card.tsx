@@ -18,8 +18,8 @@ export default function Card({ product, reviewAverage }: CardProps) {
 
   return (
     <Link href={`/product/${product._id}`}>
-      <div className="m-2 flex w-full gap-5 rounded border-2 bg-white p-2 shadow transition-transform duration-200 ease-in-out hover:scale-[1.01] hover:shadow-lg md:h-[400px] md:w-[245px] md:flex-col lg:w-[300px]">
-        <div className="relative h-[150px] w-[130px] min-w-[130px] overflow-hidden rounded bg-slate-50 md:h-[210px] md:w-full">
+      <div className="m-2 flex w-full gap-5 rounded-sm border-2 bg-white p-2 shadow-sm transition-transform duration-200 ease-in-out hover:scale-[1.01] hover:shadow-lg md:h-[400px] md:w-[245px] md:flex-col lg:w-[300px]">
+        <div className="relative h-[150px] w-[130px] min-w-[130px] overflow-hidden rounded-sm bg-slate-50 md:h-[210px] md:w-full">
           <Image
             src={product.picUrl}
             alt={product.name}
