@@ -11,6 +11,10 @@ import Swal from "sweetalert2";
 import { swalStyle, handleSuccess } from "../utils/utils";
 import { profileSchema, type ProfileInput } from "../utils/schemas";
 import { TEST_ACCOUNT_EMAIL } from "../utils/constants";
+import { cn } from "../utils/cn";
+import Button from "../components/ui/Button";
+import Card from "../components/ui/Card";
+import { FieldError, Input, Label } from "../components/ui/Field";
 import {
   useDeleteAccount,
   useLogout,
@@ -23,6 +27,19 @@ const CURRENCY_RATES: Record<CurrencySymbol, number> = {
   "€": 1.18,
   $: 1.2,
 };
+const CURRENCIES = Object.keys(CURRENCY_RATES) as CurrencySymbol[];
+
+const PROFILE_FIELDS: {
+  name: keyof ProfileInput;
+  label: string;
+  type: "text" | "date";
+}[] = [
+  { name: "name", label: "Name", type: "text" },
+  { name: "address", label: "Address", type: "text" },
+  { name: "city", label: "City", type: "text" },
+  { name: "postcode", label: "Postcode", type: "text" },
+  { name: "dateOfBirth", label: "Date of birth", type: "date" },
+];
 
 export default function Profile() {
   const [showDetails, setShowDetails] = useState(false);
@@ -100,7 +117,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="mx-4 mt-5 flex flex-col items-center gap-3 rounded-lg border border-border bg-surface p-5 shadow-sm md:mx-auto md:max-w-xl">
+    <Card className="mx-4 mt-5 flex flex-col items-center gap-3 p-5 md:mx-auto md:max-w-xl">
       <h2 className="text-xl font-bold">Welcome {user && user.firstName}</h2>
       <Image
         className="h-12.5 w-12.5 rounded-full"
@@ -120,118 +137,41 @@ export default function Profile() {
           aria-expanded={showDetails}
         >
           <MdKeyboardArrowDown
-            className={`text-xl ${showDetails ? "rotate-180" : ""}`}
+            className={cn("text-xl", showDetails && "rotate-180")}
           />
         </button>
       </div>
       {showDetails &&
         (editProfile ? (
-          <div className="flex flex-col">
-            <form onSubmit={handleSubmit(updateProfile)}>
-              <div className="relative mt-3 flex flex-col">
-                <label
-                  htmlFor="name"
-                  className="absolute -top-2.5 left-2 bg-surface px-1 text-sm text-link"
-                >
-                  Name
-                </label>
-                <input
-                  {...register("name")}
-                  type="text"
-                  id="name"
-                  name="name"
-                  className="w-57 rounded-md border-input bg-surface text-foreground shadow-sm"
+          <form
+            className="flex w-60 flex-col gap-3"
+            onSubmit={handleSubmit(updateProfile)}
+          >
+            {PROFILE_FIELDS.map(({ name, label, type }) => (
+              <div key={name} className="flex flex-col gap-1">
+                <Label htmlFor={name}>{label}</Label>
+                <Input
+                  type={type}
+                  id={name}
+                  aria-invalid={Boolean(errors[name])}
+                  {...register(name)}
                 />
-                <p className="pt-1 text-xs text-danger">
-                  {errors?.name?.message}
-                </p>
+                <FieldError message={errors[name]?.message} />
               </div>
-              <div className="relative mt-3 flex flex-col">
-                <label
-                  htmlFor="address"
-                  className="absolute -top-2.5 left-2 bg-surface px-1 text-sm text-link"
-                >
-                  Address
-                </label>
-                <input
-                  {...register("address")}
-                  type="text"
-                  id="address"
-                  name="address"
-                  className="w-57 rounded-md border-input bg-surface text-foreground shadow-sm"
-                />
-                <p className="pt-1 text-xs text-danger">
-                  {errors?.address?.message}
-                </p>
-              </div>
-              <div className="relative mt-3 flex flex-col">
-                <label
-                  htmlFor="city"
-                  className="absolute -top-2.5 left-2 bg-surface px-1 text-sm text-link"
-                >
-                  City
-                </label>
-                <input
-                  {...register("city")}
-                  type="text"
-                  id="city"
-                  name="city"
-                  className="w-57 rounded-md border-input bg-surface text-foreground shadow-sm"
-                />
-              </div>
-              <div className="relative mt-3 flex flex-col">
-                <label
-                  htmlFor="postcode"
-                  className="absolute -top-2.5 left-2 bg-surface px-1 text-sm text-link"
-                >
-                  Postcode
-                </label>
-                <input
-                  {...register("postcode")}
-                  type="text"
-                  id="postcode"
-                  name="postcode"
-                  className="w-57 rounded-md border-input bg-surface text-foreground shadow-sm"
-                />
-                <p className="pt-1 text-xs text-danger">
-                  {errors?.postcode?.message}
-                </p>
-              </div>
-              <div className="relative mt-3 flex flex-col">
-                <label
-                  htmlFor="dateOfBirth"
-                  className="absolute -top-2.5 left-2 bg-surface px-1 text-sm text-link"
-                >
-                  Date of birth
-                </label>
-                <input
-                  {...register("dateOfBirth")}
-                  type="date"
-                  name="dateOfBirth"
-                  id="dateOfBirth"
-                  className="w-57 rounded-md border-input bg-surface text-foreground shadow-sm"
-                />
-                <p className="pt-1 text-xs text-danger">
-                  {errors?.dateOfBirth?.message}
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  type="submit"
-                  className="mt-5 w-27.5 rounded-md bg-primary py-1 text-sm text-primary-foreground shadow-sm hover:bg-primary-hover"
-                >
-                  Update
-                </button>
-                <button
-                  onClick={() => setEditProfile(false)}
-                  type="button"
-                  className="mt-5 w-27.5 rounded-md border border-border bg-surface py-1 text-sm hover:bg-muted"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
+            ))}
+            <div className="mt-2 flex gap-2">
+              <Button type="submit" className="flex-1">
+                Update
+              </Button>
+              <Button
+                variant="secondary"
+                className="flex-1"
+                onClick={() => setEditProfile(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
         ) : (
           <div className="flex min-w-30 flex-col">
             <button
@@ -264,36 +204,17 @@ export default function Profile() {
       <div>
         <p className="my-3 text-center">Currency:</p>
         <div className="flex gap-5">
-          <button
-            onClick={() => setCurrency("£")}
-            className={`h-10 w-10 rounded-md border text-xl ${
-              currencySymbol === "£"
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-border hover:bg-muted"
-            }`}
-          >
-            £
-          </button>
-          <button
-            onClick={() => setCurrency("€")}
-            className={`h-10 w-10 rounded-md border text-xl ${
-              currencySymbol === "€"
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-border hover:bg-muted"
-            }`}
-          >
-            €
-          </button>
-          <button
-            onClick={() => setCurrency("$")}
-            className={`h-10 w-10 rounded-md border text-xl ${
-              currencySymbol === "$"
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-border hover:bg-muted"
-            }`}
-          >
-            $
-          </button>
+          {CURRENCIES.map((symbol) => (
+            <Button
+              key={symbol}
+              variant={currencySymbol === symbol ? "primary" : "secondary"}
+              aria-pressed={currencySymbol === symbol}
+              onClick={() => setCurrency(symbol)}
+              className="w-10 px-0 text-xl"
+            >
+              {symbol}
+            </Button>
+          ))}
         </div>
       </div>
       <div className="my-3 flex flex-col items-center gap-7">
@@ -302,14 +223,11 @@ export default function Profile() {
           <p className="text-lg font-semibold">Log out</p>
         </button>
         {user && user.email !== TEST_ACCOUNT_EMAIL && (
-          <button
-            onClick={confirmDelete}
-            className="rounded-md border-2 border-danger px-3 py-1 text-danger hover:bg-danger/10"
-          >
+          <Button variant="danger" onClick={confirmDelete}>
             Delete account
-          </button>
+          </Button>
         )}
       </div>
-    </div>
+    </Card>
   );
 }

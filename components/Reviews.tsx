@@ -1,12 +1,15 @@
 import axios from "axios";
 import Image from "next/image";
-import { BsStarFill, BsStar } from "react-icons/bs";
 import { useState, type Dispatch, type SetStateAction } from "react";
 import { errorMessage, useMe } from "../hooks/useAuth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/router";
 import { reviewSchema, type ReviewInput } from "../utils/schemas";
+import Button from "./ui/Button";
+import Card from "./ui/Card";
+import Stars, { StarInput } from "./ui/Stars";
+import { FieldError, Label, Select, Textarea } from "./ui/Field";
 import type { Product, Review, ReviewSummary } from "@/types";
 
 type SortMethod = "recent" | "rating";
@@ -83,7 +86,7 @@ export default function Reviews({
   );
 
   return (
-    <div className="mx-auto mt-3 flex w-full max-w-3xl flex-col rounded-lg border border-border bg-surface p-5 shadow-sm md:px-10">
+    <Card className="mx-auto mt-3 flex w-full max-w-3xl flex-col p-5 md:px-10">
       <div className="flex flex-col items-center">
         <h3 className="text-2xl font-bold text-foreground">Customer reviews</h3>
         <p className="mb-3 text-muted-foreground">
@@ -116,27 +119,23 @@ export default function Reviews({
       </div>
       <div className="flex justify-center gap-4">
         <div className="mt-6 flex flex-col items-center gap-1 self-center">
-          <label htmlFor="sortBy" className="font-bold text-foreground">
-            Sort by
-          </label>
-          <select
+          <Label htmlFor="sortBy">Sort by</Label>
+          <Select
             id="sortBy"
             value={sort}
             onChange={(e) => setSort(e.target.value as SortMethod)}
-            className="w-35 cursor-pointer rounded-md border-input bg-surface text-sm text-foreground shadow-xs"
+            className="w-35"
           >
             <option value="recent">Most recent</option>
             <option value="rating">Rating</option>
-          </select>
+          </Select>
         </div>
         <div className="mt-6 flex flex-col items-center gap-1 self-center">
-          <label htmlFor="filterBy" className="font-bold text-foreground">
-            Filter by
-          </label>
-          <select
+          <Label htmlFor="filterBy">Filter by</Label>
+          <Select
             id="filterBy"
             onChange={(e) => handleFilter(e.target.value)}
-            className="w-35 cursor-pointer rounded-md border-input bg-surface text-sm text-foreground shadow-xs"
+            className="w-35"
           >
             <option value="0">All rating</option>
             <option value="1">1 star</option>
@@ -144,7 +143,7 @@ export default function Reviews({
             <option value="3">3 star</option>
             <option value="4">4 star</option>
             <option value="5">5 star</option>
-          </select>
+          </Select>
         </div>
       </div>
       <div>
@@ -168,15 +167,7 @@ export default function Reviews({
                     />{" "}
                     <p className="text-xl">{review.reviewAuthor}</p>
                   </div>
-                  <div className="my-2 flex gap-1">
-                    {starsLoop.map((numb, index) =>
-                      review.rating > numb ? (
-                        <BsStarFill key={index} className="text-lg text-star" />
-                      ) : (
-                        <BsStar key={index} className="text-lg text-star" />
-                      ),
-                    )}
-                  </div>
+                  <Stars rating={review.rating} size="sm" className="my-2" />
                   <p className="mb-2 text-sm">
                     Reviewed on {review.date_formatted}
                   </p>
@@ -196,59 +187,43 @@ export default function Reviews({
         <div>
           <h4 className="my-3 font-semibold text-foreground">Leave a review</h4>
           <div className="flex flex-col items-center gap-2">
-            <div className="flex items-center gap-3">
-              {starsLoop.map((numb) => (
-                <button
-                  key={numb}
-                  type="button"
-                  aria-label={`Rate ${numb + 1} star${numb > 0 ? "s" : ""}`}
-                  aria-pressed={ratingForm === numb + 1}
-                  onClick={() => {
-                    setErrorRating("");
-                    setRatingForm(numb + 1);
-                  }}
-                >
-                  {(ratingForm ?? 0) > numb ? (
-                    <BsStarFill className="text-xl text-star" />
-                  ) : (
-                    <BsStar className="text-xl text-star" />
-                  )}
-                </button>
-              ))}
-            </div>
-            <p className="text-sm text-danger">{errorRating}</p>
+            <StarInput
+              value={ratingForm}
+              onChange={(rating) => {
+                setErrorRating("");
+                setRatingForm(rating);
+              }}
+            />
+            <FieldError message={errorRating} />
           </div>
           <div>
             <form
               className="mt-2 flex flex-col items-center"
               onSubmit={handleSubmit(addReview)}
             >
-              <textarea
-                className="h-24 w-full resize-none rounded-md border-input bg-surface p-2 text-foreground shadow-sm"
+              <Textarea
+                className="h-24"
                 id="text"
                 aria-label="Your review"
+                aria-invalid={Boolean(errors.review)}
                 {...register("review")}
               />
-              <p className="pt-1 text-xs text-danger">
-                {errors?.review?.message}
-              </p>
-              <button
-                className="mt-2 w-30 rounded-md bg-primary p-2 text-sm text-primary-foreground shadow-sm hover:bg-primary-hover"
-                type="submit"
-              >
+              <FieldError message={errors.review?.message} />
+              <Button type="submit" className="mt-2">
                 Add review
-              </button>
+              </Button>
             </form>
           </div>
         </div>
       ) : (
-        <button
-          className="mt-5 h-12 w-50 self-center rounded-md bg-primary p-1 font-medium text-primary-foreground shadow-sm hover:bg-primary-hover"
+        <Button
+          size="lg"
+          className="mt-5 self-center"
           onClick={() => setAskLogin(true)}
         >
           Write a review
-        </button>
+        </Button>
       )}
-    </div>
+    </Card>
   );
 }

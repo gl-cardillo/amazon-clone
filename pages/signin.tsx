@@ -9,6 +9,10 @@ import {
   type SignupInput,
 } from "../utils/schemas";
 import { errorMessage, useLogin, useMe, useSignup } from "../hooks/useAuth";
+import Button from "../components/ui/Button";
+import Card from "../components/ui/Card";
+import { FieldError, Input, Label } from "../components/ui/Field";
+import { cn } from "../utils/cn";
 
 export default function SignIn() {
   const [showSignup, setShowSignup] = useState(true);
@@ -54,8 +58,8 @@ export default function SignIn() {
   return (
     <div className="mx-3 my-10 flex flex-col xs:mx-auto xs:max-w-100">
       <h2 className="self-start text-3xl font-semibold">Welcome</h2>
-      <div className="mt-3 max-w-100 overflow-hidden rounded-lg border border-border bg-surface shadow-md">
-        <div className={`p-4 ${!showSignup ? "bg-muted" : ""}`}>
+      <Card className="mt-3 max-w-100 overflow-hidden shadow-md">
+        <div className={cn("p-4", !showSignup && "bg-muted")}>
           <div className="flex items-center gap-3">
             <input
               type="radio"
@@ -63,71 +67,59 @@ export default function SignIn() {
               aria-label="Create account"
               onChange={() => setShowSignup(true)}
               checked={showSignup}
-              className="h-4 w-4 text-primary checked:bg-primary checked:ring-primary hover:bg-primary"
+              className="h-4 w-4 text-primary focus:ring-primary"
             />
             <h3 className="text-sm font-bold">
               Create account.
-              <span className="text-xs font-bold">New here?</span>
+              <span className="text-xs font-bold"> New here?</span>
             </h3>
           </div>
           <div className={showSignup ? "" : "hidden"}>
-            <p className="pt-2 pl-4 text-xs text-danger">{errorSignup}</p>
             <form
-              className="mx-1 flex flex-col"
+              className="mt-3 flex flex-col gap-3"
               id="signup"
               aria-label="Create account"
               onSubmit={handleSubmit(signup)}
             >
-              <label htmlFor="name" className="py-2 pl-2 font-semibold">
-                First and last name
-              </label>
-              <input
-                className="rounded-md border border-input bg-surface p-2.5 text-foreground focus:border-primary focus:ring-primary"
-                type="text"
-                id="name"
-                {...register("name")}
-              />
-              <p className="pt-1 text-xs text-danger">
-                {errors?.name?.message}
-              </p>
-              <label htmlFor="email" className="py-2 pl-2 font-semibold">
-                Email
-              </label>
-              <input
-                className="rounded-md border border-input bg-surface p-2.5 text-foreground focus:border-primary focus:ring-primary"
-                type="email"
-                id="email"
-                {...register("email")}
-              />
-              <p className="pt-1 text-xs text-danger">
-                {errors?.email?.message}
-              </p>
-              <label htmlFor="password" className="py-2 pl-2 font-semibold">
-                Password
-              </label>
-              <input
-                className="rounded-md border border-input bg-surface p-2.5 text-foreground focus:border-primary focus:ring-primary"
-                type="password"
-                id="password"
-                {...register("password")}
-              />
-              <p className="pt-1 text-xs text-danger">
-                {errors?.password?.message}
-              </p>
-              <button
-                type="submit"
-                form="signup"
-                className="mt-5 rounded-md bg-primary p-3 font-medium text-primary-foreground hover:bg-primary-hover"
-              >
+              <FieldError message={errorSignup} />
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="name">First and last name</Label>
+                <Input
+                  type="text"
+                  id="name"
+                  aria-invalid={Boolean(errors.name)}
+                  {...register("name")}
+                />
+                <FieldError message={errors.name?.message} />
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  type="email"
+                  id="email"
+                  aria-invalid={Boolean(errors.email)}
+                  {...register("email")}
+                />
+                <FieldError message={errors.email?.message} />
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  type="password"
+                  id="password"
+                  aria-invalid={Boolean(errors.password)}
+                  {...register("password")}
+                />
+                <FieldError message={errors.password?.message} />
+              </div>
+              <Button type="submit" form="signup" size="lg" className="mt-2">
                 Continue
-              </button>
+              </Button>
             </form>
           </div>
         </div>
         <div
-          className={`border-t border-border p-4 ${
-            showSignup ? "bg-muted" : ""
-          }`}
+          className={cn("border-t border-border p-4", showSignup && "bg-muted")}
         >
           <div className="flex items-center gap-3">
             <input
@@ -136,7 +128,7 @@ export default function SignIn() {
               aria-label="Sign in"
               onChange={() => setShowSignup(false)}
               checked={!showSignup}
-              className="h-4 w-4 text-primary checked:bg-primary checked:ring-primary hover:bg-primary focus:border-transparent focus:ring-0"
+              className="h-4 w-4 text-primary focus:ring-primary"
             />
             <h3 className="text-sm font-bold">
               Sign-In.
@@ -144,59 +136,46 @@ export default function SignIn() {
             </h3>
           </div>
           <div className={showSignup ? "hidden" : ""}>
-            <p className="pt-2 pl-4 text-xs text-danger">{errorLogin}</p>
             <form
-              className="mx-1 flex flex-col"
+              className="mt-3 flex flex-col gap-3"
               aria-label="Sign in"
               onSubmit={handleSubmitLogin(login)}
             >
-              <label htmlFor="emailLogin" className="py-2 pl-2 font-semibold">
-                Email
-              </label>
-              <input
-                className="rounded-md border border-input bg-surface p-2.5 text-foreground focus:border-primary focus:ring-primary"
-                type="email"
-                id="emailLogin"
-                {...registerLogin("emailLogin")}
-              />
-              <p className="pt-1 text-xs text-danger">
-                {errorsLogin?.emailLogin?.message}
-              </p>
-              <label
-                htmlFor="passwordLogin"
-                className="py-2 pl-2 font-semibold"
-              >
-                Password
-              </label>
-              <input
-                className="rounded-md border border-input bg-surface p-2.5 text-foreground focus:border-primary focus:ring-primary"
-                type="password"
-                id="passwordLogin"
-                {...registerLogin("passwordLogin")}
-              />
-              <p className="pt-1 text-xs text-danger">
-                {errorsLogin?.passwordLogin?.message}
-              </p>
-              <button
-                className="mt-5 rounded-md bg-primary p-3 font-medium text-primary-foreground hover:bg-primary-hover"
-                type="submit"
-              >
+              <FieldError message={errorLogin} />
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="emailLogin">Email</Label>
+                <Input
+                  type="email"
+                  id="emailLogin"
+                  aria-invalid={Boolean(errorsLogin.emailLogin)}
+                  {...registerLogin("emailLogin")}
+                />
+                <FieldError message={errorsLogin.emailLogin?.message} />
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label htmlFor="passwordLogin">Password</Label>
+                <Input
+                  type="password"
+                  id="passwordLogin"
+                  aria-invalid={Boolean(errorsLogin.passwordLogin)}
+                  {...registerLogin("passwordLogin")}
+                />
+                <FieldError message={errorsLogin.passwordLogin?.message} />
+              </div>
+              <Button type="submit" size="lg" className="mt-2">
                 Continue
-              </button>
+              </Button>
             </form>
           </div>
         </div>
-      </div>
+      </Card>
       <div className="mt-7.5 flex flex-col items-center gap-2">
         <p className="w-25 border-b border-border text-center leading-[0.1em]">
           <span className="bg-background p-2">or</span>
         </p>
-        <button
-          className="mt-5 rounded-md bg-primary p-4 text-sm font-medium text-primary-foreground hover:bg-primary-hover"
-          onClick={() => login()}
-        >
+        <Button size="lg" className="mt-5" onClick={() => login()}>
           Login with test account
-        </button>
+        </Button>
       </div>
     </div>
   );

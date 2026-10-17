@@ -1,4 +1,4 @@
-import Card from "../components/Card";
+import ProductCard from "../components/ProductCard";
 import { searchProducts } from "../lib/products";
 import type { GetServerSideProps } from "next";
 import type { ProductWithRating } from "@/types";
@@ -18,7 +18,7 @@ export default function Search({ query, productsAndAverage }: SearchProps) {
       </p>
       {productsAndAverage.map(({ product, reviewAverage }) => {
         return (
-          <Card
+          <ProductCard
             key={product._id}
             product={product}
             reviewAverage={reviewAverage}

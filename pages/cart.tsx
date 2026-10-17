@@ -1,8 +1,7 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect, useContext } from "react";
-import { CurrencyContext } from "../utils/context";
+import { useState, useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useMe } from "../hooks/useAuth";
@@ -13,9 +12,11 @@ import {
   type CartStep,
 } from "../hooks/useCart";
 import { MAX_CART_QUANTITY } from "../utils/constants";
+import Button from "../components/ui/Button";
+import Card from "../components/ui/Card";
+import Price from "../components/ui/Price";
 
 export default function Cart() {
-  const { currencySymbol, currencyRate } = useContext(CurrencyContext);
   const { user, isLoading } = useMe();
   const { data: cart } = useCart();
   const updateCartQuantity = useUpdateCartQuantity();
@@ -61,7 +62,7 @@ export default function Cart() {
   };
 
   return (
-    <div className="mx-4 my-5 flex flex-col rounded-lg border border-border bg-surface p-4 shadow-sm md:px-10 lg:mx-auto lg:w-full lg:max-w-3xl">
+    <Card className="mx-4 my-5 flex flex-col p-4 md:px-10 lg:mx-auto lg:w-full lg:max-w-3xl">
       <h2 className="text-xl font-bold text-foreground">Shopping Basket</h2>
       <div>
         {cart ? (
@@ -138,14 +139,10 @@ export default function Cart() {
                         </div>
                       </div>
                     </div>
-                    <p className="text-sm font-bold">
-                      {currencySymbol}
-                      {(
-                        Math.round(
-                          productCart.product.price * currencyRate * 100,
-                        ) / 100
-                      ).toFixed(2)}
-                    </p>
+                    <Price
+                      amount={productCart.product.price}
+                      className="text-sm font-bold"
+                    />
                   </div>
                 );
               })}
@@ -153,14 +150,9 @@ export default function Cart() {
           ) : (
             <div className="flex flex-col items-center gap-1 py-3">
               <p>Basket is empty</p>
-              <div>
-                <button
-                  onClick={() => router.push("/")}
-                  className="mt-1 w-35 rounded-md bg-primary p-2 text-sm text-primary-foreground hover:bg-primary-hover"
-                >
-                  Go to shopping!
-                </button>
-              </div>
+              <Button className="mt-1" onClick={() => router.push("/")}>
+                Go to shopping!
+              </Button>
             </div>
           )
         ) : (
@@ -169,11 +161,8 @@ export default function Cart() {
       </div>
       <div className="flex items-center gap-1 self-end">
         <p className="text-sm">{`Subtotal (${cartQuantity} items):`}</p>
-        <p className="font-bold">
-          {currencySymbol}
-          {(Math.round(totalPrice * currencyRate * 100) / 100).toFixed(2)}
-        </p>
+        <Price amount={totalPrice} className="font-bold" />
       </div>
-    </div>
+    </Card>
   );
 }

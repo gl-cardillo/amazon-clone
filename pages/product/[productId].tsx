@@ -1,11 +1,14 @@
-import { useState, useContext } from "react";
-import { CurrencyContext } from "../../utils/context";
+import { useState } from "react";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import { useRouter } from "next/router";
-import { handleRating } from "../../utils/utils";
 import { getProductById } from "../../lib/products";
 import { getReviewSummary } from "../../lib/reviews";
 import ImageSelector from "../../components/ImageSelector";
+import Button from "../../components/ui/Button";
+import Card from "../../components/ui/Card";
+import Price from "../../components/ui/Price";
+import Stars from "../../components/ui/Stars";
+import { cn } from "../../utils/cn";
 import Reviews from "../../components/Reviews";
 import { useMe } from "../../hooks/useAuth";
 import { useAddToCart } from "../../hooks/useCart";
@@ -32,7 +35,6 @@ export default function Product({
   const router = useRouter();
   const { user } = useMe();
   const addToCartMutation = useAddToCart();
-  const { currencySymbol, currencyRate } = useContext(CurrencyContext);
 
   const addToCart = () => {
     if (!user) {
@@ -57,19 +59,16 @@ export default function Product({
 
   return (
     <div className="mx-2 mb-4 flex flex-col">
-      <div className="my-3 flex flex-col items-center gap-5 rounded-md bg-surface p-5 md:hidden">
+      <Card className="my-3 flex flex-col items-center gap-5 p-5 md:hidden">
         <h3 className="text-xl font-bold">{product.name}</h3>
         <div className="flex items-center">
-          {handleRating(ratingAverage)}{" "}
+          <Stars rating={ratingAverage} />
           <p className="pl-2 text-sm">
             {(Math.round(ratingAverage * 100) / 100).toFixed(1)} out of 5
           </p>
         </div>
         <ImageSelector product={product} />
-        <p className="self-center text-xl font-bold">
-          {currencySymbol}
-          {(Math.round(product.price * currencyRate * 100) / 100).toFixed(2)}
-        </p>
+        <Price amount={product.price} className="text-xl font-bold" />
         <div className="flex flex-col items-center">
           <div className="mb-2 flex items-center gap-1 font-semibold">
             <p>About this item</p>
@@ -79,7 +78,7 @@ export default function Product({
               }}
             >
               <MdKeyboardArrowDown
-                className={`${showDescription && "rotate-180 text-xl"} text-xl`}
+                className={cn("text-xl", showDescription && "rotate-180")}
               />
             </button>
           </div>
@@ -91,8 +90,8 @@ export default function Product({
             </div>
           )}
         </div>
-      </div>
-      <div className="my-3 hidden flex-col items-center rounded-md bg-surface p-3 shadow-sm md:mx-auto md:flex md:w-full md:max-w-3xl">
+      </Card>
+      <Card className="my-3 hidden flex-col items-center p-3 md:mx-auto md:flex md:w-full md:max-w-3xl">
         <div className="flex h-80 w-full items-center justify-between gap-5">
           <div className="w-1/3 p-2">
             <ImageSelector product={product} />
@@ -108,18 +107,16 @@ export default function Product({
               </p>
               <p>{product.manufacturer}</p>
             </div>
-            <div className="flex gap-1">
-              {handleRating(ratingAverage)}{" "}
+            <div className="flex items-center gap-1">
+              <Stars rating={ratingAverage} />
               <p className="pl-2 text-lg">
                 {(Math.round(ratingAverage * 100) / 100).toFixed(1)} out of 5
               </p>
             </div>
-            <p className="text-lg font-bold xl:text-xl">
-              {currencySymbol}
-              {(Math.round(product.price * currencyRate * 100) / 100).toFixed(
-                2,
-              )}
-            </p>
+            <Price
+              amount={product.price}
+              className="text-lg font-bold xl:text-xl"
+            />
             <div className="mb-2 flex items-center gap-1">
               <p>About this item</p>
               <button
@@ -128,9 +125,7 @@ export default function Product({
                 }}
               >
                 <MdKeyboardArrowDown
-                  className={`${
-                    showDescription && "rotate-180 text-xl"
-                  } text-xl`}
+                  className={cn("text-xl", showDescription && "rotate-180")}
                 />
               </button>
             </div>
@@ -143,8 +138,8 @@ export default function Product({
             <p className="text-sm">&#8226;{product.description3}</p>
           </div>
         )}
-      </div>
-      <div className="flex flex-col items-center gap-3 rounded-md bg-surface py-5 shadow-sm md:mx-auto md:w-full md:max-w-3xl">
+      </Card>
+      <Card className="flex flex-col items-center gap-3 py-5 md:mx-auto md:w-full md:max-w-3xl">
         <p className="font-semibold text-success">In Stock</p>
         <div className="flex w-17.5 gap-3 rounded-2xl border border-border px-2">
           <button
@@ -162,14 +157,15 @@ export default function Product({
           </button>
         </div>
 
-        <button
+        <Button
+          size="lg"
           onClick={addToCart}
           disabled={addToCartMutation.isPending}
-          className="h-12 w-75 rounded-md bg-primary p-2 text-sm text-primary-foreground shadow-sm hover:bg-primary-hover"
+          className="w-75"
         >
           Add to Cart
-        </button>
-      </div>
+        </Button>
+      </Card>
       <Reviews
         reviews={reviews}
         ratingArray={ratingArray}
@@ -178,25 +174,23 @@ export default function Product({
       />
       {askLogin && (
         <div className="fixed top-0 left-0 z-10 h-full w-full bg-black/50">
-          <div className="absolute top-1/2 left-1/2 w-75 -translate-x-1/2 -translate-y-1/2 transform rounded-md border border-border bg-surface p-4 text-lg shadow-lg">
+          <Card className="absolute top-1/2 left-1/2 w-75 -translate-x-1/2 -translate-y-1/2 p-4 text-lg shadow-lg">
             <p className="text-center font-semibold text-muted-foreground">
               You need to login first
             </p>
             <div className="flex justify-around">
-              <button
-                className="mt-5 w-30 rounded-md bg-primary p-2 text-sm text-primary-foreground shadow-sm hover:bg-primary-hover"
+              <Button
+                variant="secondary"
+                className="mt-5"
                 onClick={() => setAskLogin(false)}
               >
                 Cancel
-              </button>
-              <button
-                className="mt-5 w-30 rounded-md bg-primary p-1 text-sm text-primary-foreground shadow-sm hover:bg-primary-hover"
-                onClick={() => router.push("/signin")}
-              >
+              </Button>
+              <Button className="mt-5" onClick={() => router.push("/signin")}>
                 Go to login page
-              </button>
+              </Button>
             </div>
-          </div>
+          </Card>
         </div>
       )}
     </div>

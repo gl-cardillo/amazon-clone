@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { catalogs } from "../utils/catalogs";
+import Card from "../components/ui/Card";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
@@ -74,9 +75,9 @@ export default function Home() {
       <div className="flex flex-wrap justify-center pt-2">
         {catalogs.map((catalog, index) => {
           return (
-            <div
+            <Card
               key={index}
-              className="m-3 max-w-xs rounded-lg border border-border bg-surface p-3 shadow-sm transition-shadow duration-300 hover:shadow-lg"
+              className="m-3 max-w-xs p-3 transition-shadow duration-300 hover:shadow-lg"
             >
               <Link href={catalog.link}>
                 <h2 className="pb-2 text-lg font-bold">{catalog.name}</h2>
@@ -90,7 +91,7 @@ export default function Home() {
                 />
                 <p className="text-muted-foreground">See more...</p>
               </Link>
-            </div>
+            </Card>
           );
         })}
       </div>

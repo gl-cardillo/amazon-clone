@@ -1,4 +1,4 @@
-import Card from "../../../components/Card";
+import ProductCard from "../../../components/ProductCard";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { catalogs } from "../../../utils/catalogs";
@@ -80,7 +80,7 @@ export default function Category({ productsAndAverage }: CategoryProps) {
           )}
           {productsAndAverage.map((products) => {
             return (
-              <Card
+              <ProductCard
                 key={products.product._id}
                 product={products.product}
                 reviewAverage={products.reviewAverage}

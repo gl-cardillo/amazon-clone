@@ -1,19 +1,4 @@
-import { BsStarFill, BsStarHalf, BsStar } from "react-icons/bs";
 import Swal, { type SweetAlertOptions } from "sweetalert2";
-
-export const handleRating = (rating?: number) => {
-  const stars = [];
-  for (let i = 0; i < 5; i++) {
-    if (rating === undefined || i >= rating) {
-      stars.push(<BsStar key={i} className="text-xl text-star" />);
-    } else if (i < rating && rating - i < 1) {
-      stars.push(<BsStarHalf key={i} className="text-xl text-star" />);
-    } else {
-      stars.push(<BsStarFill key={i} className="text-xl text-star" />);
-    }
-  }
-  return stars;
-};
 
 export const swalStyle: SweetAlertOptions = {
   allowOutsideClick: false,
