@@ -6,7 +6,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
       <Head>
-        <title>Shop clone</title>
+        <title>Storefront</title>
         <link rel="icon" type="image/svg+xml" href="/icon.svg" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>

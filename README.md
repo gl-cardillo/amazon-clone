@@ -1,4 +1,4 @@
-# Shop Clone
+# Storefront
 
 <br/>
 
@@ -6,7 +6,7 @@
 
 ---
 
-This is an amazon clone app made with Next.js, TypeScript, Tailwind and MongoDB.
+An e-commerce store made with Next.js, TypeScript, Tailwind and MongoDB.
 
 <br/>
 
@@ -28,7 +28,7 @@ This is an amazon clone app made with Next.js, TypeScript, Tailwind and MongoDB.
 
 ---
 
-Check the [demo](https://amazon-clone-glcardillos-projects.vercel.app/)
+Check the [demo](https://glc-storefront.vercel.app/)
 
 <br/>
 
