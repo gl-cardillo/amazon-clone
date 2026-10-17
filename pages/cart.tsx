@@ -61,8 +61,8 @@ export default function Cart() {
   };
 
   return (
-    <div className="m-5 flex flex-col rounded-md bg-white p-2 py-5 shadow-sm sm:mx-6 md:mx-20 md:px-10 lg:mx-40 xl:mx-[400px] 2xl:mx-[500px] 3xl:mx-[600px]">
-      <h2 className="-ml-2 text-xl font-bold text-gray-700">Shopping Basket</h2>
+    <div className="mx-4 my-5 flex flex-col rounded-lg border border-border bg-surface p-4 shadow-sm md:px-10 lg:mx-auto lg:w-full lg:max-w-3xl">
+      <h2 className="text-xl font-bold text-foreground">Shopping Basket</h2>
       <div>
         {cart ? (
           cart.length > 0 ? (
@@ -71,15 +71,15 @@ export default function Cart() {
                 return (
                   <div
                     key={productCart.product._id}
-                    className="my-5 flex min-h-[100px] justify-between border-b border-slate-200 py-2"
+                    className="my-5 flex min-h-25 justify-between border-b border-border py-2"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="item-center flex w-[100px] justify-center">
+                      <div className="flex w-25 items-center justify-center rounded-md bg-white p-1">
                         <Image
                           src={productCart.product.picUrl}
                           width={50}
                           height={70}
-                          className="h-[70px] w-auto min-w-[50px] object-contain"
+                          className="h-17.5 w-auto min-w-12.5 object-contain"
                           alt={productCart.product.name}
                         />
                       </div>
@@ -91,7 +91,7 @@ export default function Cart() {
                         </Link>
                         <div>
                           <div className="flex items-center gap-2">
-                            <div className="flex gap-3 rounded-2xl border-2 border-solid border-slate-300 px-1 text-sm">
+                            <div className="flex gap-3 rounded-2xl border border-border px-2 text-sm">
                               <button
                                 onClick={() =>
                                   updateQuantity(
@@ -125,13 +125,13 @@ export default function Cart() {
                                 removeProduct(productCart.product._id)
                               }
                               disabled={disableButton}
-                              className="text-sm text-blue-500"
+                              className="text-sm text-link"
                             >
                               Remove
                             </button>
                           </div>
                           {limitReachedId === productCart.product._id && (
-                            <p className="text-[12px] text-red-500">
+                            <p className="text-xs text-danger">
                               The limit is {MAX_CART_QUANTITY}
                             </p>
                           )}
@@ -156,7 +156,7 @@ export default function Cart() {
               <div>
                 <button
                   onClick={() => router.push("/")}
-                  className="mt-1 w-[120px] rounded-[5px] border border-gray-300 bg-linear-to-b from-[#f7dfa5] to-[#f0c14b] p-1 text-[14px]"
+                  className="mt-1 w-35 rounded-md bg-primary p-2 text-sm text-primary-foreground hover:bg-primary-hover"
                 >
                   Go to shopping!
                 </button>

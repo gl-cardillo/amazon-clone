@@ -6,6 +6,8 @@ import { BsSearch, BsCart2 } from "react-icons/bs";
 import { AiOutlineUser } from "react-icons/ai";
 import { useMe } from "../hooks/useAuth";
 import { useProductSearch } from "../hooks/useProductSearch";
+import Logo from "./Logo";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar() {
   // shared by the desktop and mobile inputs
@@ -43,84 +45,87 @@ export default function Navbar() {
     clearSearch();
   };
 
-  return (
-    <div className="fixed z-10 flex w-full flex-col bg-[#131921]">
-      <div className="flex h-[50px] justify-between gap-3 px-3 pt-3 md:h-[60px] md:px-5">
-        <Link href="/" className="py-1">
-          <Image
-            src="/images/logo.svg"
-            width={100}
-            height={35}
-            alt="logo"
-            unoptimized
-          />
-        </Link>
-        <div onBlur={blur}>
-          <form
-            className="relative hidden h-auto md:flex"
-            onSubmit={submitSearch}
-          >
-            <input
-              type="text"
-              aria-label="Search products"
-              className="h-[38px] rounded-l border-transparent p-1 focus:border-transparent focus:ring-0 focus:outline-hidden md:w-[300px] lg:w-[350px]"
-              value={query}
-              onChange={handleSearch}
-            />
-            <button type="submit" aria-label="Search">
-              <BsSearch className="absolute top-0 -right-1 h-[38px] w-12 rounded-l-md rounded-r-md bg-orange-300 p-2 px-1.5 font-bold" />
-            </button>
-          </form>
-          {showSearch && (
-            <div
-              role="group"
-              aria-label="Search suggestions"
-              className="absolute z-10 mt-[80px] ml-[-47%] w-[calc(95%-65px)] rounded-md border-x-2 border-b-2 border-solid border-slate-200 sm:ml-[-48%] sm:w-[calc(95%-55px)] md:mt-[-5px] md:ml-[0%] md:w-[258px] lg:w-[308px]"
-            >
-              {search.slice(0, 4).map(({ product }) => {
-                return (
-                  <Link key={product._id} href={`/product/${product._id}`}>
-                    <div
-                      onClick={clearSearch}
-                      className="flex items-center gap-2 bg-white px-1 py-3"
-                    >
-                      <Image
-                        src={product.picUrl}
-                        width={30}
-                        height={40}
-                        className="hidden h-[40px] min-w-[30px] object-contain sm:block"
-                        alt={product.name}
-                      />
-                      <p className="overflow-hidden text-xs font-semibold whitespace-nowrap">
-                        {product.name}
-                      </p>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          )}
+  // one form per layout, only the visible one is in the accessibility tree
+  const searchForm = (className: string) => (
+    <form
+      className={`relative flex ${className}`}
+      onBlur={blur}
+      onSubmit={submitSearch}
+    >
+      <input
+        type="text"
+        aria-label="Search products"
+        className="h-10 w-full rounded-l-md border-input bg-surface px-3 text-foreground focus:border-primary focus:ring-primary"
+        value={query}
+        onChange={handleSearch}
+      />
+      <button
+        type="submit"
+        aria-label="Search"
+        className="flex h-10 items-center rounded-r-md bg-primary px-3 text-primary-foreground hover:bg-primary-hover"
+      >
+        <BsSearch />
+      </button>
+      {showSearch && (
+        <div
+          role="group"
+          aria-label="Search suggestions"
+          className="absolute inset-x-0 top-full z-10 mt-1 overflow-hidden rounded-md border border-border bg-surface shadow-lg"
+        >
+          {search.slice(0, 4).map(({ product }) => {
+            return (
+              <Link key={product._id} href={`/product/${product._id}`}>
+                <div
+                  onClick={clearSearch}
+                  className="flex items-center gap-2 px-2 py-3 hover:bg-muted"
+                >
+                  <Image
+                    src={product.picUrl}
+                    width={30}
+                    height={40}
+                    className="hidden h-10 min-w-7.5 rounded-sm bg-white object-contain sm:block"
+                    alt={product.name}
+                  />
+                  <p className="overflow-hidden text-xs font-semibold whitespace-nowrap">
+                    {product.name}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
         </div>
-        <div className="flex gap-5 md:gap-5">
+      )}
+    </form>
+  );
+
+  return (
+    <header className="fixed z-10 w-full border-b border-border bg-surface">
+      <div className="flex h-14 items-center justify-between gap-3 px-4 md:h-16 md:px-5">
+        <Link href="/">
+          <Logo className="h-9 w-auto" />
+        </Link>
+        {searchForm("hidden md:flex md:w-90 lg:w-100")}
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
           <Link
             href={user ? "/profile" : "/signin"}
             aria-label={user ? "Account" : "Sign in"}
           >
-            <AiOutlineUser className="text-3xl text-white" />
+            <AiOutlineUser className="text-2xl text-foreground" />
           </Link>
-          <div>
+          <div className="relative">
             <Link
               href="/cart"
               aria-label={
                 cartQuantity > 0 ? `Cart, ${cartQuantity} items` : "Cart"
               }
             >
-              <BsCart2 className="text-3xl text-white" />
+              <BsCart2 className="text-2xl text-foreground" />
             </Link>
             {cartQuantity > 0 && (
               <p
                 aria-hidden="true"
-                className="text-bg-slate-900 absolute top-8 right-1.5 flex h-[20px] w-[20px] items-center justify-center rounded-full bg-orange-300 md:right-2.5"
+                className="absolute -top-2 -right-2.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1 text-xs font-semibold text-primary-foreground"
               >
                 {cartQuantity}
               </p>
@@ -128,22 +133,7 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-      <form
-        className="relative flex h-auto w-full self-center px-5 py-1 md:hidden"
-        onBlur={blur}
-        onSubmit={submitSearch}
-      >
-        <input
-          type="text"
-          aria-label="Search products"
-          className="h-[44px] w-full rounded-lg border-transparent p-1 focus:border-transparent focus:ring-0"
-          value={query}
-          onChange={handleSearch}
-        />
-        <button type="submit" aria-label="Search">
-          <BsSearch className="absolute top-[4px] right-4 h-[44px] w-12 rounded-l-md rounded-r-md bg-orange-300 p-2 px-1.5 font-bold" />
-        </button>
-      </form>
-    </div>
+      {searchForm("mx-4 mb-3 md:hidden")}
+    </header>
   );
 }

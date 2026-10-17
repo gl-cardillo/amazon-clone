@@ -7,6 +7,10 @@ import { CurrencyContext, type CurrencySymbol } from "../utils/context";
 import { clearToken, readToken } from "../utils/storage";
 import { useState } from "react";
 import { SkeletonTheme } from "react-loading-skeleton";
+import { Inter } from "next/font/google";
+
+// self-hosted at build time, no request to google fonts
+const inter = Inter({ subsets: ["latin"] });
 
 // attach the saved token to every request
 if (typeof window !== "undefined") {
@@ -56,7 +60,15 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           setCurrencyRate,
         }}
       >
-        <SkeletonTheme highlightColor="#979797">
+        <style jsx global>{`
+          :root {
+            --font-inter: ${inter.style.fontFamily};
+          }
+        `}</style>
+        <SkeletonTheme
+          baseColor="var(--color-muted)"
+          highlightColor="var(--color-border)"
+        >
           <Layout>
             <Component {...pageProps} />
           </Layout>

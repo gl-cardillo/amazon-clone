@@ -5,11 +5,11 @@ export const handleRating = (rating?: number) => {
   const stars = [];
   for (let i = 0; i < 5; i++) {
     if (rating === undefined || i >= rating) {
-      stars.push(<BsStar key={i} className="text-xl text-[#FFA41C]" />);
+      stars.push(<BsStar key={i} className="text-xl text-star" />);
     } else if (i < rating && rating - i < 1) {
-      stars.push(<BsStarHalf key={i} className="text-xl text-[#FFA41C]" />);
+      stars.push(<BsStarHalf key={i} className="text-xl text-star" />);
     } else {
-      stars.push(<BsStarFill key={i} className="text-xl text-[#FFA41C]" />);
+      stars.push(<BsStarFill key={i} className="text-xl text-star" />);
     }
   }
   return stars;

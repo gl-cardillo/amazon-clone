@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/forms";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 @theme {
   --breakpoint-*: initial;
   --breakpoint-xs: 425px;
@@ -10,17 +12,73 @@
   --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1536px;
   --breakpoint-3xl: 2560px;
+
+  /* --font-inter is set by next/font in _app */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* role colors, components use these instead of palette colors */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-link: var(--link);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --color-star: var(--star);
+}
+
+:root {
+  color-scheme: light;
+  --background: #f4f4f5;
+  --foreground: #18181b;
+  --surface: #ffffff;
+  --muted: #f4f4f5;
+  --muted-foreground: #52525b;
+  --border: #e4e4e7;
+  --input: #8a8a93;
+  --primary: #0f766e;
+  --primary-hover: #115e59;
+  --primary-foreground: #ffffff;
+  --link: #0f766e;
+  --danger: #dc2626;
+  --success: #15803d;
+  --star: #f59e0b;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #09090b;
+  --foreground: #f4f4f5;
+  --surface: #18181b;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --border: #27272a;
+  --input: #52525b;
+  --primary: #2dd4bf;
+  --primary-hover: #5eead4;
+  --primary-foreground: #09090b;
+  --link: #5eead4;
+  --danger: #f87171;
+  --success: #4ade80;
+  --star: #fbbf24;
 }
 
 /* in the base layer, so utilities still override them */
 @layer base {
-  /* v3 defaults: gray borders and pointer cursor on buttons */
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+    border-color: var(--color-border);
   }
 
   button:not(:disabled),
@@ -28,10 +86,9 @@
     cursor: pointer;
   }
 
-  html,
-  body {
-    background-color: #f1f5f9;
-    font-family: "Roboto", sans-serif;
+  html {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
   }
 
   a {

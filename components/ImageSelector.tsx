@@ -13,7 +13,7 @@ export default function ImageSelector({ product }: { product: Product }) {
         src={pic}
         width={250}
         height={300}
-        className="object-scale-down"
+        className="rounded-md bg-white object-scale-down p-2"
         alt={product.name}
       />
       {pics.length > 1 && (
@@ -23,7 +23,7 @@ export default function ImageSelector({ product }: { product: Product }) {
               key={url}
               aria-label="Show image"
               className={`h-3.5 w-3.5 rounded-full ${
-                pic === url ? "bg-black" : "bg-slate-400"
+                pic === url ? "bg-foreground" : "bg-muted-foreground/40"
               }`}
               onClick={() => setPic(url)}
             ></button>

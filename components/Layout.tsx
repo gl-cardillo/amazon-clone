@@ -11,7 +11,8 @@ export default function Layout({ children }: { children: ReactNode }) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Navbar />
-      <main className="pt-[60px]">{children}</main>
+      {/* matches the fixed navbar height, it has a second row on phones */}
+      <main className="pt-27 md:pt-16">{children}</main>
     </>
   );
 }

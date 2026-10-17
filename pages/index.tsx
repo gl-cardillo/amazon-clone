@@ -48,7 +48,7 @@ export default function Home() {
           {slideImages.map((slideImage, index) => (
             <div className="each-slide" key={index}>
               <Link href={slideImage.link}>
-                <div className="relative h-[250px] w-full md:h-[350px] lg:h-[400px] xl:h-[550px] 3xl:h-[700px]">
+                <div className="relative h-62.5 w-full md:h-87.5 lg:h-100 xl:h-137.5 3xl:h-175">
                   <Image
                     src={slideImage.image}
                     fill
@@ -71,12 +71,12 @@ export default function Home() {
           ))}
         </Slide>
       </div>
-      <div className="flex flex-wrap justify-center bg-slate-100 pt-2">
+      <div className="flex flex-wrap justify-center pt-2">
         {catalogs.map((catalog, index) => {
           return (
             <div
               key={index}
-              className="m-3 max-w-xs rounded-sm bg-white p-3 shadow-sm transition-transform duration-300 ease-in-out hover:scale-[1.01] hover:shadow-lg"
+              className="m-3 max-w-xs rounded-lg border border-border bg-surface p-3 shadow-sm transition-shadow duration-300 hover:shadow-lg"
             >
               <Link href={catalog.link}>
                 <h2 className="pb-2 text-lg font-bold">{catalog.name}</h2>
@@ -85,10 +85,10 @@ export default function Home() {
                   width={400}
                   height={267}
                   sizes="320px"
-                  className="aspect-3/2 w-full object-cover"
+                  className="aspect-3/2 w-full rounded-md object-cover"
                   alt={catalog.name}
                 />
-                <p className="text-slate-500">See more...</p>
+                <p className="text-muted-foreground">See more...</p>
               </Link>
             </div>
           );

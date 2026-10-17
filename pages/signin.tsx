@@ -52,14 +52,10 @@ export default function SignIn() {
   const login = (data?: LoginInput) => loginMutation.mutate(data);
 
   return (
-    <div className="mx-3 my-10 flex flex-col xs:mx-auto xs:max-w-[400px]">
+    <div className="mx-3 my-10 flex flex-col xs:mx-auto xs:max-w-100">
       <h2 className="self-start text-3xl font-semibold">Welcome</h2>
-      <div className="mt-3 max-w-[400px] rounded-md border-gray-300 bg-white shadow-md">
-        <div
-          className={`rounded-t-md border-t-2 p-4 ${
-            !showSignup ? "bg-slate-100" : ""
-          }`}
-        >
+      <div className="mt-3 max-w-100 overflow-hidden rounded-lg border border-border bg-surface shadow-md">
+        <div className={`p-4 ${!showSignup ? "bg-muted" : ""}`}>
           <div className="flex items-center gap-3">
             <input
               type="radio"
@@ -67,15 +63,15 @@ export default function SignIn() {
               aria-label="Create account"
               onChange={() => setShowSignup(true)}
               checked={showSignup}
-              className="h-4 w-4 text-orange-400 checked:bg-orange-400 checked:ring-orange-400 hover:bg-orange-400"
+              className="h-4 w-4 text-primary checked:bg-primary checked:ring-primary hover:bg-primary"
             />
-            <h3 className="text-medium text-[14px] font-bold">
+            <h3 className="text-sm font-bold">
               Create account.
-              <span className="text-md text-[13px] font-bold">New here?</span>
+              <span className="text-xs font-bold">New here?</span>
             </h3>
           </div>
           <div className={showSignup ? "" : "hidden"}>
-            <p className="pt-2 pl-4 text-[12px] text-red-600">{errorSignup}</p>
+            <p className="pt-2 pl-4 text-xs text-danger">{errorSignup}</p>
             <form
               className="mx-1 flex flex-col"
               id="signup"
@@ -86,42 +82,42 @@ export default function SignIn() {
                 First and last name
               </label>
               <input
-                className="rounded-[3px] border border-solid border-slate-400 p-2.5 focus:border-transparent focus:ring-0 focus:outline-orange-300"
+                className="rounded-md border border-input bg-surface p-2.5 text-foreground focus:border-primary focus:ring-primary"
                 type="text"
                 id="name"
                 {...register("name")}
               />
-              <p className="pt-1 text-[12px] text-red-600">
+              <p className="pt-1 text-xs text-danger">
                 {errors?.name?.message}
               </p>
               <label htmlFor="email" className="py-2 pl-2 font-semibold">
                 Email
               </label>
               <input
-                className="rounded-[3px] border border-solid border-slate-400 p-2.5 focus:border-transparent focus:ring-0 focus:outline-orange-300"
+                className="rounded-md border border-input bg-surface p-2.5 text-foreground focus:border-primary focus:ring-primary"
                 type="email"
                 id="email"
                 {...register("email")}
               />
-              <p className="pt-1 text-[12px] text-red-600">
+              <p className="pt-1 text-xs text-danger">
                 {errors?.email?.message}
               </p>
               <label htmlFor="password" className="py-2 pl-2 font-semibold">
                 Password
               </label>
               <input
-                className="rounded-[3px] border border-solid border-slate-400 p-2.5 focus:border-transparent focus:ring-0 focus:outline-orange-300"
+                className="rounded-md border border-input bg-surface p-2.5 text-foreground focus:border-primary focus:ring-primary"
                 type="password"
                 id="password"
                 {...register("password")}
               />
-              <p className="pt-1 text-[12px] text-red-600">
+              <p className="pt-1 text-xs text-danger">
                 {errors?.password?.message}
               </p>
               <button
                 type="submit"
                 form="signup"
-                className="mt-5 rounded-[5px] border border-gray-300 bg-linear-to-b from-[#f7dfa5] to-[#f0c14b] p-3"
+                className="mt-5 rounded-md bg-primary p-3 font-medium text-primary-foreground hover:bg-primary-hover"
               >
                 Continue
               </button>
@@ -129,8 +125,8 @@ export default function SignIn() {
           </div>
         </div>
         <div
-          className={`rounded-b-md border-t-2 p-4 ${
-            showSignup ? "bg-slate-100" : ""
+          className={`border-t border-border p-4 ${
+            showSignup ? "bg-muted" : ""
           }`}
         >
           <div className="flex items-center gap-3">
@@ -140,18 +136,15 @@ export default function SignIn() {
               aria-label="Sign in"
               onChange={() => setShowSignup(false)}
               checked={!showSignup}
-              className="h-4 w-4 text-orange-400 checked:bg-orange-400 checked:ring-orange-400 hover:bg-orange-400 focus:border-transparent focus:ring-0"
+              className="h-4 w-4 text-primary checked:bg-primary checked:ring-primary hover:bg-primary focus:border-transparent focus:ring-0"
             />
-            <h3 className="text-medium text-[14px] font-bold">
+            <h3 className="text-sm font-bold">
               Sign-In.
-              <span className="text-md text-[13px] font-bold">
-                {" "}
-                Already a customer?
-              </span>
+              <span className="text-xs font-bold"> Already a customer?</span>
             </h3>
           </div>
           <div className={showSignup ? "hidden" : ""}>
-            <p className="pt-2 pl-4 text-[12px] text-red-600">{errorLogin}</p>
+            <p className="pt-2 pl-4 text-xs text-danger">{errorLogin}</p>
             <form
               className="mx-1 flex flex-col"
               aria-label="Sign in"
@@ -161,12 +154,12 @@ export default function SignIn() {
                 Email
               </label>
               <input
-                className="rounded-[3px] border border-solid border-slate-400 p-2.5 focus:border-transparent focus:ring-0 focus:outline-orange-300"
+                className="rounded-md border border-input bg-surface p-2.5 text-foreground focus:border-primary focus:ring-primary"
                 type="email"
                 id="emailLogin"
                 {...registerLogin("emailLogin")}
               />
-              <p className="pt-1 text-[12px] text-red-600">
+              <p className="pt-1 text-xs text-danger">
                 {errorsLogin?.emailLogin?.message}
               </p>
               <label
@@ -176,16 +169,16 @@ export default function SignIn() {
                 Password
               </label>
               <input
-                className="rounded-[3px] border border-solid border-slate-400 p-2.5 focus:border-transparent focus:ring-0 focus:outline-orange-300"
+                className="rounded-md border border-input bg-surface p-2.5 text-foreground focus:border-primary focus:ring-primary"
                 type="password"
                 id="passwordLogin"
                 {...registerLogin("passwordLogin")}
               />
-              <p className="pt-1 text-[12px] text-red-600">
+              <p className="pt-1 text-xs text-danger">
                 {errorsLogin?.passwordLogin?.message}
               </p>
               <button
-                className="mt-5 rounded-[5px] border border-gray-300 bg-linear-to-b from-[#f7dfa5] to-[#f0c14b] p-3"
+                className="mt-5 rounded-md bg-primary p-3 font-medium text-primary-foreground hover:bg-primary-hover"
                 type="submit"
               >
                 Continue
@@ -194,12 +187,12 @@ export default function SignIn() {
           </div>
         </div>
       </div>
-      <div className="mt-[30px] flex flex-col items-center gap-2">
-        <p className="w-[100px] border-b border-black text-center leading-[0.1em]">
-          <span className="bg-[#f1f5f9] p-2">or</span>
+      <div className="mt-7.5 flex flex-col items-center gap-2">
+        <p className="w-25 border-b border-border text-center leading-[0.1em]">
+          <span className="bg-background p-2">or</span>
         </p>
         <button
-          className="mt-5 border border-gray-300 bg-linear-to-b from-[#f7dfa5] to-[#f0c14b] p-4 text-sm"
+          className="mt-5 rounded-md bg-primary p-4 text-sm font-medium text-primary-foreground hover:bg-primary-hover"
           onClick={() => login()}
         >
           Login with test account

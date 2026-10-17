@@ -18,8 +18,13 @@ export default function Card({ product, reviewAverage }: CardProps) {
 
   return (
     <Link href={`/product/${product._id}`}>
-      <div className="m-2 flex w-full gap-5 rounded-sm border-2 bg-white p-2 shadow-sm transition-transform duration-200 ease-in-out hover:scale-[1.01] hover:shadow-lg md:h-[400px] md:w-[245px] md:flex-col lg:w-[300px]">
-        <div className="relative h-[150px] w-[130px] min-w-[130px] overflow-hidden rounded-sm bg-slate-50 md:h-[210px] md:w-full">
+      <div className="m-2 flex w-full gap-5 rounded-lg border border-border bg-surface p-3 shadow-sm transition-shadow duration-200 hover:shadow-lg md:h-100 md:w-61 md:flex-col lg:w-75">
+        {/* product photos have white backgrounds, covers sit on a neutral tile */}
+        <div
+          className={`relative h-37.5 w-32.5 min-w-32.5 overflow-hidden rounded-md md:h-52.5 md:w-full ${
+            isCover ? "bg-muted" : "bg-white"
+          }`}
+        >
           <Image
             src={product.picUrl}
             alt={product.name}
@@ -29,7 +34,7 @@ export default function Card({ product, reviewAverage }: CardProps) {
           />
         </div>
         <div>
-          <p className="md:text-md text-sm font-semibold">{product.name}</p>
+          <p className="text-sm font-semibold md:text-base">{product.name}</p>
           <div className="my-5 flex gap-1">{handleRating(reviewAverage)}</div>
           <p className="font-bold">
             {currencySymbol}

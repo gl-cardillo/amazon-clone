@@ -23,7 +23,7 @@ export default function Category({ productsAndAverage }: CategoryProps) {
 
   return (
     <div className="flex min-h-screen gap-3">
-      <div className="fixed hidden h-[calc(100vh-60px)] min-w-[210px] border-r-2 bg-white p-2 md:block">
+      <div className="fixed hidden h-[calc(100vh-4rem)] w-52 border-r border-border bg-surface p-3 md:block">
         <h2 className="mb-3 text-2xl font-bold">Categories</h2>
         {catalogs.map((category, index) => {
           return (
@@ -55,8 +55,8 @@ export default function Category({ productsAndAverage }: CategoryProps) {
           );
         })}
       </div>
-      <div className="w-full md:ml-[210px]">
-        <h3 className="mb-2 border-b-2 border-slate-300 pl-1 text-2xl font-bold md:hidden">
+      <div className="w-full md:ml-52">
+        <h3 className="mb-2 border-b border-border pl-1 text-2xl font-bold md:hidden">
           {currentCategory?.name}
         </h3>
         <div className="flex items-center md:hidden">
